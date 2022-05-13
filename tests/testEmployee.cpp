@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include "../includes/model/Employee//Price.h"
+#include "../includes/model/helpers/price.h"
 #include "../includes/model/Employee//Employee.h"
 #include "../includes/model/Employee//Exceptions.h"
 #include "../includes/model/Employee//Waiter.h"
@@ -45,8 +45,9 @@ TEST_CASE("waiter virtual methods") {
     Price salary(3000, 0);
     Waiter waiter1(2, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
     SECTION("calculate salary") {
-        CHECK(waiter1.calculate_salary() == Price(3464, 99));
-    }SECTION("calculate shifts") {
+        CHECK(waiter1.calculate_salary() == Price(9000, 0));
+    }
+    SECTION("calculate shifts") {
         CHECK(waiter1.calculate_shifts_per_week() == 5);
     }
 }
@@ -76,8 +77,10 @@ TEST_CASE("cook virtual methods") {
     Price salary(3000, 0);
     Cook cook1(11, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
     SECTION("calculate salary") {
-        CHECK(cook1.calculate_salary() == Price(3450, 0));
-    }SECTION("calculate shifts") {
+        Price cooker_salary = cook1.calculate_salary();
+        CHECK(cook1.calculate_salary() == Price(6000, 0));
+    }
+    SECTION("calculate shifts") {
         CHECK(cook1.calculate_shifts_per_week() == 5);
     }
 }

@@ -3,7 +3,7 @@
 
 #include <string>
 #include <iostream>
-#include "Price.h"
+#include "../helpers/price.h"
 
 using std::string;
 

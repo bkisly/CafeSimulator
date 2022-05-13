@@ -7,7 +7,7 @@ Waiter::Waiter(int id, const string &name, const string &surname, int gender, Pr
           can_serve_alcohol(canServeAlcohol) {}
 
 Price Waiter::calculate_salary() const noexcept {
-    return (can_serve_alcohol) ? base_salary * 1.1 * 1.05 : base_salary * 1.1;
+    return (can_serve_alcohol) ? base_salary * 3 : base_salary * 2;
 }
 
 bool Waiter::is_can_serve_alcohol() const {

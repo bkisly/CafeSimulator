@@ -15,7 +15,7 @@ Cook::Cook(int id, const string &name, const string &surname, int gender, Price 
           known_cuisines(knownCuisines) {}
 
 Price Cook::calculate_salary() const noexcept {
-    return base_salary * 1.15;
+    return base_salary * 2;
 }
 
 unsigned int Cook::calculate_shifts_per_week() const noexcept {

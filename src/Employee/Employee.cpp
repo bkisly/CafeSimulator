@@ -1,5 +1,5 @@
 #include "../../includes/model/Employee/Employee.h"
-#include "../../includes/model/Employee/Price.h"
+#include "../../includes/model/helpers/price.h"
 #include "../../includes/model/Employee/Exceptions.h"
 
 #include <memory>
@@ -109,7 +109,7 @@ string Employee::print() const noexcept {
     string gender_str = (gender ==1 ) ? "male" : "female";
     return "name: "  + name + ", surname: " + surname + ", gender: " +
     ", id: " + std::to_string(id) +
-    gender_str + ", base salary: " + base_salary.price_str() + "zl "
+    gender_str + ", base salary: " + base_salary.ToString() + " "
     + ",\nbase amount of shifts: " + std::to_string(base_amount_of_shifts) + "\n";
 }
 
