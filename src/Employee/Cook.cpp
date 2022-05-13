@@ -11,7 +11,7 @@ void Cook::set_known_cuisines(int knownCuisines) {
 
 Cook::Cook(int id, const string &name, const string &surname, int gender, Price baseSalary,
                unsigned int baseAmountOfShifts, unsigned int knownCuisines)
-        : Worker(id, name, surname, gender, baseSalary, baseAmountOfShifts),
+        : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
           known_cuisines(knownCuisines) {}
 
 Price Cook::calculate_salary() const noexcept {
@@ -23,18 +23,18 @@ unsigned int Cook::calculate_shifts_per_week() const noexcept {
 }
 
 std::ostream &Cook::write(std::ostream &os) const noexcept{
-    Worker::write(os);
+    Employee::write(os);
     os << " " << known_cuisines;
     return os;
 }
 
 string Cook::print() const noexcept {
-    return Worker::print() + "known cuisines: " + std::to_string
+    return Employee::print() + "known cuisines: " + std::to_string
             (known_cuisines) + "\n";
 }
 
 std::istream &Cook::read(std::istream &in) {
-    Worker::read(in);
+    Employee::read(in);
     in >> known_cuisines;
     return in;
 }
@@ -44,7 +44,7 @@ Cook::Cook() {
 }
 
 bool Cook::operator==(const Cook &rhs) const {
-    return static_cast<const Worker &>(*this) == static_cast<const Worker &>(rhs) &&
+    return static_cast<const Employee &>(*this) == static_cast<const Employee &>(rhs) &&
            known_cuisines == rhs.known_cuisines;
 }
 

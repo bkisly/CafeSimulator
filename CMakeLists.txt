@@ -3,6 +3,7 @@ project(Cafe)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# libs
 add_library(
         menu
         includes/model/helpers/price.h src/price.cpp
@@ -17,16 +18,22 @@ add_library(
         employee
         includes/model/Employee/Cook.h src/Employee/Cook.cpp
         includes/model/Employee/Waiter.h src/Employee/Waiter.cpp
-        includes/model/Employee/Worker.h src/Employee/Worker.cpp
+        includes/model/Employee/Employee.h src/Employee/Employee.cpp
         includes/model/Employee/DbWorkers.h src/Employee/DbWorkers.cpp
+        includes/model/Employee/Price.h src/Employee/Price.cpp
         includes/model/Employee/Exceptions.h
 )
 
+# tests
 add_executable(priceTests tests/priceTests.cpp)
 target_link_libraries(priceTests PRIVATE menu)
 
 add_executable(menuItemsTests tests/menuItemsTests.cpp)
 target_link_libraries(menuItemsTests PRIVATE menu)
 
+add_executable(employeeTests tests/testEmployee.cpp)
+target_link_libraries(employeeTests PRIVATE employee)
+
+# runners
 add_executable(Cafe main.cpp)
-target_link_libraries(Cafe PRIVATE menu)
+target_link_libraries(Cafe PRIVATE menu employee)

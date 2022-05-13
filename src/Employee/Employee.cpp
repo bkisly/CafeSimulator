@@ -1,12 +1,12 @@
-#include "../../includes/model/Employee/Worker.h"
+#include "../../includes/model/Employee/Employee.h"
 #include "../../includes/model/Employee/Price.h"
 #include "../../includes/model/Employee/Exceptions.h"
 
 #include <memory>
 
 using std::unique_ptr;
-Worker::Worker(int id, const string &name, const string &surname, int gender, Price baseSalary,
-unsigned baseAmountOfShifts)
+Employee::Employee(int id, const string &name, const string &surname, int gender, Price baseSalary,
+                   unsigned baseAmountOfShifts)
         : id(id), name(name), surname(surname), gender(gender), base_salary(baseSalary),
         base_amount_of_shifts(baseAmountOfShifts){
     if (gender != 0 && gender != 1){
@@ -15,70 +15,70 @@ unsigned baseAmountOfShifts)
     state = 0;
 }
 
-const string &Worker::get_name() const {
+const string &Employee::get_name() const {
     return name;
 }
 
-void Worker::set_name(const string &name) {
-    Worker::name = name;
+void Employee::set_name(const string &name) {
+    Employee::name = name;
 }
 
-const string &Worker::get_surname() const {
+const string &Employee::get_surname() const {
     return surname;
 }
 
-void Worker::set_surname(const string &surname) {
-    Worker::surname = surname;
+void Employee::set_surname(const string &surname) {
+    Employee::surname = surname;
 }
 
-Price Worker::get_base_salary() const {
+Price Employee::get_base_salary() const {
     return base_salary;
 }
 
 
-int Worker::get_gender() const {
+int Employee::get_gender() const {
     return gender;
 }
 
-Worker::~Worker() {
+Employee::~Employee() {
 
 }
 
-Price Worker::calculate_salary() const noexcept{
+Price Employee::calculate_salary() const noexcept{
     return base_salary;
 }
 
-unsigned int Worker::calculate_shifts_per_week() const noexcept{
+unsigned int Employee::calculate_shifts_per_week() const noexcept{
     return base_amount_of_shifts;
 }
 
-int Worker::get_base_amount_of_shifts() const {
+int Employee::get_base_amount_of_shifts() const {
     return base_amount_of_shifts;
 }
 
 
-Worker::Worker() {
+Employee::Employee() {
 
 }
 
-bool Worker::operator==(const Worker &rhs) const {
+bool Employee::operator==(const Employee &rhs) const {
     return id == rhs.id && name == rhs.name && surname == rhs.surname && gender == rhs.gender &&
            base_salary == rhs.base_salary &&
            base_amount_of_shifts == rhs.base_amount_of_shifts;
 }
 
-bool Worker::operator!=(const Worker &rhs) const {
+bool Employee::operator!=(const Employee &rhs) const {
     return !(rhs == *this);
 }
 
-std::ostream &Worker::write(std::ostream &os) const noexcept {
+std::ostream &Employee::write(std::ostream &os) const noexcept {
     os << name << "\n" << surname << "\n" << id << " "
        << gender << " " << base_salary
        << " " << base_amount_of_shifts;
     return os;
 }
 
-std::istream &Worker::read(std::istream &in) {
+std::istream &Employee::read(std::istream &in) {
     string name, surname;
     int id, gender;
     Price salary;
@@ -96,16 +96,16 @@ std::istream &Worker::read(std::istream &in) {
 }
 
 
-std::ostream &operator<<(std::ostream &os, const Worker &worker) {
+std::ostream &operator<<(std::ostream &os, const Employee &worker) {
     return worker.write(os);
 }
 
-std::istream &operator>>(std::istream &in, Worker &worker) {
+std::istream &operator>>(std::istream &in, Employee &worker) {
     worker.read(in);
     return in;
 }
 
-string Worker::print() const noexcept {
+string Employee::print() const noexcept {
     string gender_str = (gender ==1 ) ? "male" : "female";
     return "name: "  + name + ", surname: " + surname + ", gender: " +
     ", id: " + std::to_string(id) +
@@ -113,19 +113,19 @@ string Worker::print() const noexcept {
     + ",\nbase amount of shifts: " + std::to_string(base_amount_of_shifts) + "\n";
 }
 
-int Worker::getId() const {
+int Employee::getId() const {
     return id;
 }
 
-int Worker::getState() const {
+int Employee::getState() const {
     return state;
 }
 
-void Worker::setState(int state) {
-    Worker::state = state;
+void Employee::setState(int state) {
+    Employee::state = state;
 }
 
-string Worker::printState() const{
+string Employee::printState() const{
     return std::to_string(state);
 }
 

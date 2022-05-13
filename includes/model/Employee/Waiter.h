@@ -1,9 +1,9 @@
 #ifndef WAITER_H
 #define WAITER_H
 
-#include "Worker.h"
+#include "Employee.h"
 
-class Waiter : public Worker {
+class Waiter : public Employee {
 private:
     bool can_serve_alcohol;
 public:

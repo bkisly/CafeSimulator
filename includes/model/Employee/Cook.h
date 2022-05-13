@@ -1,10 +1,10 @@
 #ifndef COOK_H
 #define COOK_H
 
-#include "Worker.h"
+#include "Employee.h"
 #include <string>
 
-class Cook : public Worker {
+class Cook : public Employee {
 public:
     bool operator==(const Cook &rhs) const;
 

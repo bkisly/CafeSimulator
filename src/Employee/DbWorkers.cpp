@@ -10,8 +10,8 @@ using std::unique_ptr, std::make_unique, std::move;
 
 void DbWorkers::addWorker(const string &name, const string &surname, int gender,
                           Price baseSalary, unsigned int baseAmountOfShifts) {
-    unique_ptr<Worker> added_worker = make_unique<Worker>(newIdToAssign, name, surname, gender,
-                                                          baseSalary, baseAmountOfShifts);
+    unique_ptr<Employee> added_worker = make_unique<Employee>(newIdToAssign, name, surname, gender,
+                                                              baseSalary, baseAmountOfShifts);
     workers.push_back(move(added_worker));
     existingIDs.push_back(newIdToAssign);
     newIdToAssign++;

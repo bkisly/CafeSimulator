@@ -5,13 +5,13 @@
 #include <memory>
 #include <string>
 #include <ostream>
-#include "Worker.h"
+#include "Employee.h"
 
 using std::string, std::vector;
 
 class DbWorkers {
 private:
-    vector<std::unique_ptr<Worker>> workers;
+    vector<std::unique_ptr<Employee>> workers;
     vector<int> existingIDs;
     int newIdToAssign;
 
@@ -44,7 +44,7 @@ public:
     string printAll() const noexcept;
 
     int getWokerState(int id);
-//    todo envoke polymorphic method for Worker base class (unique_ptr)
+//    todo envoke polymorphic method for Employee base class (unique_ptr)
 
 };
 

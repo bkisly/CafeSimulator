@@ -1,5 +1,5 @@
-#ifndef WORKER_H
-#define WORKER_H
+#ifndef EMPLOYEE_H
+#define EMPLOYEE_H
 
 #include <string>
 #include <iostream>
@@ -7,13 +7,13 @@
 
 using std::string;
 
-class Worker {
+class Employee {
 public:
     int getId() const;
 
-    friend std::ostream &operator<<(std::ostream &os, const Worker &worker);
+    friend std::ostream &operator<<(std::ostream &os, const Employee &worker);
 
-    friend std::istream &operator>>(std::istream &in, Worker &worker);
+    friend std::istream &operator>>(std::istream &in, Employee &worker);
 
     virtual std::ostream &write(std::ostream &os) const noexcept;
 
@@ -26,12 +26,12 @@ public:
     enum Gender {
         female = 0, male
     };
-    Worker();
+    Employee();
 
-    Worker(int id, const string &name, const string &surname, int gender, Price baseSalary,
-           unsigned baseAmountOfShifts);
+    Employee(int id, const string &name, const string &surname, int gender, Price baseSalary,
+             unsigned baseAmountOfShifts);
 
-    virtual ~Worker();
+    virtual ~Employee();
 
     const string &get_name() const;
 
@@ -51,9 +51,9 @@ public:
 
     virtual unsigned int calculate_shifts_per_week() const noexcept;
 
-    bool operator==(const Worker &rhs) const;
+    bool operator==(const Employee &rhs) const;
 
-    bool operator!=(const Worker &rhs) const;
+    bool operator!=(const Employee &rhs) const;
 
     virtual string print() const noexcept;
 
@@ -70,8 +70,8 @@ protected:
 
 };
 
-std::ostream &operator<<(std::ostream &os, const Worker &worker);
+std::ostream &operator<<(std::ostream &os, const Employee &worker);
 
 
 
-#endif //WORKER_H
+#endif //EMPLOYEE_H

@@ -3,7 +3,7 @@
 
 Waiter::Waiter(int id, const string &name, const string &surname, int gender, Price baseSalary,
                unsigned int baseAmountOfShifts, bool canServeAlcohol)
-        : Worker(id, name, surname, gender, baseSalary, baseAmountOfShifts),
+        : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
           can_serve_alcohol(canServeAlcohol) {}
 
 Price Waiter::calculate_salary() const noexcept {
@@ -23,7 +23,7 @@ unsigned int Waiter::calculate_shifts_per_week() const noexcept {
 }
 
 std::ostream &Waiter::write(std::ostream &os) const noexcept{
-    Worker::write(os);
+    Employee::write(os);
     os << " " << can_serve_alcohol;
     return os;
 }
@@ -31,12 +31,12 @@ std::ostream &Waiter::write(std::ostream &os) const noexcept{
 
 
 string Waiter::print() const noexcept {
-    return Worker::print() + "whether can serve alcohol: " + std::to_string
+    return Employee::print() + "whether can serve alcohol: " + std::to_string
             (can_serve_alcohol) + "\n";
 }
 
 std::istream &Waiter::read(std::istream &in) {
-    Worker::read(in);
+    Employee::read(in);
     in >> can_serve_alcohol;
     return in;
 }
@@ -46,7 +46,7 @@ Waiter::Waiter() {
 }
 
 bool Waiter::operator==(const Waiter &rhs) const {
-    return static_cast<const Worker &>(*this) == static_cast<const Worker &>(rhs) &&
+    return static_cast<const Employee &>(*this) == static_cast<const Employee &>(rhs) &&
            can_serve_alcohol == rhs.can_serve_alcohol;
 }
 
