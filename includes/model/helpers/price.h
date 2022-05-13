@@ -18,6 +18,7 @@ private:
     void setDollarsAndCents(unsigned int dollars, unsigned int cents);
 
 public:
+    Price();
     Price(unsigned int dollars, unsigned int cents);
 
     unsigned int GetDollars() const;

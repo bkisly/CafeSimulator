@@ -129,3 +129,8 @@ std::istream &operator>>(std::istream &in, Price &price) {
     price = Price(dollars, cents);
     return in;
 }
+
+Price::Price() {
+
+}
+

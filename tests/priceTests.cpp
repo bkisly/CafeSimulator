@@ -99,3 +99,15 @@ TEST_CASE("To-string")
     CHECK(price2.ToString() == "$5.09");
     CHECK(price3.ToString() == "$0.00");
 }
+
+
+TEST_CASE("stream casting") {
+    Price p1(10, 20);
+    std::stringstream ss;
+    ss << p1;
+    CHECK(ss.str() == "10 20");
+    Price p5;
+    ss >> p5;
+    CHECK(p1 == p5);
+
+}
