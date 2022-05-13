@@ -117,3 +117,15 @@ Price Price::operator/(unsigned int factor) const {
     newPrice /= factor;
     return newPrice;
 }
+
+std::ostream &operator<<(std::ostream &os, const Price &price) {
+    os << price.dollars << " " << price.cents;
+    return os;
+}
+
+std::istream &operator>>(std::istream &in, Price &price) {
+    unsigned dollars, cents;
+    in >> dollars >> cents;
+    price = Price(dollars, cents);
+    return in;
+}

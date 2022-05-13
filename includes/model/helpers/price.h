@@ -40,7 +40,12 @@ public:
     Price operator-(const Price &rhs) const;
     Price operator*(unsigned int factor) const;
     Price operator/(unsigned int factor) const;
+
+    friend std::ostream &operator<<(std::ostream &os, const Price &price);
+    friend std::istream &operator>>(std::istream &in, Price &price);
 };
 
+std::ostream &operator<<(std::ostream &os, const Price &price);
+std::istream &operator>>(std::istream &in, Price &price);
 
 #endif //CAFEMENU_PRICE_H

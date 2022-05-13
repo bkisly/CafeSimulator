@@ -13,9 +13,9 @@ public:
 
     Price operator+(const Price &second_argument) const;
 
-    friend std::ostream &operator<<(std::ostream &os, const Price &price);
-
-    friend std::istream &operator>>(std::istream &in, Price &price);
+//    friend std::ostream &operator<<(std::ostream &os, const Price &price);
+//
+//    friend std::istream &operator>>(std::istream &in, Price &price);
 
     Price &operator-=(const Price &second_argument);
 
@@ -35,8 +35,8 @@ private:
     unsigned int value;
 };
 
-std::ostream &operator<<(std::ostream &os, const Price &price);
-std::istream &operator>>(std::istream &in, Price &price);
+//std::ostream &operator<<(std::ostream &os, const Price &price);
+//std::istream &operator>>(std::istream &in, Price &price);
 
 
 #endif //PRICE_H

@@ -57,17 +57,17 @@ std::string Price::price_str() const {
     return std::to_string(value / 100) + "." + std::to_string(value % 100) ;
 }
 
-std::ostream &operator<<(std::ostream &os, const Price &price) {
-    os << price.value / 100 << " " << price.value % 100;
-    return os;
-}
-
-std::istream &operator>>(std::istream &in, Price &price) {
-    unsigned zl, gr;
-    in >> zl >> gr;
-    price = Price(zl, gr);
-    return in;
-}
+//std::ostream &operator<<(std::ostream &os, const Price &price) {
+//    os << price.value / 100 << " " << price.value % 100;
+//    return os;
+//}
+//
+//std::istream &operator>>(std::istream &in, Price &price) {
+//    unsigned zl, gr;
+//    in >> zl >> gr;
+//    price = Price(zl, gr);
+//    return in;
+//}
 
 Price::Price() {
 
