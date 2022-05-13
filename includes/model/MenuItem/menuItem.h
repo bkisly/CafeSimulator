@@ -7,7 +7,7 @@
 
 #include <string>
 #include <map>
-#include "price.h"
+#include "../helpers/price.h"
 
 using namespace std;
 
