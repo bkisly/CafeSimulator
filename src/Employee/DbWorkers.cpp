@@ -82,7 +82,7 @@ string DbWorkers::printAll() const noexcept {
     int counter = 0;
     for (const auto &worker_ptr: workers) {
         output += std::to_string(counter) + "\n";
-        output += worker_ptr->print()+"\n";
+        output += worker_ptr->printProperties() + "\n";
         counter++;
     }
     return output;

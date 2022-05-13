@@ -25,7 +25,7 @@ public:
 
     unsigned int calculate_shifts_per_week() const noexcept;
 
-    string print() const noexcept;
+    string printProperties() const noexcept;
 
 //  stream proccesing
     std::istream &read(std::istream &in);
@@ -36,7 +36,7 @@ public:
 
     void set_known_cuisines(int knownCuisines);
 
-    string PrintState() const;
+    string printStateLog() const;
 
 };
 

@@ -69,7 +69,7 @@ public:
 class StateException : public std::invalid_argument {
 public:
     StateException(int wrong_state) : std::invalid_argument(
-            "state index out of range - use enum of states: " +
+            "currentState index out of range - use enum of states: " +
             std::to_string(wrong_state)) {};
 };
 

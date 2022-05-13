@@ -20,7 +20,7 @@ public:
 
     unsigned int calculate_shifts_per_week() const noexcept;
 
-    string print() const noexcept;
+    string printProperties() const noexcept;
 
 //    stream handling
     std::ostream &write(std::ostream &os) const noexcept;
@@ -30,7 +30,7 @@ public:
 
     bool operator!=(const Waiter &rhs) const;
 
-    string printState() const;
+    string printStateLog() const;
 
     enum WaiterState {
         awaiting = 0,

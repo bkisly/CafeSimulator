@@ -12,7 +12,7 @@ Employee::Employee(int id, const string &name, const string &surname, int gender
     if (gender != 0 && gender != 1){
         throw GenderException(gender);
     }
-    state = 0;
+    currentState = 0;
 }
 
 const string &Employee::get_name() const {
@@ -105,7 +105,7 @@ std::istream &operator>>(std::istream &in, Employee &worker) {
     return in;
 }
 
-string Employee::print() const noexcept {
+string Employee::printProperties() const noexcept {
     string gender_str = (gender ==1 ) ? "male" : "female";
     return "name: "  + name + ", surname: " + surname + ", gender: " +
     ", id: " + std::to_string(id) +
@@ -118,14 +118,32 @@ int Employee::getId() const {
 }
 
 int Employee::getState() const {
-    return state;
+    return currentState;
 }
 
 void Employee::setState(int state) {
-    Employee::state = state;
+    Employee::currentState = state;
 }
 
-string Employee::printState() const{
-    return std::to_string(state);
+string Employee::printStateLog() const{
+    return std::to_string(currentState);
+}
+
+int Employee::getCyclesLeft() const {
+    return cyclesLeft;
+}
+
+void Employee::advanceCycle() {
+    if (cyclesLeft == 0){
+        updateState();
+    }
+    else{
+        cyclesLeft--;
+    }
+}
+
+void Employee::updateState() {
+    currentState++;
+//    todo: in override function check amount of states and reset to 0
 }
 

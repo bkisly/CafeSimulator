@@ -28,8 +28,8 @@ std::ostream &Cook::write(std::ostream &os) const noexcept{
     return os;
 }
 
-string Cook::print() const noexcept {
-    return Employee::print() + "known cuisines: " + std::to_string
+string Cook::printProperties() const noexcept {
+    return Employee::printProperties() + "known cuisines: " + std::to_string
             (known_cuisines) + "\n";
 }
 
@@ -52,15 +52,15 @@ bool Cook::operator!=(const Cook &rhs) const {
     return !(rhs == *this);
 }
 
-string Cook::PrintState() const {
+string Cook::printStateLog() const {
     string msg = "waiter " + std::to_string(id) + " - ";
-    switch (state) {
+    switch (currentState) {
         case CookState::free:
             return msg + "free\n";
         case CookState::busy:
             return msg + "cooking meals\n";
         default:
-            throw StateException(state);
+            throw StateException(currentState);
     }
 }
 

@@ -30,8 +30,8 @@ std::ostream &Waiter::write(std::ostream &os) const noexcept{
 
 
 
-string Waiter::print() const noexcept {
-    return Employee::print() + "whether can serve alcohol: " + std::to_string
+string Waiter::printProperties() const noexcept {
+    return Employee::printProperties() + "whether can serve alcohol: " + std::to_string
             (can_serve_alcohol) + "\n";
 }
 
@@ -54,9 +54,9 @@ bool Waiter::operator!=(const Waiter &rhs) const {
     return !(rhs == *this);
 }
 
-string Waiter::printState() const{
+string Waiter::printStateLog() const{
     string msg = "waiter " + std::to_string(id) + " - ";
-    switch (state) {
+    switch (currentState) {
         case WaiterState::awaiting:
             return msg + "awaiting\n";
         case WaiterState::giveMenu:
@@ -68,7 +68,7 @@ string Waiter::printState() const{
         case WaiterState::takeReceipt:
             return msg + "taking receipt\n";
         default:
-            throw StateException(state);
+            throw StateException(currentState);
     }
 }
 

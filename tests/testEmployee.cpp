@@ -33,12 +33,12 @@ TEST_CASE("waiter setter") {
     CHECK(waiter1.get_name() == "Jan");
 }
 
-TEST_CASE("waiter print state") {
+TEST_CASE("waiter printProperties currentState") {
     Price salary(3000, 0);
     Waiter waiter1(1, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
-    CHECK(waiter1.printState() == "waiter 1 - awaiting\n");
+    CHECK(waiter1.printStateLog() == "waiter 1 - awaiting\n");
     waiter1.setState(Waiter::WaiterState::collectOrder);
-    CHECK(waiter1.printState() == "waiter 1 - collecting orders\n");
+    CHECK(waiter1.printStateLog() == "waiter 1 - collecting orders\n");
 }
 
 TEST_CASE("waiter virtual methods") {
