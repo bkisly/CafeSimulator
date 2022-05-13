@@ -2,7 +2,7 @@
 // Created by bkisl on 27.04.2022.
 //
 
-#include "../includes/dish.h"
+#include "../includes/model/MenuItem/dish.h"
 
 Dish::Dish(string name, Price pricePerPortion, bool vegetarian, unsigned int cyclesToPrepare) : MenuItem(name, PortionUnit::Portion, pricePerPortion, cyclesToPrepare) {
     this->vegetarian = vegetarian;

@@ -7,10 +7,10 @@
 #include <string>
 #include <iostream>
 #include "catch.hpp"
-#include "../includes/beverage.h"
-#include "../includes/dessert.h"
-#include "../includes/dish.h"
-#include "../includes/exceptions.h"
+#include "../includes/model/MenuItem/beverage.h"
+#include "../includes/model/MenuItem/dessert.h"
+#include "../includes/model/MenuItem/dish.h"
+#include "../includes/model/MenuItem/exceptions.h"
 
 using namespace std;
 

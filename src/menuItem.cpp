@@ -2,8 +2,8 @@
 // Created by bkisl on 27.04.2022.
 //
 
-#include "../includes/menuItem.h"
-#include "../includes/exceptions.h"
+#include "../includes/model/MenuItem/menuItem.h"
+#include "../includes/model/MenuItem/exceptions.h"
 
 using namespace std;
 

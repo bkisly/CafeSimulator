@@ -5,12 +5,12 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_library(
         lib
-        includes/price.h src/price.cpp
-        includes/menuItem.h src/menuItem.cpp
-        includes/beverage.h src/beverage.cpp
-        includes/dessert.h src/dessert.cpp
-        includes/dish.h src/dish.cpp
-        includes/exceptions.h src/exceptions.cpp
+        includes/model/MenuItem/price.h src/price.cpp
+        includes/model/MenuItem/menuItem.h src/menuItem.cpp
+        includes/model/MenuItem/beverage.h src/beverage.cpp
+        includes/model/MenuItem/dessert.h src/dessert.cpp
+        includes/model/MenuItem/dish.h src/dish.cpp
+        includes/model/MenuItem/exceptions.h src/exceptions.cpp
 )
 
 add_executable(priceTests tests/priceTests.cpp)

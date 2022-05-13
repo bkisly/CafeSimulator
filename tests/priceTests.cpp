@@ -3,7 +3,7 @@
 //
 
 #define CATCH_CONFIG_MAIN
-#include "../includes/price.h"
+#include "../includes/model/MenuItem/price.h"
 #include "catch.hpp"
 
 TEST_CASE("Boolean operators")

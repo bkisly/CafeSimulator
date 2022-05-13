@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "../includes/price.h"
+#include "../includes/model/MenuItem/price.h"
 
 using namespace std;
 
