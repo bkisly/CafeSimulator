@@ -1,3 +1,4 @@
+#include <memory>
 #include "../../includes/model/Employee/Cook.h"
 #include "../../includes/model/Employee/Exceptions.h"
 
@@ -63,4 +64,11 @@ string Cook::printStateLog() const {
             throw StateException(currentState);
     }
 }
+
+
+
+void Cook::setAssignedMenuItem(std::unique_ptr<MenuItem> newAssignedMenuItem) {
+    Cook::assignedMenuItem  = std::move(newAssignedMenuItem);
+}
+
 
