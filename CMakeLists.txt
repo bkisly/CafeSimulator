@@ -6,17 +6,22 @@ set(CMAKE_CXX_STANDARD 20)
 # libs
 add_library(
         menu
-        includes/model/MenuItem/menuItem.h src/menuItem.cpp
-        includes/model/MenuItem/beverage.h src/beverage.cpp
-        includes/model/MenuItem/dessert.h src/dessert.cpp
-        includes/model/MenuItem/dish.h src/dish.cpp
-        includes/model/MenuItem/exceptions.h src/exceptions.cpp
+        includes/model/MenuItem/menuItem.h src/MenuItem/menuItem.cpp
+        includes/model/MenuItem/beverage.h src/MenuItem/beverage.cpp
+        includes/model/MenuItem/dessert.h src/MenuItem/dessert.cpp
+        includes/model/MenuItem/dish.h src/MenuItem/dish.cpp
+        includes/model/MenuItem/exceptions.h src/MenuItem/exceptions.cpp
 )
 
+add_library(
+        table
+        includes/model/Customer/table.h src/Customer/table.cpp
+        includes/model/Customer/customer.h src/Customer/customer.cpp
+)
 
 add_library(
         helpers
-        includes/model/helpers/price.h src/price.cpp
+        includes/model/helpers/price.h src/Helpers/price.cpp
 )
 
 add_library(

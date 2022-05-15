@@ -2,7 +2,7 @@
 // Created by bkisl on 28.04.2022.
 //
 
-#include "../includes/model/MenuItem/exceptions.h"
+#include "../../includes/model/MenuItem/exceptions.h"
 
 using namespace std;
 

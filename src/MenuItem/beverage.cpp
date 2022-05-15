@@ -2,7 +2,7 @@
 // Created by bkisl on 27.04.2022.
 //
 
-#include "../includes/model/MenuItem/beverage.h"
+#include "../../includes/model/MenuItem/beverage.h"
 
 using namespace std;
 
