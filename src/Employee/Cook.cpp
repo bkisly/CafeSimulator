@@ -13,7 +13,9 @@ void Cook::set_known_cuisines(int knownCuisines) {
 Cook::Cook(int id, const string &name, const string &surname, int gender, Price baseSalary,
                unsigned int baseAmountOfShifts, unsigned int knownCuisines)
         : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
-          known_cuisines(knownCuisines) {}
+          known_cuisines(knownCuisines) {
+    dish_to_collect = false;
+}
 
 Price Cook::calculate_salary() const noexcept {
     return base_salary * 2;
@@ -69,6 +71,21 @@ string Cook::printStateLog() const {
 
 void Cook::setAssignedMenuItem(std::unique_ptr<MenuItem> newAssignedMenuItem) {
     Cook::assignedMenuItem  = std::move(newAssignedMenuItem);
+}
+
+void Cook::updateState() {
+    if (currentState == CookState::busy){
+        currentState == CookState::free;
+        dishToCollect = true;
+    }
+    else{
+        currentState == CookState::busy;
+        dishToCollect = false;
+    }
+}
+
+bool Cook::isDishToCollect() const {
+    return dishToCollect;
 }
 
 

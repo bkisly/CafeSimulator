@@ -21,6 +21,7 @@ public:
         free = 0, busy
     };
     void setAssignedMenuItem(unique_ptr<MenuItem> newAssignedMenuItem);
+    bool isDishToCollect() const;
 
 //  constructors, operators ...
     Cook();
@@ -40,7 +41,10 @@ public:
 
 private:
     unsigned known_cuisines;
+    bool dishToCollect;
     std::unique_ptr<MenuItem> assignedMenuItem;
+
+    void updateState();
 
 
 
