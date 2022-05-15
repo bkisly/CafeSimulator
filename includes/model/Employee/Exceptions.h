@@ -73,4 +73,9 @@ public:
             std::to_string(wrong_state)) {};
 };
 
+class  BusyCookException : public std::logic_error {
+public:
+    BusyCookException() : std::logic_error("Dish cannot be assigned to busy cook") {};
+};
+
 #endif //EXCEPTIONS_H
