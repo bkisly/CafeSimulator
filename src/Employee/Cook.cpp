@@ -78,6 +78,7 @@ void Cook::setAssignedMenuItem(std::unique_ptr<MenuItem> newAssignedMenuItem) {
 }
 
 void Cook::updateState() {
+    Employee::updateState();
     if (currentState == CookState::busy){
         currentState == CookState::free;
         dishToCollect = true;

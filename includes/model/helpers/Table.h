@@ -9,6 +9,8 @@ private:
 //    rest of the implementation
 public:
     Table();
+
+    int getId() const;
 };
 
 

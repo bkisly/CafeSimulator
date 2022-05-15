@@ -7,3 +7,7 @@
 Table::Table() {
     id = 23;
 }
+
+int Table::getId() const {
+    return id;
+}

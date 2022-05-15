@@ -53,7 +53,7 @@ add_executable(menuItemsTests tests/menuItemsTests.cpp)
 target_link_libraries(menuItemsTests PRIVATE menu helpers)
 
 add_executable(employeeTests tests/testEmployee.cpp)
-target_link_libraries(employeeTests PRIVATE employee helpers)
+target_link_libraries(employeeTests PRIVATE employee helpers menu)
 
 add_executable(customerTableTests tests/customerTableTests.cpp)
 target_link_libraries(customerTableTests PRIVATE customer menu helpers)

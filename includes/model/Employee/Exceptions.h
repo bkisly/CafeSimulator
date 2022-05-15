@@ -78,4 +78,9 @@ public:
     BusyCookException() : std::logic_error("Dish cannot be assigned to busy cook") {};
 };
 
+class  BusyWaiterException : public std::logic_error {
+public:
+    BusyWaiterException() : std::logic_error("Table cannot be assigned to busy waiter") {};
+};
+
 #endif //EXCEPTIONS_H

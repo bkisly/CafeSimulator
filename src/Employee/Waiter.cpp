@@ -60,15 +60,36 @@ string Waiter::printStateLog() const{
         case WaiterState::awaiting:
             return msg + "awaiting\n";
         case WaiterState::giveMenu:
-            return msg + "giving cards\n";
+            return msg + "giving cards to table nr " +
+            to_string(assignedTable->getId()) + "\n";
         case WaiterState::collectOrder:
-            return msg + "collecting orders\n";
+            return msg + "collecting orders to table nr " +
+            to_string(assignedTable->getId()) + "\n";
         case WaiterState::handInOrder:
-            return msg + "handing in orders\n";
+            return msg + "handing in orders to table nr " +
+            to_string(assignedTable->getId()) + "\n";
         case WaiterState::takeReceipt:
-            return msg + "taking receipt\n";
+            return msg + "taking receipt to table nr " +
+            to_string(assignedTable->getId()) + "\n";
         default:
             throw StateException(currentState);
     }
+}
+
+void Waiter::updateState() {
+    Employee::getId();
+    if (currentState < WaiterState::last){
+        currentState++;
+    }
+    else{
+        currentState == WaiterState::awaiting;
+    }
+}
+
+void Waiter::setAssignedTable(unique_ptr<Table> newAssignedTable) {
+    if (currentState != WaiterState::awaiting){
+        throw BusyWaiterException();
+    }
+    Waiter::assignedTable = std::move(newAssignedTable);
 }
 

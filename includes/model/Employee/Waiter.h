@@ -2,6 +2,8 @@
 #define WAITER_H
 
 #include "Employee.h"
+#include "../helpers/Table.h"
+#include <memory>
 
 class Waiter : public Employee {
 
@@ -21,8 +23,10 @@ public:
         giveMenu,
         collectOrder,
         handInOrder,
-        takeReceipt
+        takeReceipt,
+        last = takeReceipt
     };
+    void setAssignedTable(unique_ptr<Table> newAssignedTable);
 
 //  constructors, operators ...
     Waiter();
@@ -39,7 +43,8 @@ public:
 
 
 private:
-
+    std::unique_ptr<Table> assignedTable;
+    void updateState();
 
 //    legacy
     bool can_serve_alcohol;
