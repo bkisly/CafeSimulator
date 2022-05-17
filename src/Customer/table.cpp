@@ -52,8 +52,8 @@ bool Table::TryAddCustomers(vector<Customer> customers) {
     if(customers.size() <= capacity - this->customers.size())
     {
         customersValidation(customers);
-        for(int i = 0; i < customers.size(); i++)
-            this->customers.push_back(customers[i]);
+        for(Customer &customer : customers)
+            this->customers.push_back(move(customer));
 
         return true;
     }
