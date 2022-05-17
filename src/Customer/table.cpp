@@ -23,6 +23,16 @@ void Table::customersValidation(const vector<Customer> &customers) {
         idOccurrences[customerId]++;
     }
 
+    for(Customer &customer : this->customers)
+    {
+        unsigned int customerId = customer.GetId();
+
+        if(!idOccurrences.contains(customerId))
+            idOccurrences.insert(pair{ customerId, 0 });
+
+        idOccurrences[customerId]++;
+    }
+
     for(const auto& [key, value] : idOccurrences)
     {
         if(value > 1) throw invalid_argument("Customer IDs must be unique.");
@@ -48,12 +58,21 @@ const vector<Customer> &Table::GetCustomers() const {
     return customers;
 }
 
-bool Table::TryAddCustomers(vector<Customer> customers) {
+bool Table::TryAddCustomers(vector<Customer> &customers) {
     if(customers.size() <= capacity - this->customers.size())
     {
         customersValidation(customers);
+        for(Customer &customer : this->customers)
+            if(!customer.DoesAllowOthers())
+                return false;
+
         for(Customer &customer : customers)
+        {
+            if (!customer.DoesAllowOthers())
+                return false;
+
             this->customers.push_back(move(customer));
+        }
 
         return true;
     }
@@ -62,5 +81,6 @@ bool Table::TryAddCustomers(vector<Customer> customers) {
 }
 
 string Table::ToString() {
-    return "Table nr " + to_string(id);
+    string peopleString = capacity > 1 ? " people" : " person";
+    return "Table nr " + to_string(id) + " for " + to_string(capacity) + peopleString;
 }
