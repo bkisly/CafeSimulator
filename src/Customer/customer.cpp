@@ -47,12 +47,12 @@ string Customer::ToString() {
         }
         case CustomerState::Awaiting:
         {
-            result += "is awaiting for " + preferredMenuItem->ToString();
+            result += "is awaiting for " + preferredMenuItem->GetName();
             break;
         }
         case CustomerState::Eating:
         {
-            result += "is eating/drinking " + preferredMenuItem->ToString();
+            result += "is eating/drinking " + preferredMenuItem->GetName();
             break;
         }
         case CustomerState::ReadyToPay:

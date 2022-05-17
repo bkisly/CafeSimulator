@@ -14,7 +14,7 @@ add_library(
 )
 
 add_library(
-        table
+        customer
         includes/model/Customer/table.h src/Customer/table.cpp
         includes/model/Customer/customer.h src/Customer/customer.cpp
 )
@@ -42,6 +42,9 @@ target_link_libraries(menuItemsTests PRIVATE menu helpers)
 
 add_executable(employeeTests tests/testEmployee.cpp)
 target_link_libraries(employeeTests PRIVATE employee helpers)
+
+add_executable(customerTableTests tests/customerTableTests.cpp)
+target_link_libraries(customerTableTests PRIVATE customer menu helpers)
 
 # runners
 add_executable(Cafe main.cpp)

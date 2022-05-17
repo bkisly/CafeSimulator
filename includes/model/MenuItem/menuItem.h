@@ -37,6 +37,7 @@ protected:
 
 public:
     MenuItem(string name, PortionUnit portionUnit, Price pricePerPortion, unsigned int cyclesToPrepare);
+    virtual ~MenuItem() = default;
 
     string GetName() const;
     PortionUnit GetPortionUnit() const;
