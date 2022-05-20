@@ -22,12 +22,11 @@ unsigned int Waiter::calculate_shifts_per_week() const noexcept {
     return (can_serve_alcohol) ? base_amount_of_shifts + 1 : base_amount_of_shifts;
 }
 
-std::ostream &Waiter::write(std::ostream &os) const noexcept{
+std::ostream &Waiter::write(std::ostream &os) const noexcept {
     Employee::write(os);
     os << " " << can_serve_alcohol;
     return os;
 }
-
 
 
 string Waiter::printProperties() const noexcept {
@@ -54,42 +53,45 @@ bool Waiter::operator!=(const Waiter &rhs) const {
     return !(rhs == *this);
 }
 
-string Waiter::printStateLog() const{
+string Waiter::printStateLog() const {
     string msg = "waiter " + std::to_string(id) + " - ";
     switch (currentState) {
         case WaiterState::awaiting:
             return msg + "awaiting\n";
         case WaiterState::giveMenu:
             return msg + "giving cards to table nr " +
-            to_string(assignedTable->getId()) + "\n";
+                   to_string(assignedTable->getId()) + "\n";
         case WaiterState::collectOrder:
             return msg + "collecting orders to table nr " +
-            to_string(assignedTable->getId()) + "\n";
+                   to_string(assignedTable->getId()) + "\n";
         case WaiterState::handInOrder:
             return msg + "handing in orders to table nr " +
-            to_string(assignedTable->getId()) + "\n";
+                   to_string(assignedTable->getId()) + "\n";
         case WaiterState::takeReceipt:
             return msg + "taking receipt to table nr " +
-            to_string(assignedTable->getId()) + "\n";
+                   to_string(assignedTable->getId()) + "\n";
         default:
             throw StateException(currentState);
     }
 }
 
 void Waiter::updateState() {
-    Employee::getId();
-    if (currentState < WaiterState::last){
-        currentState++;
-    }
-    else{
+    Employee::updateState();
+    if (has_assigned_table) {
+        if (currentState < WaiterState::last) {
+            currentState++;
+        }
+    } else {
         currentState == WaiterState::awaiting;
+        has_assigned_table = false;
     }
 }
 
 void Waiter::setAssignedTable(unique_ptr<Table> newAssignedTable) {
-    if (currentState != WaiterState::awaiting){
+    if (currentState != WaiterState::awaiting) {
         throw BusyWaiterException();
     }
     Waiter::assignedTable = std::move(newAssignedTable);
+    has_assigned_table = true;
 }
 
