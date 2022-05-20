@@ -4,7 +4,9 @@
 Waiter::Waiter(int id, const string &name, const string &surname, int gender, Price baseSalary,
                unsigned int baseAmountOfShifts, bool canServeAlcohol)
         : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
-          can_serve_alcohol(canServeAlcohol) {}
+          can_serve_alcohol(canServeAlcohol) {
+    has_assigned_table = false;
+}
 
 Price Waiter::calculate_salary() const noexcept {
     return (can_serve_alcohol) ? base_salary * 3 : base_salary * 2;
@@ -30,8 +32,9 @@ std::ostream &Waiter::write(std::ostream &os) const noexcept {
 
 
 string Waiter::printProperties() const noexcept {
-    return Employee::printProperties() + "whether can serve alcohol: " + std::to_string
-            (can_serve_alcohol) + "\n";
+    return Employee::printProperties();
+//    + "whether can serve alcohol: " + std::to_string
+//            (can_serve_alcohol) + "\n";
 }
 
 std::istream &Waiter::read(std::istream &in) {
@@ -76,7 +79,6 @@ string Waiter::printStateLog() const {
 }
 
 void Waiter::updateState() {
-    Employee::updateState();
     if (has_assigned_table) {
         if (currentState < WaiterState::last) {
             currentState++;

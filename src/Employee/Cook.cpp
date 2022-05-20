@@ -32,8 +32,9 @@ std::ostream &Cook::write(std::ostream &os) const noexcept{
 }
 
 string Cook::printProperties() const noexcept {
-    return Employee::printProperties() + "known cuisines: " + std::to_string
-            (known_cuisines) + "\n";
+    return Employee::printProperties();
+//    + "known cuisines: " + std::to_string
+//            (known_cuisines) + "\n";
 }
 
 std::istream &Cook::read(std::istream &in) {

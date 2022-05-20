@@ -33,7 +33,7 @@ TEST_CASE("waiter setter") {
     CHECK(waiter1.get_name() == "Jan");
 }
 
-TEST_CASE("waiter printProperties currentState") {
+TEST_CASE("waiter printStateLog currentState") {
     Price salary(3000, 0);
     Waiter waiter1(1, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
     CHECK(waiter1.printStateLog() == "waiter 1 - awaiting\n");
@@ -42,16 +42,26 @@ TEST_CASE("waiter printProperties currentState") {
     CHECK(waiter1.printStateLog() == "waiter 1 - collecting orders to table nr 23\n");
 }
 
-TEST_CASE("waiter virtual methods") {
+TEST_CASE("waiter states simulation"){
     Price salary(3000, 0);
-    Waiter waiter1(2, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
-    SECTION("calculate salary") {
-        CHECK(waiter1.calculate_salary() == Price(9000, 0));
-    }
-    SECTION("calculate shifts") {
-        CHECK(waiter1.calculate_shifts_per_week() == 5);
-    }
+    Waiter waiter(3, "Tomasz", "Nowak", Waiter::Gender::male,
+                  salary, 4, 0);
+    CHECK(waiter.getState() == Waiter::WaiterState::awaiting);
+//    advanceCycle - no assigned tables - wait
+    waiter.advanceCycle();
+    CHECK(waiter.getState() == Waiter::WaiterState::awaiting);
+
+//    setAssignedTable
+    waiter.setAssignedTable(make_unique<Table>(Table()));
+    waiter.advanceCycle();
+    CHECK(waiter.getState() == Waiter::WaiterState::giveMenu);
+
+    waiter.advanceCycle();
+    CHECK(waiter.getState() == Waiter::WaiterState::collectOrder);
+
+//    todo check other states, especially asssigned cook
 }
+
 
 TEST_CASE("waiter in out operators") {
     Price salary(3000, 0);
@@ -66,6 +76,8 @@ TEST_CASE("waiter in out operators") {
 }
 
 
+
+
 TEST_CASE("cook setter") {
     Price salary(3000, 0);
     Cook cook1(11, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
@@ -74,17 +86,6 @@ TEST_CASE("cook setter") {
     CHECK(cook1.get_name() == "Jan");
 }
 
-TEST_CASE("cook virtual methods") {
-    Price salary(3000, 0);
-    Cook cook1(11, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
-    SECTION("calculate salary") {
-        Price cooker_salary = cook1.calculate_salary();
-        CHECK(cook1.calculate_salary() == Price(6000, 0));
-    }
-    SECTION("calculate shifts") {
-        CHECK(cook1.calculate_shifts_per_week() == 5);
-    }
-}
 
 TEST_CASE("cook in out operators") {
     Price salary(3000, 0);
