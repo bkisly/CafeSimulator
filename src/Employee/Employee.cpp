@@ -13,6 +13,7 @@ Employee::Employee(int id, const string &name, const string &surname, int gender
         throw GenderException(gender);
     }
     currentState = 0;
+    cyclesLeft = 0;
 }
 
 const string &Employee::get_name() const {
