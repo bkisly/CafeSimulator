@@ -57,7 +57,7 @@ bool Cook::operator!=(const Cook &rhs) const {
 }
 
 string Cook::printStateLog() const {
-    string msg = "waiter " + std::to_string(id) + " - ";
+    string msg = "cook " + std::to_string(id) + " - ";
     switch (currentState) {
         case CookState::free:
             return msg + "free\n";
@@ -76,16 +76,16 @@ void Cook::setAssignedMenuItem(std::unique_ptr<MenuItem> newAssignedMenuItem) {
     }
     cyclesLeft = newAssignedMenuItem->GetCyclesToPrepare();
     Cook::assignedMenuItem  = std::move(newAssignedMenuItem);
+    currentState = CookState::busy;
 }
 
 void Cook::updateState() {
-    Employee::updateState();
     if (currentState == CookState::busy){
-        currentState == CookState::free;
+        currentState = CookState::free;
         dishToCollect = true;
     }
     else{
-        currentState == CookState::busy;
+        currentState = CookState::busy;
         dishToCollect = false;
     }
 }

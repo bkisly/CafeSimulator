@@ -45,7 +45,7 @@ public:
 private:
     std::unique_ptr<Table> assignedTable;
     void updateState();
-    bool has_assigned_table;
+    bool hasAssignedTable;
 
 //    legacy
     bool can_serve_alcohol;

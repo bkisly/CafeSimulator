@@ -6,13 +6,15 @@
 #include <string>
 #include <ostream>
 #include "Employee.h"
+#include "Waiter.h"
+#include "../MenuItem/dish.h"
 
 using std::string, std::vector;
 
 class DbWorkers {
 private:
-    vector<std::unique_ptr<Employee>> workers;
     vector<int> existingIDs;
+    std::vector<std::unique_ptr<Employee>> workers;
     int newIdToAssign;
 
     void validateId(int id);
@@ -42,6 +44,8 @@ public:
     friend std::istream &operator>>(std::istream &in, DbWorkers &workers);
 
     string printAll() const noexcept;
+
+    void assignDishToFreeCook(unique_ptr<Dish> dish);
 
     int getWokerState(int id);
 //    todo envoke polymorphic method for Employee base class (unique_ptr)

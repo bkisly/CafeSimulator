@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include "../helpers/price.h"
+//#include "../Employee/DbWorkers.h"
 
 using std::string;
 
@@ -11,6 +12,7 @@ class Employee {
 public:
     int getId() const;
     int getCyclesLeft() const;
+
 
 //    io methods
     friend std::ostream &operator<<(std::ostream &os, const Employee &worker);
@@ -63,9 +65,10 @@ protected:
     int gender;
     Price base_salary;
     unsigned int base_amount_of_shifts;
+
 };
 
-std::ostream &operator<<(std::ostream &os, const Employee &worker);
+//std::ostream &operator<<(std::ostream &os, const Employee &worker);
 
 
 

@@ -135,11 +135,11 @@ int Employee::getCyclesLeft() const {
 }
 
 void Employee::advanceCycle() {
+    if (cyclesLeft > 0){
+        cyclesLeft--;
+    }
     if (cyclesLeft == 0){
         updateState();
-    }
-    else{
-        cyclesLeft--;
     }
 }
 

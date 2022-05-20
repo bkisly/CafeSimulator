@@ -47,8 +47,6 @@ private:
 
     void updateState();
 
-
-
 };
 
 

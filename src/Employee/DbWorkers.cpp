@@ -97,3 +97,7 @@ void DbWorkers::validateId(int id) {
         throw IdException(id);
     }
 }
+
+void DbWorkers::assignDishToFreeCook(unique_ptr<Dish> dish) {
+//    todo: implement - iterate for each and check if they are cook - rtti
+}
