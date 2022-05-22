@@ -33,6 +33,12 @@ add_library(
         includes/model/Employee/Exceptions.h
 )
 
+add_library(
+        menuDatabase
+        includes/model/Databases/iDatabase.h
+        includes/model/Databases/menuDatabase.h src/Databases/menuDatabase.cpp
+)
+
 # tests
 add_executable(priceTests tests/priceTests.cpp)
 target_link_libraries(priceTests PRIVATE helpers)
@@ -45,6 +51,9 @@ target_link_libraries(employeeTests PRIVATE employee helpers)
 
 add_executable(customerTableTests tests/customerTableTests.cpp)
 target_link_libraries(customerTableTests PRIVATE customer menu helpers)
+
+add_executable(menuDatabaseTests tests/menuDatabaseTests.cpp)
+target_link_libraries(menuDatabaseTests PRIVATE menu menuDatabase helpers)
 
 # runners
 add_executable(Cafe main.cpp)
