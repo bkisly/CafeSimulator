@@ -4,7 +4,7 @@
 
 #include "../../includes/model/Customer/customer.h"
 
-Customer::Customer(unsigned int id, bool allowsOthers, unique_ptr<MenuItem> preferredMenuItem) {
+Customer::Customer(unsigned int id, bool allowsOthers, shared_ptr<MenuItem> preferredMenuItem) {
     this->id = id;
     this->allowsOthers = allowsOthers;
     this->preferredMenuItem = move(preferredMenuItem);
@@ -19,7 +19,7 @@ bool Customer::DoesAllowOthers() const {
     return allowsOthers;
 }
 
-const unique_ptr<MenuItem> &Customer::GetPreferredMenuItem() {
+const shared_ptr<MenuItem> &Customer::GetPreferredMenuItem() {
     return preferredMenuItem;
 }
 

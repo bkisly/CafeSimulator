@@ -18,24 +18,24 @@ TEST_CASE("Initialization")
         Dessert cake("Cake", Price(3, 49), 3);
         Dish salad("Salad", Price(9, 99), true, 3);
 
-        vector<unique_ptr<MenuItem>> items;
+        vector<shared_ptr<MenuItem>> items;
 
         CHECK_THROWS_AS(MenuDatabase(items), ArgumentEmptyException);
 
-        items.push_back(make_unique<Beverage>(coffee));
-        items.push_back(make_unique<Dessert>(cake));
-        items.push_back(make_unique<Dish>(salad));
+        items.push_back(make_shared<Beverage>(coffee));
+        items.push_back(make_shared<Dessert>(cake));
+        items.push_back(make_shared<Dish>(salad));
 
-        REQUIRE_NOTHROW(MenuDatabase(make_unique<Beverage>(coffee)));
+        REQUIRE_NOTHROW(MenuDatabase(make_shared<Beverage>(coffee)));
         REQUIRE_NOTHROW(MenuDatabase(items));
 
-        MenuDatabase menu1(make_unique<Beverage>(coffee));
+        MenuDatabase menu1(make_shared<Beverage>(coffee));
         CHECK(menu1.GetItems().size() == 1);
 
-        vector<unique_ptr<MenuItem>> itemsNew;
-        itemsNew.push_back(make_unique<Beverage>(coffee));
-        itemsNew.push_back(make_unique<Dessert>(cake));
-        itemsNew.push_back(make_unique<Dish>(salad));
+        vector<shared_ptr<MenuItem>> itemsNew;
+        itemsNew.push_back(make_shared<Beverage>(coffee));
+        itemsNew.push_back(make_shared<Dessert>(cake));
+        itemsNew.push_back(make_shared<Dish>(salad));
         MenuDatabase menu2(itemsNew);
         CHECK(menu2.GetItems().size() == 3);
     }
@@ -47,9 +47,9 @@ TEST_CASE("Collection methods")
     Dessert cake("Cake", Price(3, 49), 3);
     Dish salad("Salad", Price(9, 99), true, 3);
 
-    vector<unique_ptr<MenuItem>> items;
-    items.push_back(make_unique<Beverage>(coffee));
-    items.push_back(make_unique<Dessert>(cake));
+    vector<shared_ptr<MenuItem>> items;
+    items.push_back(make_shared<Beverage>(coffee));
+    items.push_back(make_shared<Dessert>(cake));
 
     MenuDatabase menu(items);
 
@@ -62,8 +62,8 @@ TEST_CASE("Collection methods")
     SECTION("Add item")
     {
         Beverage anotherCoffee("Coffee", Price(10, 99), CupType::Mug, 5);
-        CHECK_THROWS_AS(menu.AddItem(make_unique<Beverage>(anotherCoffee)), ItemExistenceException);
-        REQUIRE_NOTHROW(menu.AddItem(make_unique<Dish>(salad)));
+        CHECK_THROWS_AS(menu.AddItem(make_shared<Beverage>(anotherCoffee)), ItemExistenceException);
+        REQUIRE_NOTHROW(menu.AddItem(make_shared<Dish>(salad)));
         CHECK(menu.GetItems().size() == 3);
     }
 

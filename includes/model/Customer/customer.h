@@ -22,16 +22,16 @@ class Customer {
 private:
     unsigned int id;
     bool allowsOthers;
-    unique_ptr<MenuItem> preferredMenuItem;
+    shared_ptr<MenuItem> preferredMenuItem;
 
     CustomerState currentState;
 
 public:
-    Customer(unsigned int id, bool allowsOthers, unique_ptr<MenuItem> preferredMenuItem);
+    Customer(unsigned int id, bool allowsOthers, shared_ptr<MenuItem> preferredMenuItem);
 
     unsigned int GetId() const;
     bool DoesAllowOthers() const;
-    const unique_ptr<MenuItem> &GetPreferredMenuItem();
+    const shared_ptr<MenuItem> &GetPreferredMenuItem();
     CustomerState GetCurrentState() const;
 
     void AdvanceState();

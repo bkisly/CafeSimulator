@@ -5,6 +5,8 @@
 #ifndef CAFE_CAFEMODEL_H
 #define CAFE_CAFEMODEL_H
 
+#include <cstdlib>
+
 #include "Databases/menuDatabase.h"
 #include "Customer/customer.h"
 #include "Customer/table.h"
@@ -16,16 +18,18 @@
 class CafeModel {
 private:
     // Cafe resources
-    MenuDatabase menuDb = MenuDatabase(make_unique<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3));
+    MenuDatabase menuDb = MenuDatabase(make_shared<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3));
     vector<Table> tables;
 
     // Simulation status
     vector<Customer> unassignedCustomers;
     unsigned int currentCycle;
+    string simulationLog;
+    unsigned int totalCustomers;
 
     // Value generators
-    unique_ptr<MenuItem> randomMenuItem();
-    Customer randomCustomer();
+    shared_ptr<MenuItem> randomMenuItem();
+    Customer randomCustomer(bool allowsOthers);
     void addNewCustomers();
 
 public:
@@ -36,6 +40,7 @@ public:
     const vector<Customer> &GetUnassignedCustomers() const;
     const vector<Table> &GetTables() const;
     unsigned int GetCurrentCycle() const;
+    string GetSimulationLog() const;
 
     // Action methods
     void Simulate(unsigned int cycles);

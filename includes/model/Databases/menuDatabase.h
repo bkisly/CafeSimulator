@@ -17,16 +17,16 @@ using namespace std;
 
 class MenuDatabase : public IDatabase<MenuItem> {
 private:
-    vector<unique_ptr<MenuItem>> items;
-    void validateItems(const vector<unique_ptr<MenuItem>> &menuItems);
+    vector<shared_ptr<MenuItem>> items;
+    void validateItems(const vector<shared_ptr<MenuItem>> &menuItems);
 
 public:
-    MenuDatabase(unique_ptr<MenuItem> initialItem);
-    MenuDatabase(vector<unique_ptr<MenuItem>> &initialItems);
+    MenuDatabase(shared_ptr<MenuItem> initialItem);
+    MenuDatabase(vector<shared_ptr<MenuItem>> &initialItems);
 
-    const vector<unique_ptr<MenuItem>> &GetItems() override;
+    const vector<shared_ptr<MenuItem>> &GetItems() override;
     bool ItemExists(string itemName) const;
-    void AddItem(unique_ptr<MenuItem> item) override;
+    void AddItem(shared_ptr<MenuItem> item) override;
     void RemoveItem(unsigned int itemIndex) override;
     void RemoveItem(string itemName);
 

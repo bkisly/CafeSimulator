@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void MenuDatabase::validateItems(const vector<unique_ptr<MenuItem>> &menuItems) {
+void MenuDatabase::validateItems(const vector<shared_ptr<MenuItem>> &menuItems) {
     if(menuItems.empty()) throw ArgumentEmptyException("Menu cannot be empty.");
     map<string, int> namesToOccurrences;
 
@@ -29,21 +29,21 @@ void MenuDatabase::validateItems(const vector<unique_ptr<MenuItem>> &menuItems) 
     }
 }
 
-MenuDatabase::MenuDatabase(unique_ptr<MenuItem> initialItem) {
-    items.push_back(move(initialItem));
+MenuDatabase::MenuDatabase(shared_ptr<MenuItem> initialItem) {
+    items.push_back(initialItem);
 }
 
-MenuDatabase::MenuDatabase(vector<unique_ptr<MenuItem>> &initialItems) {
+MenuDatabase::MenuDatabase(vector<shared_ptr<MenuItem>> &initialItems) {
     validateItems(initialItems);
-    items = move(initialItems);
+    items = initialItems;
 }
 
-const vector<unique_ptr<MenuItem>> &MenuDatabase::GetItems() {
+const vector<shared_ptr<MenuItem>> &MenuDatabase::GetItems() {
     return items;
 }
 
 bool MenuDatabase::ItemExists(string itemName) const {
-    for(const unique_ptr<MenuItem> &item : items)
+    for(const shared_ptr<MenuItem> &item : items)
     {
         if(item->GetName() == itemName)
             return true;
@@ -52,7 +52,7 @@ bool MenuDatabase::ItemExists(string itemName) const {
     return false;
 }
 
-void MenuDatabase::AddItem(unique_ptr<MenuItem> item) {
+void MenuDatabase::AddItem(shared_ptr<MenuItem> item) {
     if(ItemExists(item->GetName()))
         throw ItemExistenceException("Cannot add an existing item.");
 
@@ -73,7 +73,7 @@ void MenuDatabase::RemoveItem(string itemName) {
     if(!ItemExists(itemName)) throw ItemExistenceException("Item with given name doesn't exist.");
 
     unsigned int index = find_if(items.begin(), items.end(),
-                                 [&](const unique_ptr<MenuItem> &item) -> bool
+                                 [&](const shared_ptr<MenuItem> &item) -> bool
                                  { return item->GetName() == itemName; }) - items.begin();
 
     RemoveItem(index);
