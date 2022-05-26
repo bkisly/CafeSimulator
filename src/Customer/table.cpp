@@ -4,10 +4,10 @@
 
 #include "../../includes/model/Customer/table.h"
 
-void Table::customersGroupValidation(const CustomersGroup &customersGroup) {
+void Table::customersGroupValidation(CustomersGroup &customersGroup) {
     map<unsigned int, int> idOccurrences;
 
-    for(const Customer &customer : customersGroup.GetCustomers())
+    for(Customer &customer : customersGroup.GetCustomers())
     {
         unsigned int customerId = customer.GetId();
 
@@ -52,7 +52,7 @@ vector<Customer> &Table::GetCustomers() {
     return customers;
 }
 
-bool Table::TryAddCustomers(const CustomersGroup &customersGroup) {
+bool Table::TryAddCustomers(CustomersGroup &customersGroup) {
     if(customersGroup.GroupSize() <= capacity - this->customers.size())
     {
         customersGroupValidation(customersGroup);
@@ -60,11 +60,11 @@ bool Table::TryAddCustomers(const CustomersGroup &customersGroup) {
             if(!customer.DoesAllowOthers())
                 return false;
 
-        if(!customersGroup.AllowOthers()) return false;
+        if(!customersGroup.AllowOthers() && !customers.empty()) return false;
 
         for(Customer &customer : customersGroup.GetCustomers()) {
-            customers.push_back(customer);
             customer.AdvanceState();
+            customers.push_back(customer);
         }
 
         return true;
@@ -75,5 +75,5 @@ bool Table::TryAddCustomers(const CustomersGroup &customersGroup) {
 
 string Table::ToString() const {
     string peopleString = capacity > 1 ? " people" : " person";
-    return "Table nr " + to_string(id) + " for " + to_string(capacity) + peopleString;
+    return "Table nr " + to_string(id) + " for " + to_string(capacity) + peopleString + " currently has " + to_string(customers.size()) + " customers";
 }

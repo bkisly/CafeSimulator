@@ -7,14 +7,15 @@
 
 #include <cstdlib>
 
-#include "Databases/menuDatabase.h"
-#include "Customer/customer.h"
-#include "Customer/customersGroup.h"
-#include "Customer/table.h"
-
 #include "MenuItem/beverage.h"
 #include "MenuItem/dessert.h"
 #include "MenuItem/dish.h"
+
+#include "Databases/menuDatabase.h"
+
+#include "Customer/customer.h"
+#include "Customer/customersGroup.h"
+#include "Customer/table.h"
 
 class CafeModel {
 private:

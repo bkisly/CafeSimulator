@@ -98,7 +98,7 @@ void CafeModel::Simulate(unsigned int cycles) {
         // 1. Collect customers who sit by the tables
 
         vector<Customer> assignedCustomers;
-        for(Table table : tables)
+        for(Table &table : tables)
         {
             for(Customer &customer : table.GetCustomers())
                 assignedCustomers.push_back(customer);
@@ -137,17 +137,20 @@ void CafeModel::Simulate(unsigned int cycles) {
 
         vector<int> groupsIdsToRemove;
         // 3. Assign unassigned customers
-        for(auto iter = unassignedCustomers.begin(); iter < unassignedCustomers.end(); iter++)
+        int groupId = 0;
+        for(CustomersGroup &customersGroup : unassignedCustomers)
         {
-            for(Table table : tables)
+            for(Table &table : tables)
             {
-                if(table.TryAddCustomers(*iter))
+                if(table.TryAddCustomers(customersGroup))
                 {
-                    groupsIdsToRemove.push_back(iter - unassignedCustomers.begin());
-                    assignedCustomers.insert(assignedCustomers.end(), iter->GetCustomers().begin(), iter->GetCustomers().end());
+                    groupsIdsToRemove.push_back(groupId);
+                    assignedCustomers.insert(assignedCustomers.end(), customersGroup.GetCustomers().begin(), customersGroup.GetCustomers().end());
                     break;
                 }
             }
+
+            groupId++;
         }
 
         for(int id : groupsIdsToRemove)
@@ -163,13 +166,21 @@ void CafeModel::Simulate(unsigned int cycles) {
 
         // 5b. Print customers state
         simulationLog += "--- Customers state ---\n";
-        for(Customer customer : assignedCustomers)
+        for(Customer &customer : assignedCustomers)
             simulationLog += customer.ToString() + "\n";
 
         for(CustomersGroup customersGroup : unassignedCustomers)
         {
             for(Customer customer : customersGroup.GetCustomers())
                 simulationLog += customer.ToString() + "\n";
+        }
+
+        // 5c. Print tables state
+        simulationLog += "\n--- Tables state ---\n";
+
+        for(Table table : tables)
+        {
+            simulationLog += table.ToString() + "\n";
         }
 
         // 5c. Print employees state

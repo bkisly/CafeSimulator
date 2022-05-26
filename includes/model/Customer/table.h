@@ -15,7 +15,7 @@ private:
     unsigned int capacity;
     vector<Customer> customers;
 
-    void customersGroupValidation(const CustomersGroup &customersGroup);
+    void customersGroupValidation(CustomersGroup &customersGroup);
 
 public:
     Table(unsigned int id, unsigned int capacity);
@@ -24,7 +24,7 @@ public:
     unsigned int GetCapacity() const;
     vector<Customer> &GetCustomers();
 
-    bool TryAddCustomers(const CustomersGroup &customersGroup);
+    bool TryAddCustomers(CustomersGroup &customersGroup);
     string ToString() const;
 };
 

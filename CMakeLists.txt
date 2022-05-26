@@ -17,6 +17,7 @@ add_library(
         customer
         includes/model/Customer/table.h src/Customer/table.cpp
         includes/model/Customer/customer.h src/Customer/customer.cpp
+        includes/model/Customer/customersGroup.h src/Customer/customersGroup.cpp
 )
 
 add_library(
@@ -39,6 +40,11 @@ add_library(
         includes/model/Databases/menuDatabase.h src/Databases/menuDatabase.cpp
 )
 
+add_library(
+        model
+        includes/model/cafeModel.h src/cafeModel.cpp
+)
+
 # tests
 add_executable(priceTests tests/priceTests.cpp)
 target_link_libraries(priceTests PRIVATE helpers)
@@ -57,4 +63,4 @@ target_link_libraries(menuDatabaseTests PRIVATE menu menuDatabase helpers)
 
 # runners
 add_executable(Cafe main.cpp)
-target_link_libraries(Cafe PRIVATE menu employee helpers)
+target_link_libraries(Cafe PRIVATE model menu menuDatabase helpers customer)
