@@ -120,7 +120,8 @@ void CafeModel::Simulate(unsigned int cycles) {
         }
 
         // 3. Assign unassigned customers
-        // TODO: modify Table implementation in order to assign single customers
+        // TODO: modify Table implementation in order to assign single customers or groups at once
+        // base class for customer and customers group, pure virtual method for getting vector of customers
 
         // 4. Add new customers
         addNewCustomers();
