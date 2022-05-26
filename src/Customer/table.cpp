@@ -48,7 +48,7 @@ unsigned int Table::GetCapacity() const {
     return capacity;
 }
 
-const vector<Customer> &Table::GetCustomers() const {
+vector<Customer> &Table::GetCustomers() {
     return customers;
 }
 
@@ -62,8 +62,10 @@ bool Table::TryAddCustomers(const CustomersGroup &customersGroup) {
 
         if(!customersGroup.AllowOthers()) return false;
 
-        for(const Customer &customer : customersGroup.GetCustomers())
+        for(Customer &customer : customersGroup.GetCustomers()) {
             customers.push_back(customer);
+            customer.AdvanceState();
+        }
 
         return true;
     }

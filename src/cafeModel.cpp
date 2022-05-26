@@ -18,10 +18,13 @@ Customer CafeModel::randomCustomer(bool allowsOthers) {
 void CafeModel::addNewCustomers() {
     unsigned int customersAmount = rand() % 5 + 1;
     bool allowOthers = rand() % 2 == 1;
+    vector<Customer> customersToAdd;
 
     for(int i = 0; i < customersAmount; i++) {
-        unassignedCustomers.push_back(randomCustomer(allowOthers));
+        customersToAdd.push_back(randomCustomer(allowOthers));
     }
+
+    unassignedCustomers.push_back(CustomersGroup(customersToAdd));
 }
 
 CafeModel::CafeModel(bool readFromService) {
@@ -41,6 +44,18 @@ CafeModel::CafeModel(bool readFromService) {
         };
 
         menuDb = MenuDatabase(menuItems);
+
+        vector<Table> tables
+        {
+            Table(1, 2),
+            Table(2, 2),
+            Table(3, 3),
+            Table(4, 4),
+            Table(5, 4),
+            Table(6, 5)
+        };
+
+        this->tables = tables;
     }
     else
     {
@@ -54,7 +69,7 @@ const MenuDatabase &CafeModel::GetMenu() const {
     return menuDb;
 }
 
-const vector<Customer> &CafeModel::GetUnassignedCustomers() const {
+const vector<CustomersGroup> &CafeModel::GetUnassignedCustomers() const {
     return unassignedCustomers;
 }
 
@@ -74,6 +89,7 @@ string CafeModel::GetSimulationLog() const {
 
 void CafeModel::Simulate(unsigned int cycles) {
     currentCycle = 0;
+    simulationLog = "";
 
     while(currentCycle < cycles)
     {
@@ -84,13 +100,13 @@ void CafeModel::Simulate(unsigned int cycles) {
         vector<Customer> assignedCustomers;
         for(Table table : tables)
         {
-            for(Customer customer : table.GetCustomers())
+            for(Customer &customer : table.GetCustomers())
                 assignedCustomers.push_back(customer);
         }
 
         // 2. Perform work for assigned customers
         // TODO: need EmployeesDatabase class to complete this step
-        for(Customer customer : assignedCustomers)
+        for(Customer &customer : assignedCustomers)
         {
             switch (customer.GetCurrentState())
             {
@@ -119,17 +135,49 @@ void CafeModel::Simulate(unsigned int cycles) {
             }
         }
 
+        vector<int> groupsIdsToRemove;
         // 3. Assign unassigned customers
-        // TODO: modify Table implementation in order to assign single customers or groups at once
-        // base class for customer and customers group, pure virtual method for getting vector of customers
+        for(auto iter = unassignedCustomers.begin(); iter < unassignedCustomers.end(); iter++)
+        {
+            for(Table table : tables)
+            {
+                if(table.TryAddCustomers(*iter))
+                {
+                    groupsIdsToRemove.push_back(iter - unassignedCustomers.begin());
+                    assignedCustomers.insert(assignedCustomers.end(), iter->GetCustomers().begin(), iter->GetCustomers().end());
+                    break;
+                }
+            }
+        }
+
+        for(int id : groupsIdsToRemove)
+            unassignedCustomers.erase(unassignedCustomers.begin() + id);
 
         // 4. Add new customers
         addNewCustomers();
 
-        // 5. Print every customer's state
+        // 5. SAVE LOG
 
-        // 6. Print every employee's state
+        // 5a. Print header
+        simulationLog += "==========\nSIMULATION CYCLE NR " + to_string(currentCycle) + "\n==========\n\n";
 
+        // 5b. Print customers state
+        simulationLog += "--- Customers state ---\n";
+        for(Customer customer : assignedCustomers)
+            simulationLog += customer.ToString() + "\n";
+
+        for(CustomersGroup customersGroup : unassignedCustomers)
+        {
+            for(Customer customer : customersGroup.GetCustomers())
+                simulationLog += customer.ToString() + "\n";
+        }
+
+        // 5c. Print employees state
+
+        simulationLog += "\n--- Employees state ---\n";
+        // TODO: print employees state
+
+        simulationLog += "\n\n";
         currentCycle++;
     }
 }

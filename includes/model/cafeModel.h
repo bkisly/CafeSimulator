@@ -9,6 +9,7 @@
 
 #include "Databases/menuDatabase.h"
 #include "Customer/customer.h"
+#include "Customer/customersGroup.h"
 #include "Customer/table.h"
 
 #include "MenuItem/beverage.h"
@@ -22,7 +23,7 @@ private:
     vector<Table> tables;
 
     // Simulation status
-    vector<Customer> unassignedCustomers;
+    vector<CustomersGroup> unassignedCustomers;
     unsigned int currentCycle;
     string simulationLog;
     unsigned int totalCustomers;
@@ -37,7 +38,7 @@ public:
 
     // Getters
     const MenuDatabase &GetMenu() const;
-    const vector<Customer> &GetUnassignedCustomers() const;
+    const vector<CustomersGroup> &GetUnassignedCustomers() const;
     const vector<Table> &GetTables() const;
     unsigned int GetCurrentCycle() const;
     string GetSimulationLog() const;

@@ -34,7 +34,7 @@ CustomersGroup::CustomersGroup(vector<Customer> &customers) {
     this->customers = customers;
 }
 
-const vector<Customer> &CustomersGroup::GetCustomers() const {
+vector<Customer> &CustomersGroup::GetCustomers() {
     return customers;
 }
 

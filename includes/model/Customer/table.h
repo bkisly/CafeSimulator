@@ -22,7 +22,7 @@ public:
 
     unsigned int GetId() const;
     unsigned int GetCapacity() const;
-    const vector<Customer> &GetCustomers() const;
+    vector<Customer> &GetCustomers();
 
     bool TryAddCustomers(const CustomersGroup &customersGroup);
     string ToString() const;

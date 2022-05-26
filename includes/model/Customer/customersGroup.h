@@ -15,7 +15,7 @@ private:
 
 public:
     CustomersGroup(vector<Customer> &customers);
-    const vector<Customer> &GetCustomers() const;
+    vector<Customer> &GetCustomers();
     unsigned int GroupSize() const;
     bool AllowOthers() const;
 };
