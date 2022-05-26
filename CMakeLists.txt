@@ -47,8 +47,9 @@ add_library(
 )
 
 add_library(
-        model
+        viewModel
         includes/model/cafeModel.h src/cafeModel.cpp
+        includes/view/cafeView.h src/cafeView.cpp
 )
 
 # tests
@@ -68,7 +69,7 @@ add_executable(menuDatabaseTests tests/menuDatabaseTests.cpp)
 target_link_libraries(menuDatabaseTests PRIVATE menu menuDatabase helpers)
 
 add_executable(simulationRunner tests/simulationRunner.cpp)
-target_link_libraries(simulationRunner PRIVATE model menu menuDatabase helpers customer)
+target_link_libraries(simulationRunner PRIVATE viewModel menu menuDatabase helpers customer)
 
 add_executable(dbEmployeesTests tests/DbEmployeeTests.cpp)
 target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu customer)
@@ -77,4 +78,4 @@ target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu customer)
 
 # runners
 add_executable(Cafe main.cpp)
-target_link_libraries(Cafe PRIVATE model menu menuDatabase employee helpers customer)
+target_link_libraries(Cafe PRIVATE viewModel customer menu menuDatabase helpers)
