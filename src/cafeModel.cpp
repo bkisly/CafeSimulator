@@ -27,7 +27,63 @@ void CafeModel::addNewCustomers() {
     unassignedCustomers.push_back(CustomersGroup(customersToAdd));
 }
 
+void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
+    vector<int> groupsIdsToRemove;
+    int groupId = 0;
+    for(CustomersGroup &customersGroup : unassignedCustomers)
+    {
+        for(Table &table : tables)
+        {
+            if(table.TryAddCustomers(customersGroup))
+            {
+                groupsIdsToRemove.push_back(groupId);
+                assignedCustomers.insert(assignedCustomers.end(), customersGroup.GetCustomers().begin(), customersGroup.GetCustomers().end());
+                break;
+            }
+        }
+
+        groupId++;
+    }
+
+    for(int id : groupsIdsToRemove)
+        unassignedCustomers.erase(unassignedCustomers.begin() + id);
+}
+
+void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
+    // 5a. Print header
+    simulationLog += "==========\nSIMULATION CYCLE NR " + to_string(currentCycle) + "\n==========\n\n";
+
+    // 5b. Print customers state
+    simulationLog += "--- Customers state ---\n";
+    for(Customer &customer : assignedCustomers)
+        simulationLog += customer.ToString() + "\n";
+
+    for(CustomersGroup customersGroup : unassignedCustomers)
+    {
+        for(Customer customer : customersGroup.GetCustomers())
+            simulationLog += customer.ToString() + "\n";
+    }
+
+    // 5c. Print tables state
+    simulationLog += "\n--- Tables state ---\n";
+
+    for(Table table : tables)
+    {
+        simulationLog += table.ToString() + "\n";
+    }
+
+    // 5c. Print employees state
+
+    simulationLog += "\n--- Employees state ---\n";
+    // TODO: print employees state
+
+    simulationLog += "\n\n";
+}
+
 CafeModel::CafeModel(bool readFromService) {
+    currentCycle = 0;
+    totalCustomers = 0;
+
     if(!readFromService)
     {
         vector<shared_ptr<MenuItem>> menuItems
@@ -135,60 +191,15 @@ void CafeModel::Simulate(unsigned int cycles) {
             }
         }
 
-        vector<int> groupsIdsToRemove;
         // 3. Assign unassigned customers
-        int groupId = 0;
-        for(CustomersGroup &customersGroup : unassignedCustomers)
-        {
-            for(Table &table : tables)
-            {
-                if(table.TryAddCustomers(customersGroup))
-                {
-                    groupsIdsToRemove.push_back(groupId);
-                    assignedCustomers.insert(assignedCustomers.end(), customersGroup.GetCustomers().begin(), customersGroup.GetCustomers().end());
-                    break;
-                }
-            }
-
-            groupId++;
-        }
-
-        for(int id : groupsIdsToRemove)
-            unassignedCustomers.erase(unassignedCustomers.begin() + id);
+        assignCustomers(assignedCustomers);
 
         // 4. Add new customers
         addNewCustomers();
 
         // 5. SAVE LOG
+        saveLog(assignedCustomers);
 
-        // 5a. Print header
-        simulationLog += "==========\nSIMULATION CYCLE NR " + to_string(currentCycle) + "\n==========\n\n";
-
-        // 5b. Print customers state
-        simulationLog += "--- Customers state ---\n";
-        for(Customer &customer : assignedCustomers)
-            simulationLog += customer.ToString() + "\n";
-
-        for(CustomersGroup customersGroup : unassignedCustomers)
-        {
-            for(Customer customer : customersGroup.GetCustomers())
-                simulationLog += customer.ToString() + "\n";
-        }
-
-        // 5c. Print tables state
-        simulationLog += "\n--- Tables state ---\n";
-
-        for(Table table : tables)
-        {
-            simulationLog += table.ToString() + "\n";
-        }
-
-        // 5c. Print employees state
-
-        simulationLog += "\n--- Employees state ---\n";
-        // TODO: print employees state
-
-        simulationLog += "\n\n";
         currentCycle++;
     }
 }

@@ -33,6 +33,8 @@ private:
     shared_ptr<MenuItem> randomMenuItem();
     Customer randomCustomer(bool allowsOthers);
     void addNewCustomers();
+    void assignCustomers(vector<Customer> &assignedCustomers);
+    void saveLog(vector<Customer> &assignedCustomers);
 
 public:
     CafeModel(bool readFromService = true);    // readFromService parameter decides whether to read cafe information using DatabaseService object or read defaults for test purposes
