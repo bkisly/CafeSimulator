@@ -125,9 +125,16 @@ TEST_CASE("cook simulation states") {
 //    dish is ready
     CHECK(cook.getState() == Cook::CookState::free);
     CHECK(cook.isDishToCollect() == true);
-//    advance cycle without assigning dish - no longer dish to collect
+//    advance cycle without assigning dish - no longer dish to collect, cook is free
     cook.advanceCycle();
     CHECK(cook.isDishToCollect() == false);
+//    advance cycle once again when free
+    CHECK(cook.getState() == Cook::CookState::free);
+
+    cook.setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
+//    assigned dish with 2 cycle to prepare - new cycle
+    cook.advanceCycle();
+    CHECK(cook.getState() == Cook::CookState::busy);
 }
 
 

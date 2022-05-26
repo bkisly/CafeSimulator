@@ -15,6 +15,7 @@ Cook::Cook(int id, const string &name, const string &surname, int gender, Price 
         : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
           known_cuisines(knownCuisines) {
     dishToCollect = false;
+    assignedMenuItem.reset(nullptr);
 }
 
 Price Cook::calculate_salary() const noexcept {
@@ -80,9 +81,15 @@ void Cook::setAssignedMenuItem(std::unique_ptr<MenuItem> newAssignedMenuItem) {
 }
 
 void Cook::updateState() {
+    if (!(assignedMenuItem)){
+//        case when cook finished preparing meal
+        dishToCollect = false;
+        return;
+    }
     if (currentState == CookState::busy){
         currentState = CookState::free;
         dishToCollect = true;
+        assignedMenuItem.reset(nullptr);
     }
     else{
         currentState = CookState::busy;

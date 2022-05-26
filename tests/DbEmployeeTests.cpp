@@ -40,15 +40,16 @@ TEST_CASE("employee removal"){
 }
 
 
-TEST_CASE("debug"){
+TEST_CASE("assign free cook"){
     Price salary(3000, 0);
     DbWorkers workers;
+    workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
+    workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
     workers.addCook("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
-    workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
-    workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
-    workers.assignDishToFreeCook(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
-    int a =2;
-    a++;
+    CHECK(workers.assignDishToFreeCook(make_unique<Dessert>(Dessert("Cake", Price(5, 0),
+                                                                    2))));
+    CHECK(workers.assignDishToFreeCook(make_unique<Dessert>(Dessert("Cake", Price(5, 0),
+                                                                    2))) == false);
 }
 
 
