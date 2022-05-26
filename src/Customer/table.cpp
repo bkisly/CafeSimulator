@@ -4,18 +4,12 @@
 
 #include "../../includes/model/Customer/table.h"
 
-void Table::customersValidation(const vector<Customer> &customers) {
+void Table::customersGroupValidation(const CustomersGroup &customersGroup) {
     map<unsigned int, int> idOccurrences;
 
-    if(customers.empty())
-        throw invalid_argument("Customers collection must not be empty.");
-
-    for(auto iter = customers.begin(); iter < customers.end(); iter++)
+    for(const Customer &customer : customersGroup.GetCustomers())
     {
-        if(iter > customers.begin() && iter->DoesAllowOthers() != (iter - 1)->DoesAllowOthers())
-            throw invalid_argument("All customers must have identical preference regarding other customers presence.");
-
-        unsigned int customerId = iter->GetId();
+        unsigned int customerId = customer.GetId();
 
         if(!idOccurrences.contains(customerId))
             idOccurrences.insert(pair{ customerId, 0 });
@@ -23,7 +17,7 @@ void Table::customersValidation(const vector<Customer> &customers) {
         idOccurrences[customerId]++;
     }
 
-    for(Customer &customer : this->customers)
+    for(const Customer &customer : this->customers)
     {
         unsigned int customerId = customer.GetId();
 
@@ -58,21 +52,18 @@ const vector<Customer> &Table::GetCustomers() const {
     return customers;
 }
 
-bool Table::TryAddCustomers(vector<Customer> &customers) {
-    if(customers.size() <= capacity - this->customers.size())
+bool Table::TryAddCustomers(const CustomersGroup &customersGroup) {
+    if(customersGroup.GroupSize() <= capacity - this->customers.size())
     {
-        customersValidation(customers);
+        customersGroupValidation(customersGroup);
         for(Customer &customer : this->customers)
             if(!customer.DoesAllowOthers())
                 return false;
 
-        for(Customer &customer : customers)
-        {
-            if (!customer.DoesAllowOthers())
-                return false;
+        if(!customersGroup.AllowOthers()) return false;
 
-            this->customers.push_back(move(customer));
-        }
+        for(const Customer &customer : customersGroup.GetCustomers())
+            customers.push_back(customer);
 
         return true;
     }
@@ -80,7 +71,7 @@ bool Table::TryAddCustomers(vector<Customer> &customers) {
     return false;
 }
 
-string Table::ToString() {
+string Table::ToString() const {
     string peopleString = capacity > 1 ? " people" : " person";
     return "Table nr " + to_string(id) + " for " + to_string(capacity) + peopleString;
 }
