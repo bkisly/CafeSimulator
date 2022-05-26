@@ -99,8 +99,17 @@ void DbWorkers::checkIdExists(int id) {
     }
 }
 
-void DbWorkers::assignDishToFreeCook(unique_ptr<Dish> dish) {
-//    todo: implement - iterate for each and check if they are cook - rtti
+bool DbWorkers::assignDishToFreeCook(unique_ptr<MenuItem> menuItem) {
+    for (auto &worker_ptr: workers) {
+        Cook* cook = dynamic_cast<Cook*>(&*worker_ptr);
+        if (cook){
+            if(cook->getState() == Cook::CookState::free){
+                cook->setAssignedMenuItem(move(menuItem));
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 int DbWorkers::getWorkerState(int id) {

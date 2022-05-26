@@ -45,10 +45,10 @@ public:
 
     string printAll() const noexcept;
 
-    void assignDishToFreeCook(unique_ptr<Dish> dish);
+    bool assignDishToFreeCook(unique_ptr<MenuItem> menuItem);
+    // true - if success, false - fail to assign
 
     int getWorkerState(int id);
-//    todo envoke polymorphic method for Employee base class (unique_ptr)
 
 };
 
