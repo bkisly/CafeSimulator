@@ -12,7 +12,7 @@ shared_ptr<MenuItem> CafeModel::randomMenuItem() {
 
 Customer CafeModel::randomCustomer(bool allowsOthers) {
     totalCustomers++;
-    return Customer(totalCustomers, allowsOthers, randomMenuItem());
+    return { totalCustomers, allowsOthers, randomMenuItem() };
 }
 
 void CafeModel::addNewCustomers() {
@@ -24,7 +24,7 @@ void CafeModel::addNewCustomers() {
         customersToAdd.push_back(randomCustomer(allowOthers));
     }
 
-    unassignedCustomers.push_back(CustomersGroup(customersToAdd));
+    unassignedCustomers.emplace_back(CustomersGroup(customersToAdd));
 }
 
 void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
@@ -51,7 +51,7 @@ void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
 
 void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
     // 5a. Print header
-    simulationLog += "==========\nSIMULATION CYCLE NR " + to_string(currentCycle) + "\n==========\n\n";
+    simulationLog += "==========\nSIMULATION CYCLE NR " + to_string(currentCycle + 1) + "\n==========\n\n";
 
     // 5b. Print customers state
     simulationLog += "--- Customers state ---\n";
@@ -60,14 +60,14 @@ void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
 
     for(CustomersGroup customersGroup : unassignedCustomers)
     {
-        for(Customer customer : customersGroup.GetCustomers())
+        for(Customer &customer : customersGroup.GetCustomers())
             simulationLog += customer.ToString() + "\n";
     }
 
     // 5c. Print tables state
     simulationLog += "\n--- Tables state ---\n";
 
-    for(Table table : tables)
+    for(const Table &table : tables)
     {
         simulationLog += table.ToString() + "\n";
     }
@@ -101,7 +101,7 @@ CafeModel::CafeModel(bool readFromService) {
 
         menuDb = MenuDatabase(menuItems);
 
-        vector<Table> tables
+        vector<Table> initialTables
         {
             Table(1, 2),
             Table(2, 2),
@@ -111,7 +111,7 @@ CafeModel::CafeModel(bool readFromService) {
             Table(6, 5)
         };
 
-        this->tables = tables;
+        tables = initialTables;
     }
     else
     {
@@ -144,6 +144,8 @@ string CafeModel::GetSimulationLog() const {
 // Action methods
 
 void CafeModel::Simulate(unsigned int cycles) {
+    if(cycles == 0) throw invalid_argument("Number of cycles must be a number greater than 0.");
+
     currentCycle = 0;
     simulationLog = "";
 
