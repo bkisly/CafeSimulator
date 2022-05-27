@@ -22,8 +22,8 @@ add_library(
 
 add_library(
         helpers
-        includes/model/helpers/price.h src/Helpers/price.cpp
-)
+        includes/model/helpers/price.h src/price.cpp
+        src/Table.cpp includes/model/helpers/Table.h)
 
 add_library(
         employee
