@@ -79,3 +79,7 @@ string Table::ToString() const {
     string peopleString = capacity > 1 ? " people" : " person";
     return "Table nr " + to_string(id) + " for " + to_string(capacity) + peopleString + " currently has " + to_string(customers.size()) + " customers";
 }
+
+unsigned int Table::GetAmountOfItemToPrepare() const {
+    return menuItemsToPrepare.size();
+}

@@ -24,6 +24,7 @@ public:
 
     unsigned int GetId() const;
     unsigned int GetCapacity() const;
+    unsigned int GetAmountOfItemToPrepare() const;
     vector<Customer> &GetCustomers();
 
     bool TryAddCustomers(CustomersGroup customersGroup);

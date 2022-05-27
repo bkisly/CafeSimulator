@@ -125,8 +125,20 @@ TEST_CASE("Table tests")
     }
 
     SECTION("menu items preferred by customers"){
-        // TODO-TEMP: implement test of creating vector of oreder menu items
+        Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 4);
+        Beverage tee("tee", Price(2, 49), CupType::Cup, 4);
+
+        vector<Customer> customers1;
+        customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
+        customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
+        customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+
+        CustomersGroup group1(customers1);
+        Table table(1, 5);
+        CHECK(table.TryAddCustomers(group1));
+        CHECK(table.GetAmountOfItemToPrepare() == 3);
     }
+// TODO: not updated ToString tests
 
 //    SECTION("To string")
 //    {
