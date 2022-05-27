@@ -2,7 +2,6 @@
 #define WAITER_H
 
 #include "Employee.h"
-#include "DbWorkers.h"
 #include "../helpers/Table.h"
 #include <memory>
 
@@ -47,7 +46,6 @@ public:
 private:
     std::unique_ptr<Table> assignedTable;
     void updateState();
-    bool hasAssignedTable;
 
 //    legacy
     bool can_serve_alcohol;

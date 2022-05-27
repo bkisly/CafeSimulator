@@ -3,6 +3,7 @@
 #include "catch.hpp"
 #include "../includes/model/helpers/price.h"
 #include "../includes/model/Employee//Employee.h"
+#include "../includes/model/Employee//DbWorkers.h"
 #include "../includes/model/Employee//Exceptions.h"
 #include "../includes/model/Employee//Waiter.h"
 #include "../includes/model/Employee//Cook.h"
@@ -56,25 +57,30 @@ TEST_CASE("setAssignedTable") {
 
 }
 
+#if DEBUG
 TEST_CASE("waiter states simulation") {
+    DbWorkers workers;
     Price salary(3000, 0);
-    Waiter waiter(3, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 0);
-    CHECK(waiter.getState() == Waiter::WaiterState::awaiting);
+    workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
+    workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
+    workers.addWaiter("Tomasz", "Burak", Waiter::Gender::male, salary, 4, 0);
+
+    CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::awaiting);
 //    advanceCycle - no assigned tables - wait
-    waiter.advanceCycle();
-    CHECK(waiter.getState() == Waiter::WaiterState::awaiting);
+    workers.advanceCycleAll();
+    CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::awaiting);
 
 //    setAssignedTable
-    waiter.setAssignedTable(make_unique<Table>(Table()));
-    waiter.advanceCycle();
-    CHECK(waiter.getState() == Waiter::WaiterState::giveMenu);
+    workers.getWaiter(1)->setAssignedTable(make_unique<Table>(Table()));
+    workers.advanceCycleAll();
+    CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::giveMenu);
 
-    waiter.advanceCycle();
-    CHECK(waiter.getState() == Waiter::WaiterState::collectOrder);
+    workers.advanceCycleAll();
+    CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::collectOrder);
 
 //    todo check other states, especially asssigned cook
 }
-
+#endif
 
 TEST_CASE("waiter in out operators") {
     Price salary(3000, 0);

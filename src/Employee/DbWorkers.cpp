@@ -129,5 +129,9 @@ Cook *DbWorkers::getCook(int id) {
     return dynamic_cast<Cook*>(&*workers[id]);
 }
 
+Waiter *DbWorkers::getWaiter(int id) {
+    return dynamic_cast<Waiter*>(&*workers[id]);
+}
+
 
 #endif

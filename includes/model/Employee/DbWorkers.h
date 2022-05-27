@@ -1,7 +1,7 @@
 #ifndef DBWORKERS_H
 #define DBWORKERS_H
 
-#include <vector>
+#include<vector>
 #include <memory>
 #include <string>
 #include <ostream>
@@ -22,11 +22,9 @@ private:
 
 public:
 #if DEBUG
-
-    Cook *getCook(int id);
-
+    Cook* getCook(int id);
+    Waiter* getWaiter(int id);
 #endif
-
     DbWorkers();
 
     void
