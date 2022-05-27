@@ -46,16 +46,19 @@ TEST_CASE("waiter printStateLog currentState") {
     CHECK(waiter1.printStateLog() == "waiter 1 - collecting orders to table nr 23\n");
 }
 
+#if DEBUG
 TEST_CASE("setAssignedTable") {
     Price salary(3000, 0);
-    Waiter waiter1(1, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
-    Table table1();
-    CHECK_NOTHROW(waiter1.setAssignedTable(make_unique<Table>(Table())));
-    waiter1.advanceCycle();
-    REQUIRE_THROWS_AS(waiter1.setAssignedTable(make_unique<Table>(Table())),
+    DbWorkers workers;
+    workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
+    CHECK_NOTHROW(workers.getWaiter(0)->setAssignedTable(make_unique<Table>(Table())));
+    // not that without advancing cycle state is not updated -> table can be reassigned
+    CHECK_NOTHROW(workers.getWaiter(0)->setAssignedTable(make_unique<Table>(Table())));
+    workers.advanceCycleAll();
+    REQUIRE_THROWS_AS(workers.getWaiter(0)->setAssignedTable(make_unique<Table>(Table())),
                       BusyWaiterException);
-
 }
+#endif
 
 #if DEBUG
 TEST_CASE("waiter states simulation") {

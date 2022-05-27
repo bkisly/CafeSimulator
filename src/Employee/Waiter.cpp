@@ -81,35 +81,7 @@ string Waiter::printStateLog() const {
     }
 }
 
-void Waiter::updateState() {
-//    if (hasAssignedTable) {
-//        if (currentState < WaiterState::last) {
-//            currentState++;
-//        }
-//    } else {
-//        currentState = WaiterState::awaiting;
-//        hasAssignedTable = false;
-//    }
-    switch (currentState) {
-        case WaiterState::awaiting:
-            if (assignedTable) {
-                currentState++;
-            }
-            break;
-        case WaiterState::giveMenu:
-            currentState++;
-            break;
-        case WaiterState::collectOrder:
-            currentState++;
-            break;
-        case WaiterState::prepareOrder:
-//            todo look for free cook - invoke advance cyle from db collector use this
-//             to point to collection -> assign dish to free cook
-            break;
-        default:
-            throw StateException(currentState);
-    }
-}
+
 
 void Waiter::setAssignedTable(unique_ptr<Table> newAssignedTable) {
     if (currentState != WaiterState::awaiting) {

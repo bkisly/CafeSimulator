@@ -29,7 +29,6 @@ public:
 //    employee currentState (waiter/cook)
     int getState() const;
     void setState(int state);
-    void advanceCycle();
 
 //  constructors, operators ...
     Employee();
@@ -57,7 +56,6 @@ public:
 protected:
     int id, currentState, cyclesLeft;
 
-    virtual void updateState();
 
 //    legacy attributes
     string name;
@@ -66,6 +64,7 @@ protected:
     Price base_salary;
     unsigned int base_amount_of_shifts;
 
+    friend class DbWorkers;
 };
 
 //std::ostream &operator<<(std::ostream &os, const Employee &worker);

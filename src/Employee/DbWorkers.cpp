@@ -119,7 +119,52 @@ int DbWorkers::getWorkerState(int id) {
 
 void DbWorkers::advanceCycleAll() {
     for (auto &worker_ptr : workers){
-        worker_ptr->advanceCycle();
+        if (worker_ptr->getCyclesLeft() > 0){
+            worker_ptr->cyclesLeft--;
+        }
+        if (worker_ptr->getCyclesLeft() == 0){
+//            cook version
+            Cook* cook = dynamic_cast<Cook*>(&*worker_ptr);
+            if (cook){
+                if(!(cook->assignedMenuItem)){
+                    // case when cook finished preparing meal
+                    cook->dishToCollect = false;
+                }
+                else if (cook->currentState == Cook::CookState::busy){
+                    cook->currentState = Cook::CookState::free;
+                    cook->dishToCollect = true;
+                    cook->assignedMenuItem.reset(nullptr);
+                }
+                else{
+                    cook->currentState = Cook::CookState::busy;
+                    cook->dishToCollect = false;
+                }
+            }
+
+            // waiter version
+            Waiter* waiter = dynamic_cast<Waiter*>(&*worker_ptr);
+            if (waiter){
+                switch (waiter->currentState) {
+                    case Waiter::WaiterState::awaiting:
+                        if (waiter->assignedTable) {
+                            waiter->currentState++;
+                        }
+                        break;
+                    case Waiter::WaiterState::giveMenu:
+                        waiter->currentState++;
+                        break;
+                    case Waiter::WaiterState::collectOrder:
+                        waiter->currentState++;
+                        break;
+                    case Waiter::WaiterState::prepareOrder:
+//            todo look for free cook - invoke advance cyle from db collector use this
+//             to point to collection -> assign dish to free cook
+                        break;
+                    default:
+                        throw StateException(waiter->currentState);
+                }
+            }
+        }
     }
 }
 

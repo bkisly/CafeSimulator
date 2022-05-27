@@ -2,9 +2,13 @@ cmake_minimum_required(VERSION 3.21)
 project(Cafe)
 
 set(CMAKE_CXX_STANDARD 20)
+
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     add_definitions(-DDEBUG=1)
 endif()
+
+# todo: add -Wall options - display all warnings
+
 # libs
 add_library(
         menu

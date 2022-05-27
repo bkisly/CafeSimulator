@@ -45,7 +45,8 @@ private:
     bool dishToCollect;
     std::unique_ptr<MenuItem> assignedMenuItem;
 
-    void updateState();
+    friend class DbWorkers;
+
 
 };
 

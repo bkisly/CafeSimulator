@@ -45,7 +45,8 @@ public:
 
 private:
     std::unique_ptr<Table> assignedTable;
-    void updateState();
+
+    friend class DbWorkers;
 
 //    legacy
     bool can_serve_alcohol;

@@ -80,22 +80,6 @@ void Cook::setAssignedMenuItem(std::unique_ptr<MenuItem> newAssignedMenuItem) {
     currentState = CookState::busy;
 }
 
-void Cook::updateState() {
-    if (!(assignedMenuItem)){
-//        case when cook finished preparing meal
-        dishToCollect = false;
-        return;
-    }
-    if (currentState == CookState::busy){
-        currentState = CookState::free;
-        dishToCollect = true;
-        assignedMenuItem.reset(nullptr);
-    }
-    else{
-        currentState = CookState::busy;
-        dishToCollect = false;
-    }
-}
 
 bool Cook::isDishToCollect() const {
     return dishToCollect;
