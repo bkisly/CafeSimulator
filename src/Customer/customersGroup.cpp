@@ -3,6 +3,7 @@
 //
 
 #include "../../includes/model/Customer/customersGroup.h"
+#include <stdexcept>
 
 void CustomersGroup::validateCustomers(const vector<Customer> &customers) {
     map<unsigned int, int> idOccurrences;

@@ -3,6 +3,7 @@
 //
 
 #include "../../includes/model/Customer/table.h"
+#include <stdexcept>
 
 void Table::customersGroupValidation(CustomersGroup &customersGroup) {
     map<unsigned int, int> idOccurrences;
