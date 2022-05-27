@@ -41,7 +41,7 @@ TEST_CASE("waiter printStateLog currentState") {
     Price salary(3000, 0);
     Waiter waiter1(1, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
     CHECK(waiter1.printStateLog() == "waiter 1 - awaiting\n");
-    waiter1.setAssignedTable(make_unique<Table>(Table()));
+    waiter1.setAssignedTable(make_unique<Table>(Table(23,5)));
     waiter1.setState(Waiter::WaiterState::collectOrder);
     CHECK(waiter1.printStateLog() == "waiter 1 - collecting orders to table nr 23\n");
 }

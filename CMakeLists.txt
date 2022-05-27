@@ -29,7 +29,7 @@ add_library(
 add_library(
         helpers
         includes/model/helpers/price.h src/helpers/price.cpp
-        src/Table.cpp includes/model/helpers/Table.h)
+)
 
 add_library(
         employee
@@ -59,7 +59,7 @@ add_executable(menuItemsTests tests/menuItemsTests.cpp)
 target_link_libraries(menuItemsTests PRIVATE menu helpers)
 
 add_executable(employeeTests tests/testEmployee.cpp)
-target_link_libraries(employeeTests PRIVATE employee helpers menu)
+target_link_libraries(employeeTests PRIVATE employee helpers menu customer)
 
 add_executable(customerTableTests tests/customerTableTests.cpp)
 target_link_libraries(customerTableTests PRIVATE customer menu helpers)
@@ -71,7 +71,7 @@ add_executable(simulationRunner tests/simulationRunner.cpp)
 target_link_libraries(simulationRunner PRIVATE model menu menuDatabase helpers customer)
 
 add_executable(dbEmployeesTests tests/DbEmployeeTests.cpp)
-target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu)
+target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu customer)
 
 # TODO: run all tests executable
 

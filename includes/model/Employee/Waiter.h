@@ -2,7 +2,7 @@
 #define WAITER_H
 
 #include "Employee.h"
-#include "../helpers/Table.h"
+#include "../Customer/table.h"
 #include <memory>
 
 class Waiter : public Employee {

@@ -63,19 +63,19 @@ string Waiter::printStateLog() const {
             return msg + "awaiting\n";
         case WaiterState::giveMenu:
             return msg + "giving cards to table nr " +
-                   to_string(assignedTable->getId()) + "\n";
+                   to_string(assignedTable->GetId()) + "\n";
         case WaiterState::collectOrder:
             return msg + "collecting orders to table nr " +
-                   to_string(assignedTable->getId()) + "\n";
+                   to_string(assignedTable->GetId()) + "\n";
         case WaiterState::prepareOrder:
             return msg + "Preparing orders for table nr " +
-                   to_string(assignedTable->getId()) + "\n";
+                   to_string(assignedTable->GetId()) + "\n";
         case WaiterState::handInOrder:
             return msg + "handing in orders to table nr " +
-                   to_string(assignedTable->getId()) + "\n";
+                   to_string(assignedTable->GetId()) + "\n";
         case WaiterState::takeReceipt:
             return msg + "taking receipt to table nr " +
-                   to_string(assignedTable->getId()) + "\n";
+                   to_string(assignedTable->GetId()) + "\n";
         default:
             throw StateException(currentState);
     }

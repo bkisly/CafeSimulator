@@ -34,6 +34,10 @@ void Table::customersGroupValidation(CustomersGroup &customersGroup) {
     }
 }
 
+Table::Table() {
+
+}
+
 Table::Table(unsigned int id, unsigned int capacity) {
     if(capacity == 0) throw invalid_argument("Table capacity must be greater than 0.");
 
