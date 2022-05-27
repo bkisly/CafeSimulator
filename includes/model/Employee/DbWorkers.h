@@ -46,7 +46,7 @@ public:
 
     string printAll() const noexcept;
 
-    bool assignDishToFreeCook(unique_ptr<MenuItem> menuItem);
+    bool assignDishToFreeCook(shared_ptr<MenuItem> menuItem);
     // true - if success, false - fail to assign
 
     int getWorkerState(int id);

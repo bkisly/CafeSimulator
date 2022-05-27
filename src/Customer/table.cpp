@@ -84,6 +84,13 @@ string Table::ToString() const {
     return "Table nr " + to_string(id) + " for " + to_string(capacity) + peopleString + " currently has " + to_string(customers.size()) + " customers";
 }
 
-unsigned int Table::GetAmountOfItemToPrepare() const {
+unsigned int Table::GetAmountOfItemsToPrepare() const {
     return menuItemsToPrepare.size();
+}
+
+
+shared_ptr<MenuItem> Table::GetLastItemToPrepare() {
+    shared_ptr<MenuItem> item =  menuItemsToPrepare.back();
+    menuItemsToPrepare.pop_back();
+    return item;
 }

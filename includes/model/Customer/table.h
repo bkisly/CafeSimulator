@@ -25,8 +25,10 @@ public:
 
     unsigned int GetId() const;
     unsigned int GetCapacity() const;
-    unsigned int GetAmountOfItemToPrepare() const;
     vector<Customer> &GetCustomers();
+
+    unsigned int GetAmountOfItemsToPrepare() const;
+    shared_ptr<MenuItem> GetLastItemToPrepare();
 
     bool TryAddCustomers(CustomersGroup customersGroup);
     string ToString() const;

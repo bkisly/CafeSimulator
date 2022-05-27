@@ -21,7 +21,7 @@ public:
     enum CookState {
         free = 0, busy
     };
-    void setAssignedMenuItem(unique_ptr<MenuItem> newAssignedMenuItem);
+    void setAssignedMenuItem(shared_ptr<MenuItem> newAssignedMenuItem);
     bool isDishToCollect() const;
 
 //  constructors, operators ...
@@ -43,7 +43,7 @@ public:
 private:
     unsigned known_cuisines;
     bool dishToCollect;
-    std::unique_ptr<MenuItem> assignedMenuItem;
+    std::shared_ptr<MenuItem> assignedMenuItem;
 
     friend class DbWorkers;
 

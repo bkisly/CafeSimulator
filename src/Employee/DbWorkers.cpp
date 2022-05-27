@@ -89,12 +89,12 @@ void DbWorkers::checkIdExists(int id) {
     }
 }
 
-bool DbWorkers::assignDishToFreeCook(unique_ptr<MenuItem> menuItem) {
+bool DbWorkers::assignDishToFreeCook(shared_ptr<MenuItem> menuItem) {
     for (auto &worker_ptr: workers) {
         Cook* cook = dynamic_cast<Cook*>(&*worker_ptr);
         if (cook){
             if(cook->getState() == Cook::CookState::free){
-                cook->setAssignedMenuItem(move(menuItem));
+                cook->setAssignedMenuItem(menuItem);
                 return true;
             }
         }
@@ -123,7 +123,7 @@ void DbWorkers::advanceCycleAll() {
                 else if (cook->currentState == Cook::CookState::busy){
                     cook->currentState = Cook::CookState::free;
                     cook->dishToCollect = true;
-                    cook->assignedMenuItem.reset(nullptr);
+                    cook->assignedMenuItem.reset();
                 }
                 else{
                     cook->currentState = Cook::CookState::busy;
@@ -147,8 +147,21 @@ void DbWorkers::advanceCycleAll() {
                         waiter->currentState++;
                         break;
                     case Waiter::WaiterState::prepareOrder:
-//            todo look for free cook - invoke advance cyle from db collector use this
-//             to point to collection -> assign dish to free cook
+                        if (waiter->assignedTable->GetAmountOfItemsToPrepare()) {
+                            shared_ptr<MenuItem> menuItem = waiter->assignedTable
+                                                                  ->GetLastItemToPrepare();
+                            if (this->assignDishToFreeCook(menuItem)) {
+                                waiter->cyclesLeft = menuItem->GetCyclesToPrepare();
+                            }
+                            else {
+                                waiter->currentState++;
+                            }
+                        }
+                        break;
+                    case Waiter::WaiterState::handInOrder:
+                        waiter->currentState++;
+                        // TODO-TEMP: other states, implement calc receipt, update
+                        //  state logs for that; tests for waiter
                         break;
                     default:
                         throw StateException(waiter->currentState);
