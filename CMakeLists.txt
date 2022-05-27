@@ -28,7 +28,7 @@ add_library(
 
 add_library(
         helpers
-        includes/model/helpers/price.h src/price.cpp
+        includes/model/helpers/price.h src/helpers/price.cpp
         src/Table.cpp includes/model/helpers/Table.h)
 
 add_library(
@@ -72,6 +72,8 @@ target_link_libraries(simulationRunner PRIVATE model menu menuDatabase helpers c
 
 add_executable(dbEmployeesTests tests/DbEmployeeTests.cpp)
 target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu)
+
+# TODO: run all tests executable
 
 # runners
 add_executable(Cafe main.cpp)

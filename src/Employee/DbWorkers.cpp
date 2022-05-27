@@ -8,16 +8,6 @@ using std::count;
 
 using std::unique_ptr, std::make_unique, std::move;
 
-void DbWorkers::addWorker(const string &name, const string &surname, int gender,
-                          Price baseSalary, unsigned int baseAmountOfShifts) {
-    unique_ptr<Employee> added_worker = make_unique<Employee>(newIdToAssign, name, surname, gender,
-                                                              baseSalary, baseAmountOfShifts);
-    workers.push_back(move(added_worker));
-    existingIDs.push_back(newIdToAssign);
-    newIdToAssign++;
-}
-
-
 void DbWorkers::addCook(const string &name, const string &surname, int gender,
                         Price baseSalary, unsigned baseAmountOfShifts,
                         unsigned knownCuisines) {

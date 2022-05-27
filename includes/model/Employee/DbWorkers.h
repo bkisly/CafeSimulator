@@ -27,11 +27,6 @@ public:
 #endif
     DbWorkers();
 
-    void
-    addWorker(const string &name, const string &surname, int gender, Price baseSalary,
-              unsigned baseAmountOfShifts);
-
-
     void addCook(const string &name, const string &surname, int gender, Price baseSalary,
                  unsigned baseAmountOfShifts, unsigned int knownCuisines);
 
