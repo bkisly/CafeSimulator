@@ -17,7 +17,7 @@ private:
     std::vector<std::unique_ptr<Employee>> workers;
     int newIdToAssign;
 
-    void validateId(int id);
+    void checkIdExists(int id);
 public:
     DbWorkers();
 
@@ -47,7 +47,7 @@ public:
 
     void assignDishToFreeCook(unique_ptr<Dish> dish);
 
-    int getWokerState(int id);
+    int getWorkerState(int id);
 //    todo envoke polymorphic method for Employee base class (unique_ptr)
 
 };

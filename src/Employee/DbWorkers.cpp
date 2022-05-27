@@ -70,8 +70,9 @@ unsigned DbWorkers::sum_all_shifts() const noexcept {
 }
 
 void DbWorkers::removeWorkerById(int id) {
-    validateId(id);
+    checkIdExists(id);
     workers.erase(workers.begin() + id);
+    existingIDs.erase(existingIDs.begin() + id);
 }
 
 string DbWorkers::printAll() const noexcept {
@@ -92,12 +93,17 @@ DbWorkers::DbWorkers() {
     newIdToAssign = 0;
 }
 
-void DbWorkers::validateId(int id) {
-    if ( std::find(existingIDs.begin(), existingIDs.end(), id) != existingIDs.end() ){
+void DbWorkers::checkIdExists(int id) {
+    if ( !(std::find(existingIDs.begin(), existingIDs.end(), id) != existingIDs.end() )){
         throw IdException(id);
     }
 }
 
 void DbWorkers::assignDishToFreeCook(unique_ptr<Dish> dish) {
 //    todo: implement - iterate for each and check if they are cook - rtti
+}
+
+int DbWorkers::getWorkerState(int id) {
+    checkIdExists(id);
+    return workers[id]->getState();
 }

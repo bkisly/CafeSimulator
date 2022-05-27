@@ -64,6 +64,9 @@ target_link_libraries(menuDatabaseTests PRIVATE menu menuDatabase helpers)
 add_executable(simulationRunner tests/simulationRunner.cpp)
 target_link_libraries(simulationRunner PRIVATE model menu menuDatabase helpers customer)
 
+add_executable(dbEmployeesTests tests/DbEmployeeTests.cpp)
+target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu)
+
 # runners
 add_executable(Cafe main.cpp)
 target_link_libraries(Cafe PRIVATE model menu menuDatabase employee helpers customer)
