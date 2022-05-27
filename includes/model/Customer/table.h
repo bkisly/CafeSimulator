@@ -17,6 +17,8 @@ private:
 
     void customersGroupValidation(CustomersGroup &customersGroup);
 
+    vector<shared_ptr<MenuItem>> menuItemsToPrepare;
+
 public:
     Table(unsigned int id, unsigned int capacity);
 
@@ -24,7 +26,7 @@ public:
     unsigned int GetCapacity() const;
     vector<Customer> &GetCustomers();
 
-    bool TryAddCustomers(CustomersGroup &customersGroup);
+    bool TryAddCustomers(CustomersGroup customersGroup);
     string ToString() const;
 };
 

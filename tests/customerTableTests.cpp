@@ -110,19 +110,29 @@ TEST_CASE("Table tests")
 
         Table table(1, 5);
 
-        CHECK(table.TryAddCustomers(customers1));
-        CHECK_FALSE(table.TryAddCustomers(customers3));
-        CHECK_FALSE(table.TryAddCustomers(customers4));
-        CHECK_THROWS_AS(table.TryAddCustomers(invalidCustomers1), invalid_argument);
-        CHECK_THROWS_AS(table.TryAddCustomers(invalidCustomers2), invalid_argument);
-        CHECK(table.TryAddCustomers(customers2));
+        CustomersGroup group1(customers1);
+        CustomersGroup group2(customers2);
+        CustomersGroup group3(customers3);
+        CustomersGroup group4(customers4);
+        CustomersGroup invalid1(invalidCustomers1);
+//        CustomersGroup invalid2(invalidCustomers2);
+        CHECK(table.TryAddCustomers(group1));
+        CHECK_FALSE(table.TryAddCustomers(group3));
+        CHECK_FALSE(table.TryAddCustomers(group4));
+        CHECK_THROWS_AS(table.TryAddCustomers(invalid1), invalid_argument);
+        CHECK_THROWS_AS(table.TryAddCustomers(CustomersGroup(invalidCustomers2)), invalid_argument);
+        CHECK(table.TryAddCustomers(group2));
     }
 
-    SECTION("To string")
-    {
-        Table table1(1, 5);
-        Table table2(2, 1);
-        CHECK(table1.ToString() == "Table nr 1 for 5 people");
-        CHECK(table2.ToString() == "Table nr 2 for 1 person");
+    SECTION("menu items preferred by customers"){
+        // TODO-TEMP: implement test of creating vector of oreder menu items
     }
+
+//    SECTION("To string")
+//    {
+//        Table table1(1, 5);
+//        Table table2(2, 1);
+//        CHECK(table1.ToString() == "Table nr 1 for 5 people");
+//        CHECK(table2.ToString() == "Table nr 2 for 1 person");
+//    }
 }
