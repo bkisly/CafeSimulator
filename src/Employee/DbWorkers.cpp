@@ -116,3 +116,18 @@ int DbWorkers::getWorkerState(int id) {
     checkIdExists(id);
     return workers[id]->getState();
 }
+
+void DbWorkers::advanceCycleAll() {
+    for (auto &worker_ptr : workers){
+        worker_ptr->advanceCycle();
+    }
+}
+
+#if DEBUG
+
+Cook *DbWorkers::getCook(int id) {
+    return dynamic_cast<Cook*>(&*workers[id]);
+}
+
+
+#endif

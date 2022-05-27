@@ -143,8 +143,5 @@ void Employee::advanceCycle() {
     }
 }
 
-void Employee::updateState() {
-    currentState++;
-//    todo: in override function check amount of states and reset to 0
-}
+void Employee::updateState() {}
 

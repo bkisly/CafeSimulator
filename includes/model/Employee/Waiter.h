@@ -2,6 +2,7 @@
 #define WAITER_H
 
 #include "Employee.h"
+#include "DbWorkers.h"
 #include "../helpers/Table.h"
 #include <memory>
 
@@ -18,10 +19,11 @@ public:
     string printStateLog() const;
 
 //    waiter properties
-    enum WaiterState {
+    enum WaiterState{
         awaiting = 0,
         giveMenu,
         collectOrder,
+        prepareOrder,
         handInOrder,
         takeReceipt,
         last = takeReceipt
@@ -49,7 +51,6 @@ private:
 
 //    legacy
     bool can_serve_alcohol;
-
 };
 
 

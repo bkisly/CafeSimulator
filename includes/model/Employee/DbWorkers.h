@@ -8,6 +8,7 @@
 #include "Employee.h"
 #include "Waiter.h"
 #include "../MenuItem/dish.h"
+#include "Cook.h"
 
 using std::string, std::vector;
 
@@ -18,7 +19,14 @@ private:
     int newIdToAssign;
 
     void checkIdExists(int id);
+
 public:
+#if DEBUG
+
+    Cook *getCook(int id);
+
+#endif
+
     DbWorkers();
 
     void
@@ -49,6 +57,8 @@ public:
     // true - if success, false - fail to assign
 
     int getWorkerState(int id);
+
+    void advanceCycleAll();
 
 };
 

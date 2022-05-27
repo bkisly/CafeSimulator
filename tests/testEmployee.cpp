@@ -112,32 +112,40 @@ TEST_CASE("cook printStateLog") {
     cook.setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 3)));
     CHECK(cook.printStateLog() == "cook 11 - prepares Cake\n");
 }
+#if DEBUG
 
 TEST_CASE("cook simulation states") {
-    Cook cook(11, "Tomasz", "Nowak", Waiter::Gender::male, Price(3000, 0), 4, 26);
-    CHECK(cook.getState() == Cook::CookState::free);
-    cook.setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
-//    assigned dish with 2 cycle to prepare
-    cook.advanceCycle();
-    CHECK(cook.getState() == Cook::CookState::busy);
-    CHECK(cook.isDishToCollect() == false);
-    cook.advanceCycle();
-//    dish is ready
-    CHECK(cook.getState() == Cook::CookState::free);
-    CHECK(cook.isDishToCollect() == true);
-//    advance cycle without assigning dish - no longer dish to collect, cook is free
-    cook.advanceCycle();
-    CHECK(cook.isDishToCollect() == false);
-//    advance cycle once again when free
-    CHECK(cook.getState() == Cook::CookState::free);
+    DbWorkers workers;
+    Price salary(3000, 0);
+    workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
+    workers.addCook("Tomasz", "Kowal", Cook::Gender::male, salary, 4, 26);
 
-    cook.setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
+
+    CHECK(workers.getWorkerState(0) == Cook::CookState::free);
+    workers.getCook(0)
+           ->setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
+//    assigned dish with 2 cycle to prepare
+    workers.advanceCycleAll();
+    CHECK(workers.getCook(0)->getState() == Cook::CookState::busy);
+    CHECK(workers.getCook(0)->isDishToCollect() == false);
+    workers.advanceCycleAll();
+//    dish is ready
+    CHECK(workers.getCook(0)->getState() == Cook::CookState::free);
+    CHECK(workers.getCook(0)->isDishToCollect() == true);
+//    advance cycle without assigning dish - no longer dish to collect, cook is free
+    workers.advanceCycleAll();
+    CHECK(workers.getCook(0)->isDishToCollect() == false);
+//    advance cycle once again when free
+    CHECK(workers.getCook(0)->getState() == Cook::CookState::free);
+
+    workers.getCook(0)
+           ->setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
 //    assigned dish with 2 cycle to prepare - new cycle
-    cook.advanceCycle();
-    CHECK(cook.getState() == Cook::CookState::busy);
+    workers.advanceCycleAll();
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
 }
 
-
+#endif
 TEST_CASE("cook in out operators") {
     Price salary(3000, 0);
     Cook cook(11, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
