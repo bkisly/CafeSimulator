@@ -25,6 +25,8 @@ private:
     shared_ptr<MenuItem> preferredMenuItem;
 
     CustomerState currentState;
+    bool collectedOrder, receivedReceipt;
+    int cyclesLeft;
 
 public:
     Customer(unsigned int id, bool allowsOthers, shared_ptr<MenuItem> preferredMenuItem);

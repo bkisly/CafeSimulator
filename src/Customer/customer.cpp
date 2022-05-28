@@ -7,8 +7,11 @@
 Customer::Customer(unsigned int id, bool allowsOthers, shared_ptr<MenuItem> preferredMenuItem) {
     this->id = id;
     this->allowsOthers = allowsOthers;
+    this->cyclesLeft = preferredMenuItem->GetCyclesToPrepare();
     this->preferredMenuItem = move(preferredMenuItem);
     currentState = CustomerState::Unassigned;
+    this->collectedOrder = false;
+    this->receivedReceipt = false;
 }
 
 unsigned int Customer::GetId() const {
@@ -28,7 +31,41 @@ CustomerState Customer::GetCurrentState() const {
 }
 
 void Customer::AdvanceState() {
-    currentState = (CustomerState)(((int)currentState + 1) % 6);
+    // advance state to awaiting only when waiter collected orders
+    if (currentState == CustomerState::ReadyToOrder){
+        if (this->collectedOrder){
+            currentState = (CustomerState)((int)currentState + 1);
+        }
+    }
+    // advance state to eating only after meal preparation
+    // TODO: potential de-synchronisation, waiter might be preparing meal longer -> he
+    //  may be waiting for free cook -> fix up or discard ??
+    else if (currentState == CustomerState::Awaiting){
+        if (this->cyclesLeft > 0){
+            cyclesLeft--;
+        }
+        if (this->cyclesLeft == 0){
+            currentState = (CustomerState)((int)currentState + 1);
+        }
+        if (this->collectedOrder){
+            currentState = (CustomerState)((int)currentState + 1);
+        }
+    }
+    // advance state to unassigned only after waiter gives receipt
+    else if (currentState == CustomerState::ReadyToPay){
+        if (this->receivedReceipt){
+            // advance state
+            currentState = (CustomerState) (((int) currentState + 1) % 6);
+            // reset properties
+            this->receivedReceipt = false;
+            this->collectedOrder = false;
+            // TODO: not sure whether customer will be "reused" in future cycles
+        }
+    }
+    // other cases
+    else {
+        currentState = (CustomerState) ((int) currentState + 1);
+    }
 }
 
 string Customer::ToString() {
