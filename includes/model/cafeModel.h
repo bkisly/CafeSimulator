@@ -32,6 +32,8 @@ private:
     // Value generators
     shared_ptr<MenuItem> randomMenuItem();
     Customer randomCustomer(bool allowsOthers);
+
+    // Simulation sub-procedures
     void addNewCustomers();
     void assignCustomers(vector<Customer> &assignedCustomers);
     void saveLog(vector<Customer> &assignedCustomers);

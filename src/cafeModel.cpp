@@ -15,6 +15,8 @@ Customer CafeModel::randomCustomer(bool allowsOthers) {
     return { totalCustomers, allowsOthers, randomMenuItem() };
 }
 
+// Simulation sub-procedures
+
 void CafeModel::addNewCustomers() {
     unsigned int customersAmount = rand() % 5 + 1;
     bool allowOthers = rand() % 2 == 1;
@@ -72,7 +74,7 @@ void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
         simulationLog += table.ToString() + "\n";
     }
 
-    // 5c. Print employees state
+    // 5d. Print employees state
 
     simulationLog += "\n--- Employees state ---\n";
     // TODO: print employees state
