@@ -32,6 +32,7 @@ public:
     void AddItemToPrepare(shared_ptr<MenuItem> menuItem);
     void  RemoveLastItemToPrepare();
 
+    void AdvanceStateAll();
 
     bool TryAddCustomers(CustomersGroup &customersGroup);
     string ToString() const;

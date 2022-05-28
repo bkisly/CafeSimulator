@@ -47,9 +47,6 @@ void Customer::AdvanceState() {
         if (this->cyclesLeft == 0){
             currentState = (CustomerState)((int)currentState + 1);
         }
-        if (this->collectedOrder){
-            currentState = (CustomerState)((int)currentState + 1);
-        }
     }
     // advance state to unassigned only after waiter gives receipt
     else if (currentState == CustomerState::FinishedEating){

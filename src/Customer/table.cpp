@@ -69,6 +69,9 @@ bool Table::TryAddCustomers(CustomersGroup &customersGroup) {
 
         for(Customer &customer : customersGroup.GetCustomers()) {
             customer.AdvanceState();
+            // @important - I suppose that here we might pass copy to table's vector of customers
+            // so far it's not an issue, because waiter "works on table" and simulation processes customers
+            // via table (loop creating assignedCustomers)
             customers.push_back(customer);
         }
 
@@ -100,5 +103,12 @@ void Table::AddItemToPrepare(shared_ptr<MenuItem> menuItem) {
 
 void Table::RemoveLastItemToPrepare() {
     menuItemsToPrepare.pop_back();
+}
+
+void Table::AdvanceStateAll() {
+    for(Customer &customer : this->customers)
+    {
+        customer.AdvanceState();
+    }
 }
 

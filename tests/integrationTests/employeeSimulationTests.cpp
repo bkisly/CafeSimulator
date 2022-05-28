@@ -143,16 +143,27 @@ TEST_CASE("waiter collect orders"){
 
 
     workers.getWaiter(1)->setAssignedTable(tablePtr);
-    workers.getWaiter(1)->collectOrders();
-    CHECK(tablePtr->GetAmountOfItemsToPrepare() == 3);
 
-    // @important - changes are applied to customers hold in tables' vectors, so it should satisfy simulation demands
-    for (auto &customer : tablePtr->GetCustomers()){
-        CHECK(customer.isCollectedOrder());
+    SECTION("customers not ready"){
+        workers.getWaiter(1)->collectOrders();
+        CHECK(tablePtr->GetAmountOfItemsToPrepare() == 0);
     }
-    for (auto &customer : workers.getWaiter(1)->getAssignedTable() ->GetCustomers()){
-        CHECK(customer.isCollectedOrder());
+
+    tablePtr->AdvanceStateAll();
+    SECTION("customers ready"){
+        workers.getWaiter(1)->collectOrders();
+        CHECK(tablePtr->GetAmountOfItemsToPrepare() == 3);
+
+        // @important - changes are applied to customers hold in tables' vectors, so it should satisfy simulation demands
+        for (auto &customer : tablePtr->GetCustomers()){
+            CHECK(customer.isCollectedOrder());
+        }
+        for (auto &customer : workers.getWaiter(1)->getAssignedTable() ->GetCustomers()){
+            CHECK(customer.isCollectedOrder());
+        }
     }
+
+
 }
 #endif
 
@@ -164,8 +175,8 @@ TEST_CASE("waiter calculate receipt"){
     workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
     workers.addWaiter("Tomasz", "Burak", Waiter::Gender::male, salary, 4, 0);
 //     prepare table and customers
-    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 4);
-    Beverage tee("tee", Price(2, 49), CupType::Cup, 4);
+    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 2);
+    Beverage tee("tee", Price(2, 49), CupType::Cup, 2);
 
     vector<Customer> customers1;
     customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
@@ -179,7 +190,16 @@ TEST_CASE("waiter calculate receipt"){
 
 
     workers.getWaiter(1)->setAssignedTable(tablePtr);
+
+    tablePtr->AdvanceStateAll();
     workers.getWaiter(1)->collectOrders();
+
+    tablePtr->AdvanceStateAll(); // ReadyToOrder -> Awaiting (cyclesLeft = 2)
+    tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1)
+    tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1) -> Eating
+    tablePtr->AdvanceStateAll(); // Eating -> EatingFinished
+
+    // TODO-TEMP: scenario when customers are not ready to take receipt and uneven states of customers
 
     CHECK(workers.getWaiter(1)->calcReceipt() == Price(7, 47));
     // @important - changes are applied to customers hold in tables' vectors, so it should satisfy simulation demands

@@ -93,8 +93,10 @@ void Waiter::setAssignedTable(shared_ptr<Table> newAssignedTable) {
 
 void Waiter::collectOrders() {
     for (auto &customer : assignedTable->GetCustomers()){
-        assignedTable->AddItemToPrepare(customer.GetPreferredMenuItem());
-        customer.setCollectedOrder(true);
+        if (customer.GetCurrentState() == CustomerState::ReadyToOrder){
+            assignedTable->AddItemToPrepare(customer.GetPreferredMenuItem());
+            customer.setCollectedOrder(true);
+        }
     }
 }
 
