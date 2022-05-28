@@ -29,6 +29,7 @@ public:
 
     unsigned int GetAmountOfItemsToPrepare() const;
     shared_ptr<MenuItem> GetLastItemToPrepare();
+    void AddItemToPrepare(shared_ptr<MenuItem> menuItem);
 
     bool TryAddCustomers(CustomersGroup customersGroup);
     string ToString() const;

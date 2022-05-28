@@ -5,7 +5,7 @@ Waiter::Waiter(int id, const string &name, const string &surname, int gender, Pr
                unsigned int baseAmountOfShifts, bool canServeAlcohol)
         : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
           can_serve_alcohol(canServeAlcohol) {
-    assignedTable.reset(nullptr);
+    assignedTable.reset();
 }
 
 Price Waiter::calculate_salary() const noexcept {
@@ -83,10 +83,16 @@ string Waiter::printStateLog() const {
 
 
 
-void Waiter::setAssignedTable(unique_ptr<Table> newAssignedTable) {
+void Waiter::setAssignedTable(shared_ptr<Table> newAssignedTable) {
     if (currentState != WaiterState::awaiting) {
         throw BusyWaiterException();
     }
-    Waiter::assignedTable = std::move(newAssignedTable);
+    Waiter::assignedTable = move(newAssignedTable);
+}
+
+void Waiter::collectOrders() {
+    for (auto customer : assignedTable->GetCustomers()){
+        assignedTable->AddItemToPrepare(customer.GetPreferredMenuItem());
+    }
 }
 

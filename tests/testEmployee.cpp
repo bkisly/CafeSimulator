@@ -9,6 +9,7 @@
 #include "../includes/model/Employee//Cook.h"
 #include "../includes/model/MenuItem/dessert.h"
 #include "../includes/model/MenuItem/dish.h"
+#include "../includes/model/MenuItem/beverage.h"
 #include <sstream>
 
 using std::stringstream;
@@ -41,7 +42,7 @@ TEST_CASE("waiter printStateLog currentState") {
     Price salary(3000, 0);
     Waiter waiter1(1, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
     CHECK(waiter1.printStateLog() == "waiter 1 - awaiting\n");
-    waiter1.setAssignedTable(make_unique<Table>(Table(23,5)));
+    waiter1.setAssignedTable(make_shared<Table>(Table(23,5)));
     waiter1.setState(Waiter::WaiterState::collectOrder);
     CHECK(waiter1.printStateLog() == "waiter 1 - collecting orders to table nr 23\n");
 }
@@ -51,11 +52,11 @@ TEST_CASE("setAssignedTable") {
     Price salary(3000, 0);
     DbWorkers workers;
     workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
-    CHECK_NOTHROW(workers.getWaiter(0)->setAssignedTable(make_unique<Table>(Table())));
+    CHECK_NOTHROW(workers.getWaiter(0)->setAssignedTable(make_shared<Table>(Table())));
     // not that without advancing cycle state is not updated -> table can be reassigned
-    CHECK_NOTHROW(workers.getWaiter(0)->setAssignedTable(make_unique<Table>(Table())));
+    CHECK_NOTHROW(workers.getWaiter(0)->setAssignedTable(make_shared<Table>(Table())));
     workers.advanceCycleAll();
-    REQUIRE_THROWS_AS(workers.getWaiter(0)->setAssignedTable(make_unique<Table>(Table())),
+    REQUIRE_THROWS_AS(workers.getWaiter(0)->setAssignedTable(make_shared<Table>(Table())),
                       BusyWaiterException);
 }
 #endif
@@ -74,7 +75,7 @@ TEST_CASE("waiter states simulation") {
     CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::awaiting);
 
 //    setAssignedTable
-    workers.getWaiter(1)->setAssignedTable(make_unique<Table>(Table()));
+    workers.getWaiter(1)->setAssignedTable(make_shared<Table>(Table()));
     workers.advanceCycleAll();
     CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::giveMenu);
 
@@ -84,6 +85,35 @@ TEST_CASE("waiter states simulation") {
 //    todo check other states, especially asssigned cook
 }
 #endif
+
+#if DEBUG
+TEST_CASE("waiter collect orders"){
+    DbWorkers workers;
+    Price salary(3000, 0);
+    workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
+    workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
+    workers.addWaiter("Tomasz", "Burak", Waiter::Gender::male, salary, 4, 0);
+//     prepare table and customers
+    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 4);
+    Beverage tee("tee", Price(2, 49), CupType::Cup, 4);
+
+    vector<Customer> customers1;
+    customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
+    customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
+    customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+
+    CustomersGroup group1(customers1);
+    Table table(1, 5);
+    shared_ptr<Table> tablePtr =  make_shared<Table>(table);
+    CHECK(tablePtr->TryAddCustomers(group1));
+
+
+    workers.getWaiter(1)->setAssignedTable(tablePtr);
+    workers.getWaiter(1)->collectOrders();
+    CHECK(tablePtr->GetAmountOfItemsToPrepare() == 3);
+}
+#endif
+
 
 TEST_CASE("waiter in out operators") {
     Price salary(3000, 0);

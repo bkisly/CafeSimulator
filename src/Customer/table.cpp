@@ -70,7 +70,6 @@ bool Table::TryAddCustomers(CustomersGroup customersGroup) {
         for(Customer &customer : customersGroup.GetCustomers()) {
             customer.AdvanceState();
             customers.push_back(customer);
-            menuItemsToPrepare.push_back(customer.GetPreferredMenuItem());
         }
 
         return true;
@@ -93,4 +92,8 @@ shared_ptr<MenuItem> Table::GetLastItemToPrepare() {
     shared_ptr<MenuItem> item =  menuItemsToPrepare.back();
     menuItemsToPrepare.pop_back();
     return item;
+}
+
+void Table::AddItemToPrepare(shared_ptr<MenuItem> menuItem) {
+    menuItemsToPrepare.push_back(menuItem);
 }

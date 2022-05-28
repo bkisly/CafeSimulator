@@ -144,6 +144,7 @@ void DbWorkers::advanceCycleAll() {
                         waiter->currentState++;
                         break;
                     case Waiter::WaiterState::collectOrder:
+//                        TODO-TEMP: invoke collect orders
                         waiter->currentState++;
                         break;
                     case Waiter::WaiterState::prepareOrder:
@@ -156,6 +157,8 @@ void DbWorkers::advanceCycleAll() {
                             else {
                                 waiter->currentState++;
                             }
+//                            TODO-TEMP: repeat above procedure until empty collcetion
+//                             of items to prepare
                         }
                         break;
                     case Waiter::WaiterState::handInOrder:

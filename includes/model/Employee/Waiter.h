@@ -27,7 +27,7 @@ public:
         takeReceipt,
         last = takeReceipt
     };
-    void setAssignedTable(unique_ptr<Table> newAssignedTable);
+    void setAssignedTable(shared_ptr<Table> newAssignedTable);
 
 //  constructors, operators ...
     Waiter();
@@ -44,12 +44,18 @@ public:
 
 
 private:
-    std::unique_ptr<Table> assignedTable;
+    std::shared_ptr<Table> assignedTable;
+
 
     friend class DbWorkers;
 
 //    legacy
     bool can_serve_alcohol;
+
+#if DEBUG
+public:
+#endif
+    void collectOrders();
 };
 
 
