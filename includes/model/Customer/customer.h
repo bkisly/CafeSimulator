@@ -15,7 +15,7 @@ enum class CustomerState
     ReadyToOrder,
     Awaiting,
     Eating,
-    ReadyToPay,
+    FinishedEating,
 };
 
 class Customer {
@@ -35,6 +35,11 @@ public:
     bool DoesAllowOthers() const;
     const shared_ptr<MenuItem> &GetPreferredMenuItem();
     CustomerState GetCurrentState() const;
+
+    bool isCollectedOrder() const;
+    void setCollectedOrder(bool collectedOrder);
+    bool isReceivedReceipt() const;
+    void setReceivedReceipt(bool receivedReceipt);
 
     void AdvanceState();
     string ToString();

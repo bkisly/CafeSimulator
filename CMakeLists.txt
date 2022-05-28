@@ -28,7 +28,7 @@ add_library(
 
 add_library(
         helpers
-        includes/model/helpers/price.h src/helpers/price.cpp
+        includes/model/helpers/price.h src/Helpers/price.cpp
 )
 
 add_library(
@@ -62,7 +62,7 @@ add_executable(employeeTests tests/testEmployee.cpp)
 target_link_libraries(employeeTests PRIVATE employee helpers menu customer)
 
 add_executable(customerTableTests tests/customerTableTests.cpp)
-target_link_libraries(customerTableTests PRIVATE customer menu helpers)
+target_link_libraries(customerTableTests PRIVATE customer menu helpers employee)
 
 add_executable(menuDatabaseTests tests/menuDatabaseTests.cpp)
 target_link_libraries(menuDatabaseTests PRIVATE menu menuDatabase helpers)

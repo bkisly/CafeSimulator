@@ -52,7 +52,7 @@ void Customer::AdvanceState() {
         }
     }
     // advance state to unassigned only after waiter gives receipt
-    else if (currentState == CustomerState::ReadyToPay){
+    else if (currentState == CustomerState::FinishedEating){
         if (this->receivedReceipt){
             // advance state
             currentState = (CustomerState) (((int) currentState + 1) % 6);
@@ -92,7 +92,7 @@ string Customer::ToString() {
             result += "is eating/drinking " + preferredMenuItem->GetName();
             break;
         }
-        case CustomerState::ReadyToPay:
+        case CustomerState::FinishedEating:
         {
             result += "is ready to pay.";
             break;
@@ -105,4 +105,20 @@ string Customer::ToString() {
     }
 
     return result;
+}
+
+bool Customer::isCollectedOrder() const {
+    return collectedOrder;
+}
+
+void Customer::setCollectedOrder(bool collectedOrder) {
+    Customer::collectedOrder = collectedOrder;
+}
+
+bool Customer::isReceivedReceipt() const {
+    return receivedReceipt;
+}
+
+void Customer::setReceivedReceipt(bool receivedReceipt) {
+    Customer::receivedReceipt = receivedReceipt;
 }

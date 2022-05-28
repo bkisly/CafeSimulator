@@ -3,7 +3,7 @@
 //
 
 #include "../../includes/model/Databases/menuDatabase.h"
-#include "../../includes/model/MenuItem/exceptions.h."
+#include "../../includes/model/MenuItem/exceptions.h"
 
 using namespace std;
 

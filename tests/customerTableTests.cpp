@@ -8,6 +8,7 @@
 #include "../includes/model/Customer/customer.h"
 #include "../includes/model/MenuItem/beverage.h"
 #include "../includes/model/Customer/table.h"
+#include "../includes/model/Employee/DbWorkers.h"
 
 TEST_CASE("Customer tests")
 {
@@ -39,7 +40,7 @@ TEST_CASE("Customer tests")
         CHECK(customer.GetCurrentState() == CustomerState::Eating);
 
         customer.AdvanceState();
-        CHECK(customer.GetCurrentState() == CustomerState::ReadyToPay);
+        CHECK(customer.GetCurrentState() == CustomerState::FinishedEating);
 
         customer.AdvanceState();
         CHECK(customer.GetCurrentState() == CustomerState::Unassigned);
@@ -150,3 +151,4 @@ TEST_CASE("Table tests")
 //        CHECK(table2.ToString() == "Table nr 2 for 1 person");
 //    }
 }
+

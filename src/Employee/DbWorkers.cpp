@@ -166,9 +166,19 @@ void DbWorkers::advanceCycleAll() {
                             break;
                         case Waiter::WaiterState::handInOrder:
                             waiter->currentState++;
-                            // TODO-TEMP: other states, implement calc receipt, update
-                            //  state logs for that; tests for waiter
                             break;
+                        case Waiter::WaiterState::takeReceipt:
+                            // TODO-TEMP invoke calc recipt (calc receipt - sum items, update customers property - receivdedReceipt
+                            // if new clients come, serve them, otherwise leave table
+                            if (waiter->assignedTable->GetCustomers().size() == 0){
+                                waiter->assignedTable.reset();
+                                waiter->currentState = Waiter::WaiterState::awaiting;
+                            }
+                            else {
+                                waiter->currentState = Waiter::WaiterState::collectOrder;
+                            }
+
+
                         default:
                             throw StateException(waiter->currentState);
                     }

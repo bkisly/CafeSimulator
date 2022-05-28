@@ -57,7 +57,7 @@ vector<Customer> &Table::GetCustomers() {
     return customers;
 }
 
-bool Table::TryAddCustomers(CustomersGroup customersGroup) {
+bool Table::TryAddCustomers(CustomersGroup &customersGroup) {
     if(customersGroup.GroupSize() <= capacity - this->customers.size())
     {
         customersGroupValidation(customersGroup);
@@ -101,3 +101,4 @@ void Table::AddItemToPrepare(shared_ptr<MenuItem> menuItem) {
 void Table::RemoveLastItemToPrepare() {
     menuItemsToPrepare.pop_back();
 }
+

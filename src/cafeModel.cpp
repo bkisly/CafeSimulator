@@ -151,8 +151,8 @@ void CafeModel::Simulate(unsigned int cycles) {
     {
         // Assigning customers must be performed as the last step before adding new ones
         // in order not to let the change propagate (we don't want to let the customer be assigned and serviced at once)
-        // 1. Collect customers who sit by the tables
 
+        // 1. Collect customers who sit by the tables
         vector<Customer> assignedCustomers;
         for(Table &table : tables)
         {
@@ -182,7 +182,7 @@ void CafeModel::Simulate(unsigned int cycles) {
                 {
                     break;
                 }
-                case CustomerState::ReadyToPay:
+                case CustomerState::FinishedEating:
                 {
                     break;
                 }

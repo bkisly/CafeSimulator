@@ -29,6 +29,8 @@ public:
     };
     void setAssignedTable(shared_ptr<Table> newAssignedTable);
 
+    Price calcReceipt();
+
 //  constructors, operators ...
     Waiter();
     Waiter(int id, const string &name, const string &surname, int gender, Price baseSalary,
@@ -45,7 +47,7 @@ public:
 
 private:
     std::shared_ptr<Table> assignedTable;
-
+    Price receipt;
 
     friend class DbWorkers;
 
@@ -54,7 +56,10 @@ private:
 
 #if DEBUG
 public:
+    const shared_ptr<Table> &getAssignedTable() const;
+
 #endif
+    // collectOrders is public in debug
     void collectOrders();
 };
 

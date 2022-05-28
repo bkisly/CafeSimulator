@@ -6,6 +6,7 @@ Waiter::Waiter(int id, const string &name, const string &surname, int gender, Pr
         : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
           can_serve_alcohol(canServeAlcohol) {
     assignedTable.reset();
+    receipt = Price(0, 0);
 }
 
 Price Waiter::calculate_salary() const noexcept {
@@ -91,8 +92,23 @@ void Waiter::setAssignedTable(shared_ptr<Table> newAssignedTable) {
 }
 
 void Waiter::collectOrders() {
-    for (auto customer : assignedTable->GetCustomers()){
+    for (auto &customer : assignedTable->GetCustomers()){
         assignedTable->AddItemToPrepare(customer.GetPreferredMenuItem());
+        customer.setCollectedOrder(true);
     }
+}
+
+Price Waiter::calcReceipt() {
+    for (auto &customer : this->assignedTable->GetCustomers()){
+        if (customer.isCollectedOrder()){
+            this->receipt += customer.GetPreferredMenuItem()->GetPricePerPortion();
+            customer.setReceivedReceipt(true);
+        }
+    }
+    return receipt;
+}
+
+const shared_ptr<Table> &Waiter::getAssignedTable() const {
+    return assignedTable;
 }
 
