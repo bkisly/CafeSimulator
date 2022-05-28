@@ -6,11 +6,11 @@
 
 #include <string>
 #include <iostream>
-#include "catch.hpp"
-#include "../includes/model/MenuItem/beverage.h"
-#include "../includes/model/MenuItem/dessert.h"
-#include "../includes/model/MenuItem/dish.h"
-#include "../includes/model/MenuItem/exceptions.h"
+#include "../catch.hpp"
+#include "../../includes/model/MenuItem/beverage.h"
+#include "../../includes/model/MenuItem/dessert.h"
+#include "../../includes/model/MenuItem/dish.h"
+#include "../../includes/model/MenuItem/exceptions.h"
 
 using namespace std;
 

@@ -3,8 +3,8 @@
 //
 
 #define CATCH_CONFIG_MAIN
-#include "../includes/model/helpers/price.h"
-#include "catch.hpp"
+#include "../../includes/model/helpers/price.h"
+#include "../catch.hpp"
 
 TEST_CASE("Boolean operators")
 {

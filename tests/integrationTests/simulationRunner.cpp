@@ -5,8 +5,8 @@
 #define CATCH_CONFIG_MAIN
 
 #include <iostream>
-#include "catch.hpp"
-#include "../includes/model/cafeModel.h"
+#include "../catch.hpp"
+#include "../../includes/model/cafeModel.h"
 
 TEST_CASE("Runner")
 {

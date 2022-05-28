@@ -4,11 +4,11 @@
 
 #define CATCH_CONFIG_MAIN
 
-#include "catch.hpp"
-#include "../includes/model/Customer/customer.h"
-#include "../includes/model/MenuItem/beverage.h"
-#include "../includes/model/Customer/table.h"
-#include "../includes/model/Employee/DbWorkers.h"
+#include "../catch.hpp"
+#include "../../includes/model/Customer/customer.h"
+#include "../../includes/model/MenuItem/beverage.h"
+#include "../../includes/model/Customer/table.h"
+#include "../../includes/model/Employee/DbWorkers.h"
 
 TEST_CASE("Customer tests")
 {
@@ -118,12 +118,12 @@ TEST_CASE("Table tests")
         CustomersGroup group3(customers3);
         CustomersGroup group4(customers4);
         CustomersGroup invalid1(invalidCustomers1);
-//        CustomersGroup invalid2(invalidCustomers2);
+        CustomersGroup invalid2(invalidCustomers2);
         CHECK(table.TryAddCustomers(group1));
         CHECK_FALSE(table.TryAddCustomers(group3));
         CHECK_FALSE(table.TryAddCustomers(group4));
         CHECK_THROWS_AS(table.TryAddCustomers(invalid1), invalid_argument);
-        CHECK_THROWS_AS(table.TryAddCustomers(CustomersGroup(invalidCustomers2)), invalid_argument);
+        CHECK_THROWS_AS(table.TryAddCustomers(invalid2), invalid_argument);
         CHECK(table.TryAddCustomers(group2));
     }
 

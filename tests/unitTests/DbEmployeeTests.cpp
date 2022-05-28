@@ -1,14 +1,14 @@
 #define CATCH_CONFIG_MAIN
 
-#include "catch.hpp"
-#include "../includes/model/helpers/price.h"
-#include "../includes/model/Employee//Employee.h"
-#include "../includes/model/Employee//Exceptions.h"
-#include "../includes/model/Employee//Waiter.h"
-#include "../includes/model/Employee//Cook.h"
-#include "../includes/model/MenuItem/dessert.h"
-#include "../includes/model/MenuItem/dish.h"
-#include "../includes/model/Employee/DbWorkers.h"
+#include "../catch.hpp"
+#include "../../includes/model/helpers/price.h"
+#include "../../includes/model/Employee/Employee.h"
+#include "../../includes/model/Employee/Exceptions.h"
+#include "../../includes/model/Employee/Waiter.h"
+#include "../../includes/model/Employee/Cook.h"
+#include "../../includes/model/MenuItem/dessert.h"
+#include "../../includes/model/MenuItem/dish.h"
+#include "../../includes/model/Employee/DbWorkers.h"
 #include <sstream>
 
 using std::stringstream;

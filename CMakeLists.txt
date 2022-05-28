@@ -52,25 +52,28 @@ add_library(
 )
 
 # tests
-add_executable(priceTests tests/priceTests.cpp)
+add_executable(priceTests tests/unitTests/priceTests.cpp)
 target_link_libraries(priceTests PRIVATE helpers)
 
-add_executable(menuItemsTests tests/menuItemsTests.cpp)
+add_executable(menuItemsTests tests/unitTests/menuItemsTests.cpp)
 target_link_libraries(menuItemsTests PRIVATE menu helpers)
 
-add_executable(employeeTests tests/testEmployee.cpp)
+add_executable(employeeTests tests/unitTests/employeeTests.cpp)
 target_link_libraries(employeeTests PRIVATE employee helpers menu customer)
 
-add_executable(customerTableTests tests/customerTableTests.cpp)
+add_executable(employeeSimulationTests tests/integrationTests/employeeSimulationTests.cpp)
+target_link_libraries(employeeSimulationTests PRIVATE employee helpers menu customer)
+
+add_executable(customerTableTests tests/unitTests/customerTableTests.cpp)
 target_link_libraries(customerTableTests PRIVATE customer menu helpers employee)
 
-add_executable(menuDatabaseTests tests/menuDatabaseTests.cpp)
+add_executable(menuDatabaseTests tests/unitTests/menuDatabaseTests.cpp)
 target_link_libraries(menuDatabaseTests PRIVATE menu menuDatabase helpers)
 
-add_executable(simulationRunner tests/simulationRunner.cpp)
+add_executable(simulationRunner tests/integrationTests/simulationRunner.cpp)
 target_link_libraries(simulationRunner PRIVATE model menu menuDatabase helpers customer)
 
-add_executable(dbEmployeesTests tests/DbEmployeeTests.cpp)
+add_executable(dbEmployeesTests tests/unitTests/DbEmployeeTests.cpp)
 target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu customer)
 
 # TODO: run all tests executable
