@@ -12,6 +12,7 @@
 #include "MenuItem/dish.h"
 
 #include "Databases/menuDatabase.h"
+#include "Employee/DbWorkers.h"
 
 #include "Customer/customer.h"
 #include "Customer/customersGroup.h"
@@ -21,6 +22,8 @@ class CafeModel {
 private:
     // Cafe resources
     MenuDatabase menuDb = MenuDatabase(make_shared<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3));
+    DbWorkers employeesDb;
+
     vector<Table> tables;
 
     // Simulation status

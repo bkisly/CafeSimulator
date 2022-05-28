@@ -69,7 +69,7 @@ add_executable(menuDatabaseTests tests/menuDatabaseTests.cpp)
 target_link_libraries(menuDatabaseTests PRIVATE menu menuDatabase helpers)
 
 add_executable(simulationRunner tests/simulationRunner.cpp)
-target_link_libraries(simulationRunner PRIVATE viewModel menu menuDatabase helpers customer)
+target_link_libraries(simulationRunner PRIVATE viewModel menu menuDatabase employee helpers customer)
 
 add_executable(dbEmployeesTests tests/DbEmployeeTests.cpp)
 target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu customer)

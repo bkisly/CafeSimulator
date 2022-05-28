@@ -32,7 +32,7 @@ public:
     void AddItemToPrepare(shared_ptr<MenuItem> menuItem);
     void  RemoveLastItemToPrepare();
 
-    bool TryAddCustomers(CustomersGroup customersGroup);
+    bool TryAddCustomers(CustomersGroup &customersGroup);
     string ToString() const;
 };
 

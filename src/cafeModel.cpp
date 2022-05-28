@@ -103,6 +103,16 @@ CafeModel::CafeModel(bool readFromService) {
 
         menuDb = MenuDatabase(menuItems);
 
+        employeesDb.addCook("Jan", "Kowalski", 0, Price(25, 0), 2, 4);
+        employeesDb.addCook("Maciej", "Nowak", 0, Price(30, 0), 1, 5);
+        employeesDb.addCook("Bożena", "Kowalska", 1, Price(25, 0), 2, 6);
+
+        employeesDb.addWaiter("Borys", "Groch", 0, Price(15, 0), 1, true);
+        employeesDb.addWaiter("Grzegorz", "Brzęczyszczykiewicz", 0, Price(20, 0), 2, false);
+        employeesDb.addWaiter("Halina", "Grzmot", 1, Price(30, 0), 1, true);
+
+        cout << employeesDb.printAll() << endl << endl;
+
         vector<Table> initialTables
         {
             Table(1, 2),
@@ -165,6 +175,9 @@ void CafeModel::Simulate(unsigned int cycles) {
         }
 
         // 2. Perform work for assigned customers
+
+
+
         // TODO: need EmployeesDatabase class to complete this step
         for(Customer &customer : assignedCustomers)
         {
