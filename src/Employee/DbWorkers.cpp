@@ -108,66 +108,70 @@ int DbWorkers::getWorkerState(int id) {
 }
 
 void DbWorkers::advanceCycleAll() {
-    for (auto &worker_ptr : workers){
-        if (worker_ptr->getCyclesLeft() > 0){
+    for (auto &worker_ptr: workers) {
+        if (worker_ptr->getCyclesLeft() > 0) {
             worker_ptr->cyclesLeft--;
         }
-        if (worker_ptr->getCyclesLeft() == 0){
+        if (worker_ptr->getCyclesLeft() == 0) {
 //            cook version
-            Cook* cook = dynamic_cast<Cook*>(&*worker_ptr);
-            if (cook){
-                if(!(cook->assignedMenuItem)){
+            Cook *cook = dynamic_cast<Cook *>(&*worker_ptr);
+            if (cook) {
+                if (!(cook->assignedMenuItem)) {
                     // case when cook finished preparing meal
                     cook->dishToCollect = false;
                 }
-                else if (cook->currentState == Cook::CookState::busy){
+                else if (cook->currentState == Cook::CookState::busy) {
                     cook->currentState = Cook::CookState::free;
                     cook->dishToCollect = true;
                     cook->assignedMenuItem.reset();
                 }
-                else{
+                else {
                     cook->currentState = Cook::CookState::busy;
                     cook->dishToCollect = false;
                 }
             }
-
             // waiter version
-            Waiter* waiter = dynamic_cast<Waiter*>(&*worker_ptr);
-            if (waiter){
-                switch (waiter->currentState) {
-                    case Waiter::WaiterState::awaiting:
-                        if (waiter->assignedTable) {
-                            waiter->currentState++;
-                        }
-                        break;
-                    case Waiter::WaiterState::giveMenu:
-                        waiter->currentState++;
-                        break;
-                    case Waiter::WaiterState::collectOrder:
-//                        TODO-TEMP: invoke collect orders
-                        waiter->currentState++;
-                        break;
-                    case Waiter::WaiterState::prepareOrder:
-                        if (waiter->assignedTable->GetAmountOfItemsToPrepare()) {
-                            shared_ptr<MenuItem> menuItem = waiter->assignedTable
-                                                                  ->GetLastItemToPrepare();
-                            if (this->assignDishToFreeCook(menuItem)) {
-                                waiter->cyclesLeft = menuItem->GetCyclesToPrepare();
+            else{
+                Waiter *waiter = dynamic_cast<Waiter *>(&*worker_ptr);
+                if (waiter) {
+                    switch (waiter->currentState) {
+                        case Waiter::WaiterState::awaiting:
+                            if (waiter->assignedTable) {
+                                waiter->currentState++;
                             }
+                            break;
+                        case Waiter::WaiterState::giveMenu:
+                            waiter->currentState++;
+                            break;
+                        case Waiter::WaiterState::collectOrder:
+                            waiter->collectOrders();
+                            waiter->currentState++;
+                            break;
+                        case Waiter::WaiterState::prepareOrder:
+                            // check if there are items to prepare
+                            if (waiter->assignedTable->GetAmountOfItemsToPrepare()) {
+                                // get item
+                                shared_ptr<MenuItem> menuItem =
+                                        waiter->assignedTable->GetLastItemToPrepare();
+                                // try to pass dish along to cook
+                                if (this->assignDishToFreeCook(menuItem)) {
+                                    waiter->cyclesLeft = menuItem->GetCyclesToPrepare();
+                                    waiter->assignedTable->RemoveLastItemToPrepare();
+                                }
+                            }
+                            // no dishes left - update state
                             else {
                                 waiter->currentState++;
                             }
-//                            TODO-TEMP: repeat above procedure until empty collcetion
-//                             of items to prepare
-                        }
-                        break;
-                    case Waiter::WaiterState::handInOrder:
-                        waiter->currentState++;
-                        // TODO-TEMP: other states, implement calc receipt, update
-                        //  state logs for that; tests for waiter
-                        break;
-                    default:
-                        throw StateException(waiter->currentState);
+                            break;
+                        case Waiter::WaiterState::handInOrder:
+                            waiter->currentState++;
+                            // TODO-TEMP: other states, implement calc receipt, update
+                            //  state logs for that; tests for waiter
+                            break;
+                        default:
+                            throw StateException(waiter->currentState);
+                    }
                 }
             }
         }

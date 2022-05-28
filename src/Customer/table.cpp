@@ -97,3 +97,7 @@ shared_ptr<MenuItem> Table::GetLastItemToPrepare() {
 void Table::AddItemToPrepare(shared_ptr<MenuItem> menuItem) {
     menuItemsToPrepare.push_back(menuItem);
 }
+
+void Table::RemoveLastItemToPrepare() {
+    menuItemsToPrepare.pop_back();
+}

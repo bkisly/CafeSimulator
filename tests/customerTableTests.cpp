@@ -31,6 +31,7 @@ TEST_CASE("Customer tests")
         customer.AdvanceState();
         CHECK(customer.GetCurrentState() == CustomerState::ReadyToOrder);
 
+        // TODO: adopt tests for new system of advancing states
         customer.AdvanceState();
         CHECK(customer.GetCurrentState() == CustomerState::Awaiting);
 
@@ -54,6 +55,7 @@ TEST_CASE("Customer tests")
         customer.AdvanceState();
         CHECK(customer.ToString() == "Customer nr 1 is ready to order.");
 
+        // TODO: adopt another tests for new system of advancing states
         customer.AdvanceState();
         CHECK(customer.ToString() == "Customer nr 1 is awaiting for Coffee");
 

@@ -68,6 +68,19 @@ TEST_CASE("waiter states simulation") {
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
     workers.addWaiter("Tomasz", "Burak", Waiter::Gender::male, salary, 4, 0);
+    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 4);
+    Beverage tee("tee", Price(2, 49), CupType::Cup, 4);
+    vector<Customer> customers1;
+    customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
+    customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
+    customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+    CustomersGroup group1(customers1);
+    Table table(1, 5);
+    shared_ptr<Table> tablePtr =  make_shared<Table>(table);
+    CHECK(tablePtr->TryAddCustomers(group1));
+
+
+
 
     CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::awaiting);
 //    advanceCycle - no assigned tables - wait
@@ -75,14 +88,20 @@ TEST_CASE("waiter states simulation") {
     CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::awaiting);
 
 //    setAssignedTable
-    workers.getWaiter(1)->setAssignedTable(make_shared<Table>(Table()));
+    workers.getWaiter(1)->setAssignedTable(tablePtr);
     workers.advanceCycleAll();
     CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::giveMenu);
 
     workers.advanceCycleAll();
     CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::collectOrder);
 
-//    todo check other states, especially asssigned cook
+//    controlling orders
+    workers.advanceCycleAll();
+//    waiter collected all orders -> 3
+    CHECK(tablePtr->GetAmountOfItemsToPrepare() == 3);
+    CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::prepareOrder);
+
+//    TODO-TEMP test waiter simulation
 }
 #endif
 
