@@ -180,7 +180,6 @@ void CafeModel::Simulate(unsigned int cycles) {
         // c) give info to cooks
         // d) give orders
 
-
         // TODO: need EmployeesDatabase class to complete this step
         for(Customer &customer : assignedCustomers)
         {

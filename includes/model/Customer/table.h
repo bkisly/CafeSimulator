@@ -31,12 +31,8 @@ public:
     shared_ptr<MenuItem> GetLastItemToPrepare();
     void AddItemToPrepare(shared_ptr<MenuItem> menuItem);
     void  RemoveLastItemToPrepare();
-
-<<<<<<< HEAD
     void AdvanceStateAll();
 
-=======
->>>>>>> 3733401 (Added sample data to employees database in CafeModel)
     bool TryAddCustomers(CustomersGroup &customersGroup);
     string ToString() const;
 };
