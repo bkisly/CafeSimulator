@@ -174,11 +174,27 @@ void CafeModel::Simulate(unsigned int cycles) {
                 assignedCustomers.push_back(customer);
         }
 
-        // 2. Perform work for assigned customers
-        // a) assign waiters
-        // b) collect orders
-        // c) give info to cooks
-        // d) give orders
+        for(auto &employee : employeesDb.GetEmployees())
+        {
+            if(typeid(*employee.get()) == typeid(Waiter&))
+            {
+                Waiter waiter = dynamic_cast<Waiter&>(*employee);
+
+                if(waiter.getState() == Waiter::WaiterState::awaiting)
+                {
+                    for(Table &table : tables)
+                    {
+                        if(table.GetAmountOfItemsToPrepare() == 0 && !table.GetCustomers().empty())
+                        {
+                            waiter.setAssignedTable(make_shared<Table>(table));
+                            table.AdvanceStateAll();
+                        }
+                    }
+                }
+            }
+        }
+
+        employeesDb.advanceCycleAll();
 
         // TODO: need EmployeesDatabase class to complete this step
         for(Customer &customer : assignedCustomers)
@@ -187,6 +203,7 @@ void CafeModel::Simulate(unsigned int cycles) {
             {
                 case CustomerState::SitTaken:
                 {
+
                     break;
                 }
                 case CustomerState::ReadyToOrder:

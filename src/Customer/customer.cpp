@@ -3,6 +3,7 @@
 //
 
 #include "../../includes/model/Customer/customer.h"
+#include <typeinfo>
 
 Customer::Customer(unsigned int id, bool allowsOthers, shared_ptr<MenuItem> preferredMenuItem) {
     this->id = id;

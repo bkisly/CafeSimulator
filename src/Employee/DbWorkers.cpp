@@ -18,6 +18,10 @@ void DbWorkers::addCook(const string &name, const string &surname, int gender,
     newIdToAssign++;
 }
 
+vector<unique_ptr<Employee>> &DbWorkers::GetEmployees() {
+    return workers;
+}
+
 void DbWorkers::addWaiter(const string &name, const string &surname, int gender,
                           Price baseSalary, unsigned baseAmountOfShifts,
                           bool canServeAlcohol) {
