@@ -175,7 +175,10 @@ void CafeModel::Simulate(unsigned int cycles) {
         }
 
         // 2. Perform work for assigned customers
-
+        // a) assign waiters
+        // b) collect orders
+        // c) give info to cooks
+        // d) give orders
 
 
         // TODO: need EmployeesDatabase class to complete this step
