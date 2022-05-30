@@ -12,7 +12,8 @@
 class Table {
 private:
     unsigned int id;
-    unsigned int capacity;
+    unsigned int capacity = 0;
+    bool hasAssignedWaiter = false;
     vector<Customer> customers;
 
     void customersGroupValidation(CustomersGroup &customersGroup);
@@ -26,9 +27,12 @@ public:
     unsigned int GetId() const;
     unsigned int GetCapacity() const;
     vector<Customer> &GetCustomers();
+    bool GetHasAssignedWaiter() const;
+    void SetHasAssignedWaiter(bool hasAssignedWaiter);
 
     unsigned int GetAmountOfItemsToPrepare() const;
     shared_ptr<MenuItem> GetLastItemToPrepare();
+
     void AddItemToPrepare(shared_ptr<MenuItem> menuItem);
     void  RemoveLastItemToPrepare();
     void AdvanceStateAll();

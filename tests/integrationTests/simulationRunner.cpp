@@ -11,6 +11,6 @@
 TEST_CASE("Runner")
 {
     CafeModel model(false);
-    model.Simulate(5);
+    model.Simulate(10);
     std::cout << model.GetSimulationLog() << std::endl;
 }

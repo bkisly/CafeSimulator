@@ -77,9 +77,12 @@ void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
     // 5d. Print employees state
 
     simulationLog += "\n--- Employees state ---\n";
-    // TODO: print employees state
+    for(auto &employee : employeesDb.GetEmployees())
+    {
+        simulationLog += employee->printStateLog() + "\n";
+    }
 
-    simulationLog += "\n\n";
+    simulationLog += "\n";
 }
 
 CafeModel::CafeModel(bool readFromService) {
@@ -110,8 +113,6 @@ CafeModel::CafeModel(bool readFromService) {
         employeesDb.addWaiter("Borys", "Groch", 0, Price(15, 0), 1, true);
         employeesDb.addWaiter("Grzegorz", "Brzęczyszczykiewicz", 0, Price(20, 0), 2, false);
         employeesDb.addWaiter("Halina", "Grzmot", 1, Price(30, 0), 1, true);
-
-        cout << employeesDb.printAll() << endl << endl;
 
         vector<Table> initialTables
         {
@@ -178,15 +179,15 @@ void CafeModel::Simulate(unsigned int cycles) {
         {
             if(typeid(*employee.get()) == typeid(Waiter&))
             {
-                Waiter waiter = dynamic_cast<Waiter&>(*employee);
+                Waiter* waiter = dynamic_cast<Waiter*>(&*employee);
 
-                if(waiter.getState() == Waiter::WaiterState::awaiting)
+                if(waiter->getState() == Waiter::WaiterState::awaiting)
                 {
                     for(Table &table : tables)
                     {
-                        if(table.GetAmountOfItemsToPrepare() == 0 && !table.GetCustomers().empty())
+                        if(!table.GetHasAssignedWaiter() && !table.GetCustomers().empty())
                         {
-                            waiter.setAssignedTable(make_shared<Table>(table));
+                            waiter->setAssignedTable(table);
                             table.AdvanceStateAll();
                         }
                     }
@@ -203,7 +204,6 @@ void CafeModel::Simulate(unsigned int cycles) {
             {
                 case CustomerState::SitTaken:
                 {
-
                     break;
                 }
                 case CustomerState::ReadyToOrder:

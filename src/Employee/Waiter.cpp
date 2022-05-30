@@ -5,7 +5,6 @@ Waiter::Waiter(int id, const string &name, const string &surname, int gender, Pr
                unsigned int baseAmountOfShifts, bool canServeAlcohol)
         : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
           can_serve_alcohol(canServeAlcohol) {
-    assignedTable.reset();
     receipt = Price(0, 0);
 }
 
@@ -45,7 +44,7 @@ std::istream &Waiter::read(std::istream &in) {
 }
 
 Waiter::Waiter() {
-
+    assignedTable = Table();
 }
 
 bool Waiter::operator==(const Waiter &rhs) const {
@@ -64,19 +63,19 @@ string Waiter::printStateLog() const {
             return msg + "awaiting\n";
         case WaiterState::giveMenu:
             return msg + "giving cards to table nr " +
-                   to_string(assignedTable->GetId()) + "\n";
+                   to_string(assignedTable.GetId()) + "\n";
         case WaiterState::collectOrder:
             return msg + "collecting orders to table nr " +
-                   to_string(assignedTable->GetId()) + "\n";
+                   to_string(assignedTable.GetId()) + "\n";
         case WaiterState::prepareOrder:
             return msg + "Preparing orders for table nr " +
-                   to_string(assignedTable->GetId()) + "\n";
+                   to_string(assignedTable.GetId()) + "\n";
         case WaiterState::handInOrder:
             return msg + "handing in orders to table nr " +
-                   to_string(assignedTable->GetId()) + "\n";
+                   to_string(assignedTable.GetId()) + "\n";
         case WaiterState::takeReceipt:
             return msg + "taking receipt to table nr " +
-                   to_string(assignedTable->GetId()) + "\n";
+                   to_string(assignedTable.GetId()) + "\n";
         default:
             throw StateException(currentState);
     }
@@ -84,24 +83,26 @@ string Waiter::printStateLog() const {
 
 
 
-void Waiter::setAssignedTable(shared_ptr<Table> newAssignedTable) {
+void Waiter::setAssignedTable(Table &newAssignedTable) {
     if (currentState != WaiterState::awaiting) {
         throw BusyWaiterException();
     }
-    Waiter::assignedTable = move(newAssignedTable);
+
+    newAssignedTable.SetHasAssignedWaiter(true);
+    assignedTable = newAssignedTable;
 }
 
 void Waiter::collectOrders() {
-    for (auto &customer : assignedTable->GetCustomers()){
+    for (auto &customer : assignedTable.GetCustomers()){
         if (customer.GetCurrentState() == CustomerState::ReadyToOrder){
-            assignedTable->AddItemToPrepare(customer.GetPreferredMenuItem());
+            assignedTable.AddItemToPrepare(customer.GetPreferredMenuItem());
             customer.setCollectedOrder(true);
         }
     }
 }
 
 Price Waiter::calcReceipt() {
-    for (auto &customer : this->assignedTable->GetCustomers()){
+    for (auto &customer : this->assignedTable.GetCustomers()){
         if (customer.isCollectedOrder()){
             this->receipt += customer.GetPreferredMenuItem()->GetPricePerPortion();
             customer.setReceivedReceipt(true);
@@ -110,7 +111,7 @@ Price Waiter::calcReceipt() {
     return receipt;
 }
 
-const shared_ptr<Table> &Waiter::getAssignedTable() const {
+const Table &Waiter::getAssignedTable() const {
     return assignedTable;
 }
 

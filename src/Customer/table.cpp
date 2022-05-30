@@ -106,9 +106,17 @@ void Table::RemoveLastItemToPrepare() {
 }
 
 void Table::AdvanceStateAll() {
-    for(Customer &customer : this->customers)
+    for(Customer &customer : customers)
     {
         customer.AdvanceState();
     }
+}
+
+bool Table::GetHasAssignedWaiter() const {
+    return hasAssignedWaiter;
+}
+
+void Table::SetHasAssignedWaiter(bool hasAssignedWaiter) {
+    this->hasAssignedWaiter = hasAssignedWaiter;
 }
 
