@@ -27,7 +27,7 @@ public:
         ReadyToTakeReceipt,
         TakenReceipt
     };
-    void setAssignedTable(shared_ptr<Table> newAssignedTable);
+    void setAssignedTable(const shared_ptr<Table> &newAssignedTable);
 
     Price calcReceipt();
 
@@ -46,7 +46,7 @@ public:
 
 
 private:
-    std::shared_ptr<Table> assignedTable;
+    shared_ptr<Table> assignedTable;
     Price receipt;
 
     friend class DbWorkers;
@@ -56,7 +56,7 @@ private:
 
 #if DEBUG
 public:
-    const shared_ptr<Table> &getAssignedTable() const;
+    shared_ptr<Table> getAssignedTable() const;
 
 #endif
     // collectOrders is public in debug

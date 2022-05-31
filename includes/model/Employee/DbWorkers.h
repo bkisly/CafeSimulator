@@ -27,6 +27,8 @@ public:
 #endif
     DbWorkers();
 
+    std::vector<std::unique_ptr<Employee>> &GetEmployees();
+
     void addCook(const string &name, const string &surname, int gender, Price baseSalary,
                  unsigned baseAmountOfShifts, unsigned int knownCuisines);
 

@@ -12,8 +12,10 @@ shared_ptr<MenuItem> CafeModel::randomMenuItem() {
 
 Customer CafeModel::randomCustomer(bool allowsOthers) {
     totalCustomers++;
-    return Customer(totalCustomers, allowsOthers, randomMenuItem());
+    return { totalCustomers, allowsOthers, randomMenuItem() };
 }
+
+// Simulation sub-procedures
 
 void CafeModel::addNewCustomers() {
     unsigned int customersAmount = rand() % 5 + 1;
@@ -24,7 +26,7 @@ void CafeModel::addNewCustomers() {
         customersToAdd.push_back(randomCustomer(allowOthers));
     }
 
-    unassignedCustomers.push_back(CustomersGroup(customersToAdd));
+    unassignedCustomers.emplace_back(CustomersGroup(customersToAdd));
 }
 
 void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
@@ -32,9 +34,9 @@ void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
     int groupId = 0;
     for(CustomersGroup &customersGroup : unassignedCustomers)
     {
-        for(Table &table : tables)
+        for(auto &table : tables)
         {
-            if(table.TryAddCustomers(customersGroup))
+            if(table->TryAddCustomers(customersGroup))
             {
                 groupsIdsToRemove.push_back(groupId);
                 assignedCustomers.insert(assignedCustomers.end(), customersGroup.GetCustomers().begin(), customersGroup.GetCustomers().end());
@@ -49,35 +51,63 @@ void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
         unassignedCustomers.erase(unassignedCustomers.begin() + id);
 }
 
-void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
-    // 5a. Print header
-    simulationLog += "==========\nSIMULATION CYCLE NR " + to_string(currentCycle) + "\n==========\n\n";
+void CafeModel::removeServedCustomers() {
+    for(auto &table : tables)
+    {
+        vector<Customer> newCustomers;
 
-    // 5b. Print customers state
-    simulationLog += "--- Customers state ---\n";
+        for(Customer &customer : table->GetCustomers())
+        {
+            if(!customer.isReceivedReceipt())
+                newCustomers.push_back(customer);
+        }
+
+        if(newCustomers.size() != table->GetCustomers().size())
+        {
+            table->GetCustomers().clear();
+            table->GetCustomers().insert(table->GetCustomers().begin(), newCustomers.begin(), newCustomers.end());
+        }
+    }
+}
+
+void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
+    // 7a. Print header
+    string block = "==========\nSIMULATION CYCLE NR " + to_string(currentCycle + 1) + "\n==========\n\n";
+    simulationLogBlocks.push_back(block);
+
+    // 7b. Print customers state
+    block = "--- Customers state ---\n";
     for(Customer &customer : assignedCustomers)
-        simulationLog += customer.ToString() + "\n";
+        block += customer.ToString() + "\n";
 
     for(CustomersGroup customersGroup : unassignedCustomers)
     {
-        for(Customer customer : customersGroup.GetCustomers())
-            simulationLog += customer.ToString() + "\n";
+        for(Customer &customer : customersGroup.GetCustomers())
+            block += customer.ToString() + "\n";
     }
 
-    // 5c. Print tables state
-    simulationLog += "\n--- Tables state ---\n";
+    simulationLogBlocks.push_back(block);
 
-    for(Table table : tables)
+    // 7c. Print tables state
+    block = "\n--- Tables state ---\n";
+
+    for(const auto &table : tables)
     {
-        simulationLog += table.ToString() + "\n";
+        block += table->ToString() + "\n";
     }
 
-    // 5c. Print employees state
+    simulationLogBlocks.push_back(block);
 
-    simulationLog += "\n--- Employees state ---\n";
-    // TODO: print employees state
+    // 7d. Print employees state
 
-    simulationLog += "\n\n";
+    block = "\n--- Employees state ---\n";
+    for(auto &employee : employeesDb.GetEmployees())
+    {
+        block += employee->printStateLog();
+    }
+
+    block += "\n";
+    simulationLogBlocks.push_back(block);
 }
 
 CafeModel::CafeModel(bool readFromService) {
@@ -101,17 +131,25 @@ CafeModel::CafeModel(bool readFromService) {
 
         menuDb = MenuDatabase(menuItems);
 
-        vector<Table> tables
+        employeesDb.addCook("Jan", "Kowalski", 0, Price(25, 0), 2, 4);
+        employeesDb.addCook("Maciej", "Nowak", 0, Price(30, 0), 1, 5);
+        employeesDb.addCook("Bożena", "Kowalska", 1, Price(25, 0), 2, 6);
+
+        employeesDb.addWaiter("Borys", "Groch", 0, Price(15, 0), 1, true);
+        employeesDb.addWaiter("Grzegorz", "Brzęczyszczykiewicz", 0, Price(20, 0), 2, false);
+        employeesDb.addWaiter("Halina", "Grzmot", 1, Price(30, 0), 1, true);
+
+        vector<shared_ptr<Table>> initialTables
         {
-            Table(1, 2),
-            Table(2, 2),
-            Table(3, 3),
-            Table(4, 4),
-            Table(5, 4),
-            Table(6, 5)
+            make_shared<Table>(1, 2),
+            make_shared<Table>(2, 2),
+            make_shared<Table>(3, 3),
+            make_shared<Table>(4, 4),
+            make_shared<Table>(5, 4),
+            make_shared<Table>(6, 5)
         };
 
-        this->tables = tables;
+        tables = initialTables;
     }
     else
     {
@@ -121,7 +159,7 @@ CafeModel::CafeModel(bool readFromService) {
 
 // Getters
 
-const MenuDatabase &CafeModel::GetMenu() const {
+MenuDatabase &CafeModel::GetMenu() {
     return menuDb;
 }
 
@@ -129,7 +167,7 @@ const vector<CustomersGroup> &CafeModel::GetUnassignedCustomers() const {
     return unassignedCustomers;
 }
 
-const vector<Table> &CafeModel::GetTables() const {
+const vector<shared_ptr<Table>> &CafeModel::GetTables() const {
     return tables;
 }
 
@@ -141,11 +179,19 @@ string CafeModel::GetSimulationLog() const {
     return simulationLog;
 }
 
+const vector<string> &CafeModel::GetSimulationLogBlocks() const {
+    return simulationLogBlocks;
+}
+
 // Action methods
 
-void CafeModel::Simulate(unsigned int cycles) {
+void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
+    if(cycles == 0) throw invalid_argument("Number of cycles must be a number greater than 0.");
+    if(customersInterval == 0)
+        throw invalid_argument("Customers appearance interval must be a number greater than 0.");
+
     currentCycle = 0;
-    simulationLog = "";
+    simulationLogBlocks.clear();
 
     while(currentCycle < cycles)
     {
@@ -154,50 +200,49 @@ void CafeModel::Simulate(unsigned int cycles) {
 
         // 1. Collect customers who sit by the tables
         vector<Customer> assignedCustomers;
-        for(Table &table : tables)
+        for(auto &table : tables)
         {
-            for(Customer &customer : table.GetCustomers())
+            for(Customer &customer : table->GetCustomers())
                 assignedCustomers.push_back(customer);
         }
 
-        // 2. Perform work for assigned customers
-        // TODO: need EmployeesDatabase class to complete this step
-        for(Customer &customer : assignedCustomers)
+
+        // 2. Assign tables to free waiters
+        for(auto &employee : employeesDb.GetEmployees())
         {
-            switch (customer.GetCurrentState())
+            if(typeid(*employee.get()) == typeid(Waiter&))
             {
-                case CustomerState::SitTaken:
+                auto* waiter = dynamic_cast<Waiter*>(&*employee);
+
+                if(waiter->getState() == Waiter::WaiterState::awaiting)
                 {
-                    break;
+                    for(auto &table : tables)
+                    {
+                        if(!table->GetHasAssignedWaiter() && !table->GetCustomers().empty())
+                            waiter->setAssignedTable(table);
+                    }
                 }
-                case CustomerState::ReadyToOrder:
-                {
-                    break;
-                }
-                case CustomerState::Awaiting:
-                {
-                    break;
-                }
-                case CustomerState::Eating:
-                {
-                    break;
-                }
-                case CustomerState::FinishedEating:
-                {
-                    break;
-                }
-                default:
-                    break;
             }
         }
 
-        // 3. Assign unassigned customers
+        // 3. Update state of all employees
+        employeesDb.advanceCycleAll();
+
+        // 4. Update state of all assigned customers
+        for(auto &table : tables)
+            table->AdvanceStateAll();
+
+        // Remove served customers
+        removeServedCustomers();
+
+        // 5. Assign unassigned customers
         assignCustomers(assignedCustomers);
 
-        // 4. Add new customers
-        addNewCustomers();
+        // 6. Add new customers
+        if(currentCycle % customersInterval == 0)
+            addNewCustomers();
 
-        // 5. SAVE LOG
+        // 7. Save log
         saveLog(assignedCustomers);
 
         currentCycle++;

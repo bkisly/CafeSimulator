@@ -5,7 +5,6 @@ Waiter::Waiter(int id, const string &name, const string &surname, int gender, Pr
                unsigned int baseAmountOfShifts, bool canServeAlcohol)
         : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
           can_serve_alcohol(canServeAlcohol) {
-    assignedTable.reset();
     receipt = Price(0, 0);
 }
 
@@ -45,7 +44,7 @@ std::istream &Waiter::read(std::istream &in) {
 }
 
 Waiter::Waiter() {
-
+    assignedTable.reset();
 }
 
 bool Waiter::operator==(const Waiter &rhs) const {
@@ -84,11 +83,13 @@ string Waiter::printStateLog() const {
 
 
 
-void Waiter::setAssignedTable(shared_ptr<Table> newAssignedTable) {
+void Waiter::setAssignedTable(const shared_ptr<Table> &newAssignedTable) {
     if (currentState != WaiterState::awaiting) {
         throw BusyWaiterException();
     }
-    Waiter::assignedTable = move(newAssignedTable);
+
+    newAssignedTable->SetHasAssignedWaiter(true);
+    assignedTable = newAssignedTable;   // @important - the copy is made here
 }
 
 void Waiter::collectOrders() {
@@ -111,7 +112,7 @@ Price Waiter::calcReceipt() {
     return receipt;
 }
 
-const shared_ptr<Table> &Waiter::getAssignedTable() const {
+shared_ptr<Table> Waiter::getAssignedTable() const {
     return assignedTable;
 }
 

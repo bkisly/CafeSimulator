@@ -34,10 +34,6 @@ void Table::customersGroupValidation(CustomersGroup &customersGroup) {
     }
 }
 
-Table::Table() {
-
-}
-
 Table::Table(unsigned int id, unsigned int capacity) {
     if(capacity == 0) throw invalid_argument("Table capacity must be greater than 0.");
 
@@ -93,7 +89,8 @@ unsigned int Table::GetAmountOfItemsToPrepare() const {
 
 shared_ptr<MenuItem> Table::PopLastItemToPrepare() {
     shared_ptr<MenuItem> item =  menuItemsToPrepare.back();
-    menuItemsToPrepare.pop_back();
+    // TODO: why it was commented out?
+     menuItemsToPrepare.pop_back();
     return item;
 }
 
@@ -106,7 +103,7 @@ void Table::RemoveItemsToPrepare() {
 }
 
 void Table::AdvanceStateAll() {
-    for(Customer &customer : this->customers)
+    for(Customer &customer : customers)
     {
         customer.AdvanceState();
     }
@@ -116,3 +113,12 @@ void Table::ClearAllCustomers() {
     customers.clear();
 }
 #endif
+
+bool Table::GetHasAssignedWaiter() const {
+    return hasAssignedWaiter;
+}
+
+void Table::SetHasAssignedWaiter(bool hasAssignedWaiter) {
+    this->hasAssignedWaiter = hasAssignedWaiter;
+}
+
