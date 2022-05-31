@@ -45,7 +45,7 @@ public:
     CafeModel(bool readFromService = true);    // readFromService parameter decides whether to read cafe information using DatabaseService object or read defaults for test purposes
 
     // Getters
-    const MenuDatabase &GetMenu() const;
+    MenuDatabase &GetMenu();
     const vector<CustomersGroup> &GetUnassignedCustomers() const;
     const vector<shared_ptr<Table>> &GetTables() const;
     unsigned int GetCurrentCycle() const;

@@ -34,15 +34,137 @@ unsigned int CafeView::printOptions(string header, vector<string> options) {
 // Menu items options
 
 void CafeView::addItem() {
-    cout << "Adding new menu item..." << endl;
+    cout << "Adding new menu item..." << endl << endl;
+
+    vector<string> itemTypeOptions = {
+            "Beverage",
+            "Dessert",
+            "Dish",
+            "Cancel"
+    };
+
+    bool validItem = false;
+
+    while(!validItem)
+    {
+        unsigned int itemType = printOptions("Select type of the item to add:", itemTypeOptions);
+        if(itemType == 3) return;
+
+        string itemName;
+        stringstream ss;
+        unsigned int dollars;
+        string dollarsString;
+        unsigned int cents;
+        string centsString;
+        unsigned int cyclesToPrepare;
+        string cyclesString;
+
+        cout << "Item name: ";
+        cin.ignore();
+        getline(cin, itemName);
+
+        cout << "Price (dollars part): ";
+        cin >> dollarsString;
+        ss << dollarsString;
+        ss >> dollars;
+        ss.clear();
+
+        cout << "Price (cents part): ";
+        cin >> centsString;
+        ss << centsString;
+        ss >> cents;
+        ss.clear();
+
+        cout << "Cycles to prepare:";
+        cin >> cyclesString;
+        ss << cyclesString;
+        ss >> cyclesToPrepare;
+        ss.clear();
+
+        try
+        {
+            Price price(dollars, cents);
+
+            switch (itemType) {
+                case 0:
+                {
+                    vector<string> cupTypes = {
+                            "Cup",
+                            "Mug",
+                            "Glass"
+                    };
+
+                    unsigned int cupType = printOptions("Select cup type:", cupTypes);
+                    model.GetMenu().AddItem(make_shared<Beverage>(itemName, price, (CupType)cupType, cyclesToPrepare));
+                    break;
+                }
+                case 1:
+                {
+                    model.GetMenu().AddItem(make_shared<Dessert>(itemName, price, cyclesToPrepare));
+                    break;
+                }
+                case 2:
+                {
+                    vector<string> vegetarianOptions = {
+                            "Yes",
+                            "No"
+                    };
+
+                    bool vegetarian = false;
+                    if(printOptions("Select whether the dish is vegetarian:", vegetarianOptions) == 0)
+                        vegetarian = true;
+
+                    model.GetMenu().AddItem(make_shared<Dish>(itemName, price, vegetarian, cyclesToPrepare));
+                    break;
+                }
+            }
+
+            cout << "Successfully added new item!" << endl << endl;
+            validItem = true;
+        }
+        catch (exception &e)
+        {
+            cerr << "An error has occurred while adding new item: " << e.what() << endl;
+            cerr << "Try again." << endl << endl;
+        }
+    }
 }
 
 void CafeView::removeItem() {
-    cout << "Removing a menu item..." << endl;
+    cout << "Removing a menu item..." << endl << endl;
+
+    for(const auto &item : model.GetMenu().GetItems())
+    {
+        cout << item->ToString() << endl;
+    }
+
+    string itemName;
+    cout << endl << "Type item name to remove: ";
+    cin.ignore();
+    getline(cin, itemName);
+
+    try
+    {
+        model.GetMenu().RemoveItem(itemName);
+        cout << "Successfully removed an item!" << endl << endl;
+    }
+    catch(exception &e)
+    {
+        cerr << "An error has occurred while removing an item: " << e.what() << endl << endl;
+    }
 }
 
 void CafeView::showMenu() {
+    int positionNumber = 1;
     cout << "Showing menu..." << endl;
+
+    for(const auto &item : model.GetMenu().GetItems())
+    {
+        cout << positionNumber << ". " << item->ToString() << endl;
+        positionNumber++;
+    }
+
+    cout << endl;
 }
 
 // Employee options

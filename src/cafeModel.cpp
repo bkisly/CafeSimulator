@@ -134,7 +134,7 @@ CafeModel::CafeModel(bool readFromService) {
 
 // Getters
 
-const MenuDatabase &CafeModel::GetMenu() const {
+MenuDatabase &CafeModel::GetMenu() {
     return menuDb;
 }
 
