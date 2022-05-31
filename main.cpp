@@ -6,7 +6,7 @@ void printHelp()
 {
     cout << "USAGE:" << endl;
     cout << "-h -> open help" << endl;
-    cout << "-s [number of cycles] -> perform a simulation for the given number of cycles" << endl;
+    cout << "-s [number of cycles] [print interval] [customers interval] -> perform a simulation for the given number of cycles" << endl;
     cout << "-a -> enter admin mode (modify menu and employee databases)" << endl;
 }
 
@@ -18,12 +18,6 @@ int main(int argc, char* argv[]) {
     {
         printHelp();
         return 0;
-    }
-    else if(argc > 3)
-    {
-        cerr << "Too many arguments." << endl << endl;
-        printHelp();
-        return 1;
     }
 
     string modeArg;
@@ -40,24 +34,36 @@ int main(int argc, char* argv[]) {
             printHelp();
         }
         else
-        {
             cafeView.InitAdminMode();
-        }
     }
     else if(modeArg == "-s")
     {
-        if(argc == 2)
+        if(argc < 5)
         {
             cerr << "Insufficient amount of arguments." << endl << endl;
             printHelp();
         }
+        else if(argc > 5)
+        {
+            cerr << "Too many arguments." << endl << endl;
+            printHelp();
+        }
         else
         {
-            unsigned int numberOfCycles;
+            unsigned int numberOfCycles, customersInterval;
+            double interval;
             ss << argv[2];
             ss >> numberOfCycles;
+            ss.clear();
 
-            cafeView.InitSimulation(numberOfCycles, 0, 20);
+            ss << argv[3];
+            ss >> interval;
+            ss.clear();
+
+            ss << argv[4];
+            ss >> customersInterval;
+
+            cafeView.InitSimulation(numberOfCycles, interval, customersInterval);
         }
     }
     else
