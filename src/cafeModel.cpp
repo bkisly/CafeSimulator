@@ -175,6 +175,8 @@ void CafeModel::Simulate(unsigned int cycles) {
                 assignedCustomers.push_back(customer);
         }
 
+
+        // 2. Assign tables to free waiters
         for(auto &employee : employeesDb.GetEmployees())
         {
             if(typeid(*employee.get()) == typeid(Waiter&))
@@ -196,28 +198,28 @@ void CafeModel::Simulate(unsigned int cycles) {
                             empty on original object, and further advancing Waiter states results in immediate moving to handing orders and collecting receipt.
                             */
                             waiter->setAssignedTable(table);
-                            table.AdvanceStateAll();
                         }
                     }
                 }
             }
         }
 
+        // 3. Update state of all employees
         employeesDb.advanceCycleAll();
 
-        // TODO: need EmployeesDatabase class to complete this step
-        for(Customer &customer : assignedCustomers)
+        // 4. Update state of all assigned customers
+        for(Table &table : tables)
         {
-            customer.AdvanceState();
+            table.AdvanceStateAll();
         }
 
-        // 3. Assign unassigned customers
+        // 5. Assign unassigned customers
         assignCustomers(assignedCustomers);
 
-        // 4. Add new customers
+        // 6. Add new customers
         addNewCustomers();
 
-        // 5. SAVE LOG
+        // 7. Save log
         saveLog(assignedCustomers);
 
         currentCycle++;
