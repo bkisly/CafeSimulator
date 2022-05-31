@@ -14,7 +14,6 @@ Cook::Cook(int id, const string &name, const string &surname, int gender, Price 
                unsigned int baseAmountOfShifts, unsigned int knownCuisines)
         : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
           known_cuisines(knownCuisines) {
-    dishToCollect = false;
     assignedMenuItem.reset();
 }
 
@@ -63,7 +62,7 @@ string Cook::printStateLog() const {
         case CookState::free:
             return msg + "free\n";
         case CookState::busy:
-            return msg + "prepares " + assignedMenuItem->GetName() + "\n";
+            return msg + "started preparing " + assignedMenuItem->GetName() + "\n";
         default:
             throw StateException(currentState);
     }
@@ -72,17 +71,10 @@ string Cook::printStateLog() const {
 
 
 void Cook::setAssignedMenuItem(std::shared_ptr<MenuItem> newAssignedMenuItem) {
-    if (currentState == CookState::busy){
-        throw BusyCookException();
-    }
     cyclesLeft = newAssignedMenuItem->GetCyclesToPrepare();
     Cook::assignedMenuItem  = newAssignedMenuItem;
     currentState = CookState::busy;
 }
 
-
-bool Cook::isDishToCollect() const {
-    return dishToCollect;
-}
 
 

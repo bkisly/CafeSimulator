@@ -75,7 +75,7 @@ TEST_CASE("cook printStateLog") {
     Cook cook(11, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
     CHECK(cook.printStateLog() == "cook 11 - free\n");
     cook.setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 3)));
-    CHECK(cook.printStateLog() == "cook 11 - prepares Cake\n");
+    CHECK(cook.printStateLog() == "cook 11 - started preparing Cake\n");
 }
 
 TEST_CASE("cook in out operators") {

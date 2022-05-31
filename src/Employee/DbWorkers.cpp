@@ -116,19 +116,7 @@ void DbWorkers::advanceCycleAll() {
 //            cook version
             Cook *cook = dynamic_cast<Cook *>(&*worker_ptr);
             if (cook) {
-                if (!(cook->assignedMenuItem)) {
-                    // case when cook finished preparing meal
-                    cook->dishToCollect = false;
-                }
-                else if (cook->currentState == Cook::CookState::busy) {
-                    cook->currentState = Cook::CookState::free;
-                    cook->dishToCollect = true;
-                    cook->assignedMenuItem.reset();
-                }
-                else {
-                    cook->currentState = Cook::CookState::busy;
-                    cook->dishToCollect = false;
-                }
+                cook->currentState = Cook::CookState::free;
             }
             // waiter version
             else{

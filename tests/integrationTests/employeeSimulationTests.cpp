@@ -18,14 +18,6 @@
 using std::stringstream;
 
 
-TEST_CASE("cook setAssignedDish") {
-    Cook cook(11, "Tomasz", "Nowak", Waiter::Gender::male, Price(3000, 0), 4, 26);
-    CHECK_NOTHROW(cook.setAssignedMenuItem(
-            make_unique<Dessert>(Dessert("Cake", Price(5, 0), 3))));
-//    assigment to busy cook
-    REQUIRE_THROWS_AS(cook.setAssignedMenuItem(
-            make_unique<Dessert>(Dessert("Cake", Price(5, 0), 3))), BusyCookException);
-}
 
 #if DEBUG
 
@@ -42,24 +34,30 @@ TEST_CASE("cook simulation states") {
 //    assigned dish with 2 cycle to prepare
     workers.advanceCycleAll();
     CHECK(workers.getCook(0)->getState() == Cook::CookState::busy);
-    CHECK(workers.getCook(0)->isDishToCollect() == false);
     workers.advanceCycleAll();
-//    dish is ready
+//    free after 2 cycles
     CHECK(workers.getCook(0)->getState() == Cook::CookState::free);
-    CHECK(workers.getCook(0)->isDishToCollect() == true);
 //    advance cycle without assigning dish - no longer dish to collect, cook is free
     workers.advanceCycleAll();
-    CHECK(workers.getCook(0)->isDishToCollect() == false);
 //    advance cycle once again when free
     CHECK(workers.getCook(0)->getState() == Cook::CookState::free);
 
     workers.getCook(0)
             ->setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
 //    assigned dish with 2 cycle to prepare - new cycle
-    workers.advanceCycleAll();
-    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
-}
 
+//    assigned another dish with 2 cycle to prepare (after 1 cycles out of 2 for
+//    previous item) => needs 1 more cycle to be free
+    workers.getCook(0)
+           ->setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
+
+    workers.advanceCycleAll(); // 1st
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
+
+    workers.advanceCycleAll(); // 2nd
+    CHECK(workers.getWorkerState(0) == Cook::CookState::free);
+}
 #endif
 
 #if DEBUG

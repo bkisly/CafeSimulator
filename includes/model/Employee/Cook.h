@@ -22,7 +22,7 @@ public:
         free = 0, busy
     };
     void setAssignedMenuItem(shared_ptr<MenuItem> newAssignedMenuItem);
-    bool isDishToCollect() const;
+
 
 //  constructors, operators ...
     Cook();
@@ -42,7 +42,6 @@ public:
 
 private:
     unsigned known_cuisines;
-    bool dishToCollect;
     std::shared_ptr<MenuItem> assignedMenuItem;
 
     friend class DbWorkers;
