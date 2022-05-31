@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
             ss << argv[2];
             ss >> numberOfCycles;
 
-            cafeView.InitSimulation(numberOfCycles);
+            cafeView.InitSimulation(numberOfCycles, 1, 20);
         }
     }
     else

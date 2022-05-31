@@ -52,37 +52,43 @@ void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
 }
 
 void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
-    // 5a. Print header
-    simulationLog += "==========\nSIMULATION CYCLE NR " + to_string(currentCycle + 1) + "\n==========\n\n";
+    // 7a. Print header
+    string block = "==========\nSIMULATION CYCLE NR " + to_string(currentCycle + 1) + "\n==========\n\n";
+    simulationLogBlocks.push_back(block);
 
-    // 5b. Print customers state
-    simulationLog += "--- Customers state ---\n";
+    // 7b. Print customers state
+    block = "--- Customers state ---\n";
     for(Customer &customer : assignedCustomers)
-        simulationLog += customer.ToString() + "\n";
+        block += customer.ToString() + "\n";
 
     for(CustomersGroup customersGroup : unassignedCustomers)
     {
         for(Customer &customer : customersGroup.GetCustomers())
-            simulationLog += customer.ToString() + "\n";
+            block += customer.ToString() + "\n";
     }
 
-    // 5c. Print tables state
-    simulationLog += "\n--- Tables state ---\n";
+    simulationLogBlocks.push_back(block);
+
+    // 7c. Print tables state
+    block = "\n--- Tables state ---\n";
 
     for(const auto &table : tables)
     {
-        simulationLog += table->ToString() + "\n";
+        block += table->ToString() + "\n";
     }
 
-    // 5d. Print employees state
+    simulationLogBlocks.push_back(block);
 
-    simulationLog += "\n--- Employees state ---\n";
+    // 7d. Print employees state
+
+    block = "\n--- Employees state ---\n";
     for(auto &employee : employeesDb.GetEmployees())
     {
-        simulationLog += employee->printStateLog();
+        block += employee->printStateLog();
     }
 
-    simulationLog += "\n";
+    block += "\n";
+    simulationLogBlocks.push_back(block);
 }
 
 CafeModel::CafeModel(bool readFromService) {
@@ -154,13 +160,19 @@ string CafeModel::GetSimulationLog() const {
     return simulationLog;
 }
 
+const vector<string> &CafeModel::GetSimulationLogBlocks() const {
+    return simulationLogBlocks;
+}
+
 // Action methods
 
-void CafeModel::Simulate(unsigned int cycles) {
+void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
     if(cycles == 0) throw invalid_argument("Number of cycles must be a number greater than 0.");
+    if(customersInterval == 0)
+        throw invalid_argument("Customers appearance interval must be a number greater than 0.");
 
     currentCycle = 0;
-    simulationLog = "";
+    simulationLogBlocks.clear();
 
     while(currentCycle < cycles)
     {
@@ -181,7 +193,7 @@ void CafeModel::Simulate(unsigned int cycles) {
         {
             if(typeid(*employee.get()) == typeid(Waiter&))
             {
-                Waiter* waiter = dynamic_cast<Waiter*>(&*employee);
+                auto* waiter = dynamic_cast<Waiter*>(&*employee);
 
                 if(waiter->getState() == Waiter::WaiterState::awaiting)
                 {
@@ -205,7 +217,8 @@ void CafeModel::Simulate(unsigned int cycles) {
         assignCustomers(assignedCustomers);
 
         // 6. Add new customers
-        addNewCustomers();
+        if(currentCycle % customersInterval == 0)
+            addNewCustomers();
 
         // 7. Save log
         saveLog(assignedCustomers);

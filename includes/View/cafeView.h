@@ -6,6 +6,8 @@
 #define CAFE_CAFEVIEW_H
 
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include "../model/cafeModel.h"
 
 class CafeView {
@@ -14,7 +16,7 @@ private:
 
 public:
     CafeView(bool readFromService = true);
-    void InitSimulation(unsigned int numberOfCycles);
+    void InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval);
 };
 
 

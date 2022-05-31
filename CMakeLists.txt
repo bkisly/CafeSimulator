@@ -81,4 +81,4 @@ target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu customer)
 
 # runners
 add_executable(Cafe main.cpp)
-target_link_libraries(Cafe PRIVATE viewModel customer menu menuDatabase helpers)
+target_link_libraries(Cafe PRIVATE viewModel customer menu employee menuDatabase helpers)
