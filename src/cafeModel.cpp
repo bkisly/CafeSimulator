@@ -187,6 +187,14 @@ void CafeModel::Simulate(unsigned int cycles) {
                     {
                         if(!table.GetHasAssignedWaiter() && !table.GetCustomers().empty())
                         {
+                            /*
+                            @important - MAJOR ISSUE HERE
+                            There's a main problem with using pointers to tables. Whenever we call
+                            make_share<Table>(someTable), a copy of someTable is created. After that, when we perform
+                            collectOrders() inside advanceCycleAll(), a copy of someTable behaves properly and collection of
+                            MenuItemsToPrepare is not empty, but this doesn't happen on original object. That's why MenuItemsToPrepare remains
+                            empty on original object, and further advancing Waiter states results in immediate moving to handing orders and collecting receipt.
+                            */
                             waiter->setAssignedTable(table);
                             table.AdvanceStateAll();
                         }

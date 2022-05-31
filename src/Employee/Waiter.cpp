@@ -89,7 +89,7 @@ void Waiter::setAssignedTable(Table &newAssignedTable) {
     }
 
     newAssignedTable.SetHasAssignedWaiter(true);
-    assignedTable = make_shared<Table>(newAssignedTable);   // TODO: solve problem of copying here
+    assignedTable = make_shared<Table>(newAssignedTable);   // @important - the copy is made here
 }
 
 void Waiter::collectOrders() {
