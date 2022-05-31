@@ -44,7 +44,7 @@ TEST_CASE("waiter printStateLog currentState") {
     CHECK(waiter1.printStateLog() == "waiter 1 - awaiting\n");
     waiter1.setAssignedTable(make_shared<Table>(Table(23,5)));
     waiter1.setState(Waiter::WaiterState::collectOrder);
-    CHECK(waiter1.printStateLog() == "waiter 1 - collecting orders to table nr 23\n");
+    CHECK(waiter1.printStateLog() == "waiter 1 - collecting orders from table nr 23\n");
 }
 
 

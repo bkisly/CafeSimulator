@@ -65,17 +65,20 @@ string Waiter::printStateLog() const {
             return msg + "giving cards to table nr " +
                    to_string(assignedTable->GetId()) + "\n";
         case WaiterState::collectOrder:
-            return msg + "collecting orders to table nr " +
+            return msg + "collecting orders from table nr " +
                    to_string(assignedTable->GetId()) + "\n";
         case WaiterState::prepareOrder:
-            return msg + "Preparing orders for table nr " +
+            return msg + "preparing orders for table nr " +
                    to_string(assignedTable->GetId()) + "\n";
         case WaiterState::handInOrder:
             return msg + "handing in orders to table nr " +
                    to_string(assignedTable->GetId()) + "\n";
         case WaiterState::ReadyToTakeReceipt:
-            return msg + "taking receipt to table nr " +
+            return msg + "preparing receipt for table nr " +
                    to_string(assignedTable->GetId()) + "\n";
+        case WaiterState::TakenReceipt:
+            return msg + "receipt for table nr " +
+                   to_string(assignedTable->GetId()) + " is " +  receipt.ToString() +"\n";
         default:
             throw StateException(currentState);
     }
@@ -94,6 +97,7 @@ void Waiter::setAssignedTable(const shared_ptr<Table> &newAssignedTable) {
 
 void Waiter::collectOrders() {
     this->assignedTable->RemoveItemsToPrepare();
+    this->receipt = Price(0,0);
     for (auto &customer : assignedTable->GetCustomers()){
         if (customer.GetCurrentState() == CustomerState::ReadyToOrder){
             assignedTable->AddItemToPrepare(customer.GetPreferredMenuItem());
@@ -102,14 +106,13 @@ void Waiter::collectOrders() {
     }
 }
 
-Price Waiter::calcReceipt() {
+void Waiter::calcReceipt() {
     for (auto &customer : this->assignedTable->GetCustomers()){
         if (customer.isCollectedOrder() && customer.GetCurrentState() == CustomerState::FinishedEating){
             this->receipt += customer.GetPreferredMenuItem()->GetPricePerPortion();
             customer.setReceivedReceipt(true);
         }
     }
-    return receipt;
 }
 
 shared_ptr<Table> Waiter::getAssignedTable() const {

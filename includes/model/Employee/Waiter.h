@@ -29,7 +29,7 @@ public:
     };
     void setAssignedTable(const shared_ptr<Table> &newAssignedTable);
 
-    Price calcReceipt();
+    void calcReceipt();
 
 //  constructors, operators ...
     Waiter();
