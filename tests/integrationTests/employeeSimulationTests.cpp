@@ -75,7 +75,7 @@ TEST_CASE("waiter setAssignedTable") {
 #endif
 
 #if DEBUG
-TEST_CASE("waiter states simulation") {
+TEST_CASE("waiter cook big simulation") {
     DbWorkers workers;
     Price salary(3000, 0);
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
@@ -112,14 +112,18 @@ TEST_CASE("waiter states simulation") {
 
     workers.advanceCycleAll(); // after that cycles left 2
     workers.advanceCycleAll(); // after that cycles left 1
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
 
     workers.advanceCycleAll(); // after that cycles left 2 (item for another customer)
     workers.advanceCycleAll(); //after that cycles left 1
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
 
     workers.advanceCycleAll(); // after that cycles left 2 (item for another customer)
     workers.advanceCycleAll(); //after that cycles left 1
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
 
     workers.advanceCycleAll(); // hand in order
+    CHECK(workers.getWorkerState(0) == Cook::CookState::free);
     workers.advanceCycleAll(); // readyToTakeReceipt
 
     workers.advanceCycleAll(); // calcRecceipt -> TakenReceipt
