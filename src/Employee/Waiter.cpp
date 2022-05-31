@@ -102,7 +102,7 @@ void Waiter::collectOrders() {
 
 Price Waiter::calcReceipt() {
     for (auto &customer : this->assignedTable->GetCustomers()){
-        if (customer.isCollectedOrder()){
+        if (customer.isCollectedOrder() && customer.GetCurrentState() == CustomerState::FinishedEating){
             this->receipt += customer.GetPreferredMenuItem()->GetPricePerPortion();
             customer.setReceivedReceipt(true);
         }

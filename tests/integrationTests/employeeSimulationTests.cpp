@@ -172,43 +172,91 @@ TEST_CASE("waiter calculate receipt"){
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
     workers.addWaiter("Tomasz", "Burak", Waiter::Gender::male, salary, 4, 0);
-//     prepare table and customers
-    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 2);
-    Beverage tee("tee", Price(2, 49), CupType::Cup, 2);
 
-    vector<Customer> customers1;
-    customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
-    customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
-    customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+    SECTION("same time for preparation"){
+        //     prepare table and customers
+        Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 2);
+        Beverage tee("tee", Price(2, 49), CupType::Cup, 2);
 
-    CustomersGroup group1(customers1);
-    Table table(1, 5);
-    shared_ptr<Table> tablePtr =  make_shared<Table>(table);
-    CHECK(tablePtr->TryAddCustomers(group1));
+        vector<Customer> customers1;
+        customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
+        customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
+        customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+
+        CustomersGroup group1(customers1);
+        Table table(1, 5);
+        shared_ptr<Table> tablePtr =  make_shared<Table>(table);
+        CHECK(tablePtr->TryAddCustomers(group1));
 
 
-    workers.getWaiter(1)->setAssignedTable(tablePtr);
+        workers.getWaiter(1)->setAssignedTable(tablePtr);
 
-    tablePtr->AdvanceStateAll();
-    workers.getWaiter(1)->collectOrders();
+        tablePtr->AdvanceStateAll();
+        workers.getWaiter(1)->collectOrders();
 
-    tablePtr->AdvanceStateAll(); // ReadyToOrder -> Awaiting (cyclesLeft = 2)
-    tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1)
-    tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1) -> Eating
-    tablePtr->AdvanceStateAll(); // Eating -> EatingFinished
+        tablePtr->AdvanceStateAll(); // ReadyToOrder -> Awaiting (cyclesLeft = 2)
+        tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1)
+        tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1) -> Eating
+        tablePtr->AdvanceStateAll(); // Eating -> EatingFinished
 
-    // TODO-TEMP: scenario when customers are not ready to take receipt and uneven states of customers
+        // TODO-TEMP: scenario when customers are not ready to take receipt and uneven states of customers
 
-    CHECK(workers.getWaiter(1)->calcReceipt() == Price(7, 47));
-    // @important - changes are applied to customers hold in tables' vectors, so it should satisfy simulation demands
-    for (auto &customer : tablePtr->GetCustomers()){
-        CHECK(customer.isCollectedOrder());
-        CHECK(customer.isReceivedReceipt());
+        CHECK(workers.getWaiter(1)->calcReceipt() == Price(7, 47));
+        // @important - changes are applied to customers hold in tables' vectors, so it should satisfy simulation demands
+        for (auto &customer : tablePtr->GetCustomers()){
+            CHECK(customer.isCollectedOrder());
+            CHECK(customer.isReceivedReceipt());
+        }
+        for (auto &customer : workers.getWaiter(1)->getAssignedTable() ->GetCustomers()){
+            CHECK(customer.isCollectedOrder());
+            CHECK(customer.isReceivedReceipt());
+        }
     }
-    for (auto &customer : workers.getWaiter(1)->getAssignedTable() ->GetCustomers()){
-        CHECK(customer.isCollectedOrder());
-        CHECK(customer.isReceivedReceipt());
+
+    SECTION("different time for preparation"){
+        //     prepare table and customers
+        Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 2);
+        Beverage tee("tee", Price(1, 49), CupType::Cup, 6);
+
+        vector<Customer> customers1;
+        customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
+        customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
+        customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+
+        CustomersGroup group1(customers1);
+        Table table(1, 5);
+        shared_ptr<Table> tablePtr =  make_shared<Table>(table);
+        CHECK(tablePtr->TryAddCustomers(group1));
+
+
+        workers.getWaiter(1)->setAssignedTable(tablePtr);
+
+        tablePtr->AdvanceStateAll();
+        workers.getWaiter(1)->collectOrders();
+
+        tablePtr->AdvanceStateAll(); // ReadyToOrder -> Awaiting (cyclesLeft = 2)
+        tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1)
+        tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1) -> Eating
+        tablePtr->AdvanceStateAll(); // Eating -> EatingFinished
+
+        // TODO-TEMP: scenario when customers are not ready to take receipt and uneven states of customers
+
+        CHECK(workers.getWaiter(1)->calcReceipt() == Price(4, 98));
+        // @important - changes are applied to customers hold in tables' vectors, so it should satisfy simulation demands
+        for (auto &customer : tablePtr->GetCustomers()){
+            if (customer.GetCurrentState() == CustomerState::FinishedEating){
+                CHECK(customer.isCollectedOrder());
+                CHECK(customer.isReceivedReceipt());
+            }
+        }
+        for (auto &customer : workers.getWaiter(1)->getAssignedTable() ->GetCustomers()){
+            if (customer.GetCurrentState() == CustomerState::FinishedEating){
+                CHECK(customer.isCollectedOrder());
+                CHECK(customer.isReceivedReceipt());
+            }
+        }
     }
+
 
 }
 #endif
