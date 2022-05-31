@@ -24,8 +24,8 @@ public:
         collectOrder,
         prepareOrder,
         handInOrder,
-        takeReceipt,
-        last = takeReceipt
+        ReadyToTakeReceipt,
+        TakenReceipt
     };
     void setAssignedTable(shared_ptr<Table> newAssignedTable);
 

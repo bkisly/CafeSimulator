@@ -136,27 +136,24 @@ void DbWorkers::advanceCycleAll() {
                             waiter->currentState++;
                             break;
                         case Waiter::WaiterState::prepareOrder:
-                            // check if there are items to prepare
-                            if (waiter->assignedTable->GetAmountOfItemsToPrepare()) {
-                                // get item
-                                shared_ptr<MenuItem> menuItem =
-                                        waiter->assignedTable->GetLastItemToPrepare();
-                                // try to pass dish along to cook
-                                if (this->assignDishToFreeCook(menuItem)) {
-                                    waiter->cyclesLeft = menuItem->GetCyclesToPrepare();
-                                    waiter->assignedTable->RemoveItemsToPrepare();
-                                }
+                            if (waiter->assignedTable->GetAmountOfItemsToPrepare() !=0) {
+                                shared_ptr<MenuItem> item =
+                                        waiter->assignedTable->PopLastItemToPrepare();
+                                waiter->cyclesLeft = item->GetCyclesToPrepare();
+                                this->assignDishToFreeCook(item);
                             }
-                            // no dishes left - update state
-                            else {
+                            else{
                                 waiter->currentState++;
                             }
                             break;
                         case Waiter::WaiterState::handInOrder:
                             waiter->currentState++;
                             break;
-                        case Waiter::WaiterState::takeReceipt:
-                            // TODO-TEMP invoke calc recipt (calc receipt - sum items, update customers property - receivdedReceipt
+                        case Waiter::WaiterState::ReadyToTakeReceipt:
+                            waiter->calcReceipt();
+                            waiter->currentState++;
+                            break;
+                        case Waiter::WaiterState::TakenReceipt:
                             // if new clients come, serve them, otherwise leave table
                             if (waiter->assignedTable->GetCustomers().size() == 0){
                                 waiter->assignedTable.reset();
@@ -165,7 +162,7 @@ void DbWorkers::advanceCycleAll() {
                             else {
                                 waiter->currentState = Waiter::WaiterState::collectOrder;
                             }
-
+                            break;
 
                         default:
                             throw StateException(waiter->currentState);

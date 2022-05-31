@@ -21,7 +21,7 @@ using std::stringstream;
 
 #if DEBUG
 
-TEST_CASE("cook simulation states") {
+TEST_CASE("cook simple simulation states") {
     DbWorkers workers;
     Price salary(3000, 0);
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
@@ -81,40 +81,63 @@ TEST_CASE("waiter states simulation") {
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
     workers.addWaiter("Tomasz", "Burak", Waiter::Gender::male, salary, 4, 0);
-    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 4);
-    Beverage tee("tee", Price(2, 49), CupType::Cup, 4);
+
+    //     prepare table and customers
+    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 2);
+    Beverage tee("tee", Price(1, 49), CupType::Cup, 2);
+
     vector<Customer> customers1;
     customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
     customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
     customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+
     CustomersGroup group1(customers1);
     Table table(1, 5);
     shared_ptr<Table> tablePtr =  make_shared<Table>(table);
     CHECK(tablePtr->TryAddCustomers(group1));
 
 
-
-
-    CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::awaiting);
-//    advanceCycle - no assigned tables - wait
-    workers.advanceCycleAll();
-    CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::awaiting);
-
-//    setAssignedTable
     workers.getWaiter(1)->setAssignedTable(tablePtr);
-    workers.advanceCycleAll();
-    CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::giveMenu);
 
+    tablePtr->AdvanceStateAll();
     workers.advanceCycleAll();
-    CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::collectOrder);
-
-//    controlling orders
     workers.advanceCycleAll();
-//    waiter collected all orders -> 3
-    CHECK(tablePtr->GetAmountOfItemsToPrepare() == 3);
-    CHECK(workers.getWaiter(1)->getState() == Waiter::WaiterState::prepareOrder);
+    workers.advanceCycleAll();
+//    workers.getWaiter(1)->collectOrders();
 
-//    TODO-TEMP: test waiter simulation
+    tablePtr->AdvanceStateAll(); // ReadyToOrder -> Awaiting (cyclesLeft = 2)
+    tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1)
+    tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1) -> Eating
+    tablePtr->AdvanceStateAll(); // Eating -> EatingFinished
+
+    workers.advanceCycleAll(); // after that cycles left 2
+    workers.advanceCycleAll(); // after that cycles left 1
+
+    workers.advanceCycleAll(); // after that cycles left 2 (item for another customer)
+    workers.advanceCycleAll(); //after that cycles left 1
+
+    workers.advanceCycleAll(); // after that cycles left 2 (item for another customer)
+    workers.advanceCycleAll(); //after that cycles left 1
+
+    workers.advanceCycleAll(); // hand in order
+    workers.advanceCycleAll(); // readyToTakeReceipt
+
+    workers.advanceCycleAll(); // calcRecceipt -> TakenReceipt
+
+//    CHECK(workers.getWaiter(1)->calcReceipt() == Price(4, 98));
+    // @important - changes are applied to customers hold in tables' vectors, so it should satisfy simulation demands
+    for (auto &customer : tablePtr->GetCustomers()){
+        if (customer.GetCurrentState() == CustomerState::FinishedEating){
+            CHECK(customer.isCollectedOrder());
+            CHECK(customer.isReceivedReceipt());
+        }
+    }
+    for (auto &customer : workers.getWaiter(1)->getAssignedTable() ->GetCustomers()){
+        if (customer.GetCurrentState() == CustomerState::FinishedEating){
+            CHECK(customer.isCollectedOrder());
+            CHECK(customer.isReceivedReceipt());
+        }
+    }
 }
 #endif
 

@@ -74,7 +74,7 @@ string Waiter::printStateLog() const {
         case WaiterState::handInOrder:
             return msg + "handing in orders to table nr " +
                    to_string(assignedTable->GetId()) + "\n";
-        case WaiterState::takeReceipt:
+        case WaiterState::ReadyToTakeReceipt:
             return msg + "taking receipt to table nr " +
                    to_string(assignedTable->GetId()) + "\n";
         default:

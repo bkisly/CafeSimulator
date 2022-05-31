@@ -28,7 +28,7 @@ public:
     vector<Customer> &GetCustomers();
 
     unsigned int GetAmountOfItemsToPrepare() const;
-    shared_ptr<MenuItem> GetLastItemToPrepare();
+    shared_ptr<MenuItem> PopLastItemToPrepare();
     void AddItemToPrepare(shared_ptr<MenuItem> menuItem);
     void  RemoveItemsToPrepare();
 
