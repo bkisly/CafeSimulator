@@ -36,6 +36,11 @@ public:
 
     bool TryAddCustomers(CustomersGroup &customersGroup);
     string ToString() const;
+
+#if DEBUG
+    // only for tests
+    void ClearAllCustomers();
+#endif
 };
 
 

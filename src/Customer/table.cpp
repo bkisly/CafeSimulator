@@ -111,4 +111,8 @@ void Table::AdvanceStateAll() {
         customer.AdvanceState();
     }
 }
-
+#if DEBUG
+void Table::ClearAllCustomers() {
+    customers.clear();
+}
+#endif

@@ -54,7 +54,9 @@ void Customer::AdvanceState() {
             // reset properties
             this->receivedReceipt = false;
             this->collectedOrder = false;
-            // TODO: not sure whether customer will be "reused" in future cycles
+            // TODO: change state too leaving or other implemntation not sure whether
+            //  customer will be "reused"
+            //  in future cycles
         }
     }
     // other cases

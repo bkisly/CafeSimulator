@@ -128,7 +128,7 @@ TEST_CASE("waiter cook big simulation") {
 
     workers.advanceCycleAll(); // calcRecceipt -> TakenReceipt
 
-//    CHECK(workers.getWaiter(1)->calcReceipt() == Price(4, 98));
+    CHECK(workers.getWorkerState(1) == Waiter::WaiterState::TakenReceipt);
     // @important - changes are applied to customers hold in tables' vectors, so it should satisfy simulation demands
     for (auto &customer : tablePtr->GetCustomers()){
         if (customer.GetCurrentState() == CustomerState::FinishedEating){
@@ -142,7 +142,40 @@ TEST_CASE("waiter cook big simulation") {
             CHECK(customer.isReceivedReceipt());
         }
     }
+    workers.advanceCycleAll(); // still clients at table
+    CHECK(workers.getWorkerState(1) == Waiter::WaiterState::collectOrder);
 }
+
+TEST_CASE("waiter - finish serving the table"){
+    DbWorkers workers;
+    Price salary(3000, 0);
+    workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
+    workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
+    workers.addWaiter("Tomasz", "Burak", Waiter::Gender::male, salary, 4, 0);
+
+    //     prepare table and customers
+    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 2);
+    Beverage tee("tee", Price(1, 49), CupType::Cup, 2);
+
+    vector<Customer> customers1;
+    customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
+    customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
+    customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+
+    CustomersGroup group1(customers1);
+    Table table(1, 5);
+    shared_ptr<Table> tablePtr =  make_shared<Table>(table);
+    CHECK(tablePtr->TryAddCustomers(group1));
+
+
+    workers.getWaiter(1)->setAssignedTable(tablePtr);
+    workers.getWaiter(1)->setState(Waiter::WaiterState::TakenReceipt);
+    tablePtr->ClearAllCustomers();
+    workers.advanceCycleAll();
+    CHECK(workers.getWorkerState(1)==Waiter::WaiterState::awaiting);
+}
+
+
 #endif
 
 #if DEBUG
