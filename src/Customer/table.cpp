@@ -89,7 +89,7 @@ unsigned int Table::GetAmountOfItemsToPrepare() const {
 
 shared_ptr<MenuItem> Table::GetLastItemToPrepare() {
     shared_ptr<MenuItem> item =  menuItemsToPrepare.back();
-    menuItemsToPrepare.pop_back();
+    // menuItemsToPrepare.pop_back();
     return item;
 }
 

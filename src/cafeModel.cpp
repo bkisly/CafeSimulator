@@ -34,9 +34,9 @@ void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
     int groupId = 0;
     for(CustomersGroup &customersGroup : unassignedCustomers)
     {
-        for(Table &table : tables)
+        for(auto &table : tables)
         {
-            if(table.TryAddCustomers(customersGroup))
+            if(table->TryAddCustomers(customersGroup))
             {
                 groupsIdsToRemove.push_back(groupId);
                 assignedCustomers.insert(assignedCustomers.end(), customersGroup.GetCustomers().begin(), customersGroup.GetCustomers().end());
@@ -69,9 +69,9 @@ void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
     // 5c. Print tables state
     simulationLog += "\n--- Tables state ---\n";
 
-    for(const Table &table : tables)
+    for(const auto &table : tables)
     {
-        simulationLog += table.ToString() + "\n";
+        simulationLog += table->ToString() + "\n";
     }
 
     // 5d. Print employees state
@@ -79,7 +79,7 @@ void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
     simulationLog += "\n--- Employees state ---\n";
     for(auto &employee : employeesDb.GetEmployees())
     {
-        simulationLog += employee->printStateLog() + "\n";
+        simulationLog += employee->printStateLog();
     }
 
     simulationLog += "\n";
@@ -114,14 +114,14 @@ CafeModel::CafeModel(bool readFromService) {
         employeesDb.addWaiter("Grzegorz", "Brzęczyszczykiewicz", 0, Price(20, 0), 2, false);
         employeesDb.addWaiter("Halina", "Grzmot", 1, Price(30, 0), 1, true);
 
-        vector<Table> initialTables
+        vector<shared_ptr<Table>> initialTables
         {
-            Table(1, 2),
-            Table(2, 2),
-            Table(3, 3),
-            Table(4, 4),
-            Table(5, 4),
-            Table(6, 5)
+            make_shared<Table>(1, 2),
+            make_shared<Table>(2, 2),
+            make_shared<Table>(3, 3),
+            make_shared<Table>(4, 4),
+            make_shared<Table>(5, 4),
+            make_shared<Table>(6, 5)
         };
 
         tables = initialTables;
@@ -142,7 +142,7 @@ const vector<CustomersGroup> &CafeModel::GetUnassignedCustomers() const {
     return unassignedCustomers;
 }
 
-const vector<Table> &CafeModel::GetTables() const {
+const vector<shared_ptr<Table>> &CafeModel::GetTables() const {
     return tables;
 }
 
@@ -169,9 +169,9 @@ void CafeModel::Simulate(unsigned int cycles) {
 
         // 1. Collect customers who sit by the tables
         vector<Customer> assignedCustomers;
-        for(Table &table : tables)
+        for(auto &table : tables)
         {
-            for(Customer &customer : table.GetCustomers())
+            for(Customer &customer : table->GetCustomers())
                 assignedCustomers.push_back(customer);
         }
 
@@ -185,20 +185,10 @@ void CafeModel::Simulate(unsigned int cycles) {
 
                 if(waiter->getState() == Waiter::WaiterState::awaiting)
                 {
-                    for(Table &table : tables)
+                    for(auto &table : tables)
                     {
-                        if(!table.GetHasAssignedWaiter() && !table.GetCustomers().empty())
-                        {
-                            /*
-                            @important - MAJOR ISSUE HERE
-                            There's a main problem with using pointers to tables. Whenever we call
-                            make_share<Table>(someTable), a copy of someTable is created. After that, when we perform
-                            collectOrders() inside advanceCycleAll(), a copy of someTable behaves properly and collection of
-                            MenuItemsToPrepare is not empty, but this doesn't happen on original object. That's why MenuItemsToPrepare remains
-                            empty on original object, and further advancing Waiter states results in immediate moving to handing orders and collecting receipt.
-                            */
+                        if(!table->GetHasAssignedWaiter() && !table->GetCustomers().empty())
                             waiter->setAssignedTable(table);
-                        }
                     }
                 }
             }
@@ -208,10 +198,8 @@ void CafeModel::Simulate(unsigned int cycles) {
         employeesDb.advanceCycleAll();
 
         // 4. Update state of all assigned customers
-        for(Table &table : tables)
-        {
-            table.AdvanceStateAll();
-        }
+        for(auto &table : tables)
+            table->AdvanceStateAll();
 
         // 5. Assign unassigned customers
         assignCustomers(assignedCustomers);

@@ -27,7 +27,7 @@ public:
         takeReceipt,
         last = takeReceipt
     };
-    void setAssignedTable(Table &newAssignedTable);
+    void setAssignedTable(const shared_ptr<Table> &newAssignedTable);
 
     Price calcReceipt();
 

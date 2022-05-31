@@ -24,7 +24,7 @@ private:
     MenuDatabase menuDb = MenuDatabase(make_shared<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3));
     DbWorkers employeesDb;
 
-    vector<Table> tables;
+    vector<shared_ptr<Table>> tables;
 
     // Simulation status
     vector<CustomersGroup> unassignedCustomers;
@@ -47,7 +47,7 @@ public:
     // Getters
     const MenuDatabase &GetMenu() const;
     const vector<CustomersGroup> &GetUnassignedCustomers() const;
-    const vector<Table> &GetTables() const;
+    const vector<shared_ptr<Table>> &GetTables() const;
     unsigned int GetCurrentCycle() const;
     string GetSimulationLog() const;
 

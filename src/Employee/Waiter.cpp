@@ -83,13 +83,13 @@ string Waiter::printStateLog() const {
 
 
 
-void Waiter::setAssignedTable(Table &newAssignedTable) {
+void Waiter::setAssignedTable(const shared_ptr<Table> &newAssignedTable) {
     if (currentState != WaiterState::awaiting) {
         throw BusyWaiterException();
     }
 
-    newAssignedTable.SetHasAssignedWaiter(true);
-    assignedTable = make_shared<Table>(newAssignedTable);   // @important - the copy is made here
+    newAssignedTable->SetHasAssignedWaiter(true);
+    assignedTable = newAssignedTable;   // @important - the copy is made here
 }
 
 void Waiter::collectOrders() {
