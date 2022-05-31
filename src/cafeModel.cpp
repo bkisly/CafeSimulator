@@ -200,31 +200,7 @@ void CafeModel::Simulate(unsigned int cycles) {
         // TODO: need EmployeesDatabase class to complete this step
         for(Customer &customer : assignedCustomers)
         {
-            switch (customer.GetCurrentState())
-            {
-                case CustomerState::SitTaken:
-                {
-                    break;
-                }
-                case CustomerState::ReadyToOrder:
-                {
-                    break;
-                }
-                case CustomerState::Awaiting:
-                {
-                    break;
-                }
-                case CustomerState::Eating:
-                {
-                    break;
-                }
-                case CustomerState::FinishedEating:
-                {
-                    break;
-                }
-                default:
-                    break;
-            }
+            customer.AdvanceState();
         }
 
         // 3. Assign unassigned customers

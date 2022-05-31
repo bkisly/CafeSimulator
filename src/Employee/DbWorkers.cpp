@@ -140,7 +140,7 @@ void DbWorkers::advanceCycleAll() {
                 if (waiter) {
                     switch (waiter->currentState) {
                         case Waiter::WaiterState::awaiting:
-                            if (waiter->assignedTable.GetCapacity() != 0) {
+                            if (waiter->assignedTable) {
                                 waiter->currentState++;
                             }
                             break;
@@ -153,14 +153,14 @@ void DbWorkers::advanceCycleAll() {
                             break;
                         case Waiter::WaiterState::prepareOrder:
                             // check if there are items to prepare
-                            if (waiter->assignedTable.GetAmountOfItemsToPrepare()) {
+                            if (waiter->assignedTable->GetAmountOfItemsToPrepare()) {
                                 // get item
                                 shared_ptr<MenuItem> menuItem =
-                                        waiter->assignedTable.GetLastItemToPrepare();
+                                        waiter->assignedTable->GetLastItemToPrepare();
                                 // try to pass dish along to cook
                                 if (this->assignDishToFreeCook(menuItem)) {
                                     waiter->cyclesLeft = menuItem->GetCyclesToPrepare();
-                                    waiter->assignedTable.RemoveLastItemToPrepare();
+                                    waiter->assignedTable->RemoveLastItemToPrepare();
                                 }
                             }
                             // no dishes left - update state
@@ -174,8 +174,8 @@ void DbWorkers::advanceCycleAll() {
                         case Waiter::WaiterState::takeReceipt:
                             // TODO-TEMP invoke calc recipt (calc receipt - sum items, update customers property - receivdedReceipt
                             // if new clients come, serve them, otherwise leave table
-                            if (waiter->assignedTable.GetCustomers().size() == 0){
-                                waiter->assignedTable = Table();
+                            if (waiter->assignedTable->GetCustomers().size() == 0){
+                                waiter->assignedTable.reset();
                                 waiter->currentState = Waiter::WaiterState::awaiting;
                             }
                             else {

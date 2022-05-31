@@ -46,7 +46,7 @@ public:
 
 
 private:
-    Table assignedTable;
+    shared_ptr<Table> assignedTable;
     Price receipt;
 
     friend class DbWorkers;
@@ -56,7 +56,7 @@ private:
 
 #if DEBUG
 public:
-    const Table &getAssignedTable() const;
+    shared_ptr<Table> getAssignedTable() const;
 
 #endif
     // collectOrders is public in debug

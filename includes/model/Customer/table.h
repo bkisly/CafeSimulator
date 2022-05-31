@@ -21,7 +21,7 @@ private:
     vector<shared_ptr<MenuItem>> menuItemsToPrepare;
 
 public:
-    Table();
+    Table() = default;
     Table(unsigned int id, unsigned int capacity);
 
     unsigned int GetId() const;
