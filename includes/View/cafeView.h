@@ -35,16 +35,9 @@ private:
 
 public:
     CafeView(bool readFromService = true);
-<<<<<<< HEAD
-<<<<<<< HEAD
-    void InitSimulation(unsigned int numberOfCycles);
+
     void InitAdminMode();
-=======
     void InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval);
->>>>>>> 5a16f96 (Added simulation customization)
-=======
-    void InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval);
->>>>>>> 5a16f96aaecc83f33bc7e519850645a3a808bd69
 };
 
 
