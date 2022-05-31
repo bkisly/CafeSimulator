@@ -203,11 +203,16 @@ CafeView::CafeView(bool readFromService) {
     model = CafeModel(readFromService);
 }
 
-void CafeView::InitSimulation(unsigned int numberOfCycles) {
+void CafeView::InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval) {
     try
     {
-        model.Simulate(numberOfCycles);
-        cout << model.GetSimulationLog() << endl;
+        model.Simulate(numberOfCycles, customersInterval);
+
+        for(const string &block : model.GetSimulationLogBlocks())
+        {
+            cout << block;
+            this_thread::sleep_for(chrono::milliseconds((int)(intervalSeconds * 1000)));
+        }
     }
     catch(exception &e)
     {

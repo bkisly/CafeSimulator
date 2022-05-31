@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <thread>
+#include <chrono>
 #include "../model/cafeModel.h"
 
 using std::cout, std::cerr, std::endl;
@@ -33,8 +35,12 @@ private:
 
 public:
     CafeView(bool readFromService = true);
+<<<<<<< HEAD
     void InitSimulation(unsigned int numberOfCycles);
     void InitAdminMode();
+=======
+    void InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval);
+>>>>>>> 5a16f96 (Added simulation customization)
 };
 
 

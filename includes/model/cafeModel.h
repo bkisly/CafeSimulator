@@ -29,6 +29,7 @@ private:
     // Simulation status
     vector<CustomersGroup> unassignedCustomers;
     unsigned int currentCycle;
+    vector<string> simulationLogBlocks;
     string simulationLog;
     unsigned int totalCustomers;
 
@@ -50,9 +51,10 @@ public:
     const vector<shared_ptr<Table>> &GetTables() const;
     unsigned int GetCurrentCycle() const;
     string GetSimulationLog() const;
+    const vector<string> &GetSimulationLogBlocks() const;
 
     // Action methods
-    void Simulate(unsigned int cycles);
+    void Simulate(unsigned int cycles, unsigned int customersInterval);
 };
 
 
