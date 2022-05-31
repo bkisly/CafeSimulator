@@ -92,6 +92,7 @@ void Waiter::setAssignedTable(shared_ptr<Table> newAssignedTable) {
 }
 
 void Waiter::collectOrders() {
+    this->assignedTable->RemoveItemsToPrepare();
     for (auto &customer : assignedTable->GetCustomers()){
         if (customer.GetCurrentState() == CustomerState::ReadyToOrder){
             assignedTable->AddItemToPrepare(customer.GetPreferredMenuItem());

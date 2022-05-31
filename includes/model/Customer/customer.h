@@ -16,6 +16,7 @@ enum class CustomerState
     Awaiting,
     Eating,
     FinishedEating,
+    Leaving
 };
 
 class Customer {

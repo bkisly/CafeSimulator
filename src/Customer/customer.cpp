@@ -38,8 +38,6 @@ void Customer::AdvanceState() {
         }
     }
     // advance state to eating only after meal preparation
-    // TODO: potential de-synchronisation, waiter might be preparing meal longer -> he
-    //  may be waiting for free cook -> fix up or discard ??
     else if (currentState == CustomerState::Awaiting){
         if (this->cyclesLeft > 0){
             cyclesLeft--;

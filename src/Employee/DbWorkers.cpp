@@ -144,7 +144,7 @@ void DbWorkers::advanceCycleAll() {
                                 // try to pass dish along to cook
                                 if (this->assignDishToFreeCook(menuItem)) {
                                     waiter->cyclesLeft = menuItem->GetCyclesToPrepare();
-                                    waiter->assignedTable->RemoveLastItemToPrepare();
+                                    waiter->assignedTable->RemoveItemsToPrepare();
                                 }
                             }
                             // no dishes left - update state
