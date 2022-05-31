@@ -41,8 +41,7 @@ int main(int argc, char* argv[]) {
         }
         else
         {
-            cout << "Entering admin mode";
-            // TODO: enter admin mode here
+            cafeView.InitAdminMode();
         }
     }
     else if(modeArg == "-s")
