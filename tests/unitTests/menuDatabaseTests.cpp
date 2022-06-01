@@ -93,4 +93,23 @@ TEST_CASE("Stream operations")
 
         CHECK(ss.str() == "012\nCoffee\n2 49 3 0\nCake\n5 99 2\nCaesar salad\n19 99 5 1\n");
     }
+
+    SECTION("Input")
+    {
+        ss = stringstream();
+        MenuDatabase db(make_shared<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3));
+        db.AddItem(make_shared<Dessert>("Cake", Price(5, 99), 2));
+        db.AddItem(make_shared<Dish>("Caesar salad", Price(19, 99), true, 5));
+
+        MenuDatabase newDb(make_shared<Beverage>("Lonely coffee", Price(0, 5), CupType::Cup, 3));
+
+        ss << db;
+        ss >> newDb;
+
+        vector<shared_ptr<MenuItem>> newItems = newDb.GetItems();
+
+        CHECK(newItems[0]->GetName() == "Coffee");
+        CHECK(newItems[1]->GetName() == "Cake");
+        CHECK(newItems[2]->GetName() == "Caesar salad");
+    }
 }

@@ -37,7 +37,7 @@ public:
     istream &Read(istream &is) override;
 
     friend ostream &operator<<(ostream &os, const MenuDatabase &menu);
-    friend istream &operator>>(istream &is, const MenuDatabase &menu);
+    friend istream &operator>>(istream &is, MenuDatabase &menu);
 };
 
 

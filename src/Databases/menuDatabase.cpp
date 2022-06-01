@@ -80,11 +80,13 @@ void MenuDatabase::RemoveItem(string itemName) {
 }
 
 ostream &MenuDatabase::Write(ostream &os) {
-    return os;  // TODO: implement writing menu database to stream
+    os << *this;
+    return os;
 }
 
 istream &MenuDatabase::Read(istream &is) {
-    return is;  // TODO: implement reading menu database from stream
+    is >> *this;
+    return is;
 }
 
 ostream &operator<<(ostream &os, const MenuDatabase &menu) {
@@ -111,6 +113,44 @@ ostream &operator<<(ostream &os, const MenuDatabase &menu) {
     return os;
 }
 
-istream &operator>>(istream &is, const MenuDatabase &menu) {
+istream &operator>>(istream &is, MenuDatabase &menu) {
+    vector<shared_ptr<MenuItem>> newItems;
+    string typesRecord;
+    menu.items.clear();
+
+    is >> typesRecord;
+
+    for(char typeId : typesRecord)
+    {
+        int typeInt = typeId - '0';
+
+        switch (typeInt)
+        {
+            case 0:
+            {
+                Beverage bev("x", Price(0, 1), CupType::Cup, 1);
+                bev.Read(is);
+                menu.AddItem(make_shared<Beverage>(bev));
+                break;
+            }
+            case 1:
+            {
+                Dessert des("y", Price(0, 2), 1);
+                des.Read(is);
+                menu.AddItem(make_shared<Dessert>(des));
+                break;
+            }
+            case 2:
+            {
+                Dish dish("z", Price(0, 3), false, 1);
+                dish.Read(is);
+                menu.AddItem(make_shared<Dish>(dish));
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
     return is;
 }
