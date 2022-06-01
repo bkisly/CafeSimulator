@@ -89,7 +89,6 @@ unsigned int Table::GetAmountOfItemsToPrepare() const {
 
 shared_ptr<MenuItem> Table::PopLastItemToPrepare() {
     shared_ptr<MenuItem> item =  menuItemsToPrepare.back();
-    // TODO: why it was commented out?
      menuItemsToPrepare.pop_back();
     return item;
 }
