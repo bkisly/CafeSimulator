@@ -132,3 +132,15 @@ bool Table::HaveAllEaten() const {
     return true;
 }
 
+void Table::RemoveServedCustomers() {
+    vector<Customer> filteredCustomers;
+
+    for(Customer &customer : customers)
+    {
+        if(customer.GetCurrentState() != CustomerState::Leaving)
+            filteredCustomers.push_back(customer);
+    }
+
+    customers = filteredCustomers;
+}
+

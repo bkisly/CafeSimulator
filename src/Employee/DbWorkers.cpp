@@ -167,6 +167,8 @@ void DbWorkers::advanceCycleAll() {
                             break;
                         case Waiter::WaiterState::TakenReceipt:
                             // if new clients come, serve them, otherwise leave table
+
+
                             if (waiter->assignedTable->GetCustomers().size() == 0){
                                 waiter->assignedTable.reset();
                                 waiter->currentState = Waiter::WaiterState::awaiting;

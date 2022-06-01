@@ -42,7 +42,6 @@ private:
     void addNewCustomers();
     void assignCustomers(vector<Customer> &assignedCustomers);
     void printLog(vector<Customer> &assignedCustomers);
-    void removeServedCustomers();
 
 public:
     CafeModel(bool readFromService = true);    // readFromService parameter decides whether to read cafe information using DatabaseService object or read defaults for test purposes

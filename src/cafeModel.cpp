@@ -51,25 +51,6 @@ void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
         unassignedCustomers.erase(unassignedCustomers.begin() + id);
 }
 
-void CafeModel::removeServedCustomers() {
-    for(auto &table : tables)
-    {
-        vector<Customer> newCustomers;
-
-        for(Customer &customer : table->GetCustomers())
-        {
-            if(!customer.isReceivedReceipt())
-                newCustomers.push_back(customer);
-        }
-
-        if(newCustomers.size() != table->GetCustomers().size())
-        {
-            table->GetCustomers().clear();
-            table->GetCustomers().insert(table->GetCustomers().begin(), newCustomers.begin(), newCustomers.end());
-        }
-    }
-}
-
 void CafeModel::printLog(vector<Customer> &assignedCustomers) {
     // 7a. Print header
     string block = "==========\nSIMULATION CYCLE NR " + to_string(currentCycle + 1) + "\n==========\n\n";
@@ -230,16 +211,17 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
                 }
             }
         }
-        
+
+        // 3. Remove served customers
+        for(auto &table : tables)
+            table->RemoveServedCustomers();
+
+        // 4. Update state of all employees
         employeesDb.advanceCycleAll();
 
         // 4. Update state of all assigned customers
         for(auto &table : tables)
             table->AdvanceStateAll();
-
-
-        // Remove served customers
-        removeServedCustomers();
 
         // 5. Assign unassigned customers
         assignCustomers(assignedCustomers);
