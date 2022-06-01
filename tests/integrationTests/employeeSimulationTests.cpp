@@ -22,59 +22,20 @@ using std::stringstream;
 
 #if DEBUG
 
-TEST_CASE("cook simple simulation states") {
-    CustomEmployeesDb workers;
-    Price salary(3000, 0);
-    workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
-    workers.addCook("Tomasz", "Kowal", Cook::Gender::male, salary, 4, 26);
-
-
-    CHECK(workers.getWorkerState(0) == Cook::CookState::free);
-    workers.getCook(0)
-            ->setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
-//    assigned dish with 2 cycle to prepare
-    workers.advanceCycleAll();
-    CHECK(workers.getCook(0)->getState() == Cook::CookState::busy);
-    workers.advanceCycleAll();
-//    free after 2 cycles
-    CHECK(workers.getCook(0)->getState() == Cook::CookState::free);
-//    advance cycle without assigning dish - no longer dish to collect, cook is free
-    workers.advanceCycleAll();
-//    advance cycle once again when free
-    CHECK(workers.getCook(0)->getState() == Cook::CookState::free);
-
-    workers.getCook(0)
-            ->setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
-//    assigned dish with 2 cycle to prepare - new cycle
-
-//    assigned another dish with 2 cycle to prepare (after 1 cycles out of 2 for
-//    previous item) => needs 1 more cycle to be free
-    workers.getCook(0)
-           ->setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 2)));
-    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
-
-    workers.advanceCycleAll(); // 1st
-    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
-
-    workers.advanceCycleAll(); // 2nd
-    CHECK(workers.getWorkerState(0) == Cook::CookState::free);
-}
 
 TEST_CASE("cook - single -  assigned item"){
     CustomEmployeesDb workers;
     Price salary(3000, 0);
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
-    workers.addWaiter("Tomasz", "Burak", Waiter::Gender::male, salary, 4, 0);
 
     //     prepare table and customers
     Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 2);
     Beverage tee("tee", Price(1, 49), CupType::Cup, 2);
 
     vector<Customer> customers1;
-    customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
-    customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
-    customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+    customers1.emplace_back(Customer(2, true, make_unique<Beverage>(coffee)));
+    customers1.emplace_back(Customer(3, true, make_unique<Beverage>(tee)));
 
     CustomersGroup group1(customers1);
     Table table(1, 5);
@@ -91,12 +52,74 @@ TEST_CASE("cook - single -  assigned item"){
     workers.advanceCycleAll();
     CHECK(workers.getWorkerState(0) == Cook::CookState::free);
     workers.advanceCycleAll();
+    // 2 cycles for tee
     workers.advanceCycleAll(); // waiter is preparing orders
     CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
-    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "Name: Coffee, price per liter: $2.49, cup type: Cup");
+    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "tee, Coffee, ");
     workers.advanceCycleAll();
-    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "Name: Coffee, price per liter: $2.49, cup type: Cup");
+    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "tee, Coffee, ");
+    // 2 cycles for coffee
+    workers.advanceCycleAll(); // waiter is preparing orders
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
+    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "tee, Coffee, ");
+    workers.advanceCycleAll();
+    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "tee, Coffee, ");
+    CHECK(workers.getWorkerState(1) == Waiter::WaiterState::prepareOrder);
+
+    // then free - 2 x 2 cycles per 1 cook
+    workers.advanceCycleAll(); // waiter is preparing orders
+    CHECK(workers.getWorkerState(0) == Cook::CookState::free);
+    CHECK(workers.getWorkerState(1) == Waiter::WaiterState::handInOrder);
 }
+
+TEST_CASE("cook - many -  assigned item"){
+    CustomEmployeesDb workers;
+    Price salary(3000, 0);
+    workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
+    workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
+    workers.addCook("Tomasz", "Nowakowski", Cook::Gender::male, salary, 4, 26);
+    //     prepare table and customers
+    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 2);
+    Beverage tee("tee", Price(1, 49), CupType::Cup, 2);
+
+    vector<Customer> customers1;
+    customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
+    customers1.emplace_back(Customer(2, true, make_unique<Beverage>(coffee)));
+    customers1.emplace_back(Customer(3, true, make_unique<Beverage>(tee)));
+
+    CustomersGroup group1(customers1);
+    Table table(1, 5);
+    shared_ptr<Table> tablePtr =  make_shared<Table>(table);
+    CHECK(tablePtr->TryAddCustomers(group1));
+
+
+    workers.getWaiter(1)->setAssignedTable(tablePtr);
+    tablePtr->AdvanceStateAll();
+    tablePtr->AdvanceStateAll();
+    tablePtr->AdvanceStateAll();
+
+    workers.advanceCycleAll();
+    workers.advanceCycleAll();
+    CHECK(workers.getWorkerState(0) == Cook::CookState::free);
+    workers.advanceCycleAll();
+    // 2 cycles for tee
+    workers.advanceCycleAll(); // waiter is preparing orders
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
+    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "tee, Coffee, Coffee, ");
+    workers.advanceCycleAll();
+    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "tee, Coffee, Coffee, ");
+    // 2 cycles for Coffee
+    workers.advanceCycleAll(); // waiter is preparing orders
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
+    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "tee, Coffee, Coffee, ");
+
+
+    // then free - 3 x 2 cycles per 2 cook = 3 cycles
+    workers.advanceCycleAll(); // waiter is preparing orders
+    CHECK(workers.getWorkerState(0) == Cook::CookState::free);
+    CHECK(workers.getWorkerState(1) == Waiter::WaiterState::handInOrder);
+}
+
 
 #endif
 

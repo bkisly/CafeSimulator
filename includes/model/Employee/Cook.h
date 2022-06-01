@@ -21,7 +21,6 @@ public:
     enum CookState {
         free = 0, busy
     };
-    void setAssignedMenuItem(shared_ptr<MenuItem> newAssignedMenuItem);
 
 #if DEBUG
     string getAssignedMenuItemName() const;
@@ -46,6 +45,7 @@ public:
 private:
     unsigned known_cuisines;
     std::shared_ptr<MenuItem> assignedMenuItem;
+    string preparingItems;
 
     friend class DbWorkers;
     friend class CustomEmployeesDb;

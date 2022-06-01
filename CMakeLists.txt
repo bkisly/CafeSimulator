@@ -36,7 +36,6 @@ add_library(
         includes/model/Employee/Cook.h src/Employee/Cook.cpp
         includes/model/Employee/Waiter.h src/Employee/Waiter.cpp
         includes/model/Employee/Employee.h src/Employee/Employee.cpp
-        includes/model/Employee/DbWorkers.h src/Employee/DbWorkers.cpp
         includes/model/Employee/Exceptions.h
 )
 

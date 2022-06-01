@@ -58,10 +58,17 @@ void CustomEmployeesDb::advanceCycleAll() {
                             break;
                         case Waiter::WaiterState::prepareOrder:
                             if (waiter->assignedTable->GetAmountOfItemsToPrepare() !=0) {
-                                shared_ptr<MenuItem> item =
-                                        waiter->assignedTable->PopLastItemToPrepare();
-                                waiter->cyclesLeft = item->GetCyclesToPrepare();
-                                this->assignDishToFreeCook(item);
+                               int totalCycles = 0;
+                               string itemList = "";
+                               while (waiter->assignedTable->GetAmountOfItemsToPrepare
+                               () != 0){
+                                   auto item =waiter->assignedTable->PopLastItemToPrepare();
+                                   totalCycles += item->GetCyclesToPrepare();
+                                   itemList += item->GetName() + ", ";
+                               }
+                               totalCycles /= getAmountOfCooks();
+                               assignItemsCooks(totalCycles, itemList);
+                               waiter->cyclesLeft = totalCycles;
                             }
                             else{
                                 waiter->currentState++;
@@ -94,28 +101,14 @@ void CustomEmployeesDb::advanceCycleAll() {
     }
 }
 
-void CustomEmployeesDb::assignDishToFreeCook(shared_ptr<MenuItem> menuItem) {
+void CustomEmployeesDb::assignItemsCooks(int cycles, string itemsList) {
     Cook* leastBusyCook= nullptr;
     for (auto &worker_ptr: items) {
         Cook* cook = dynamic_cast<Cook*>(&*worker_ptr);
         if (cook){
-            // if found free - best option - done
-            if(cook->getState() == Cook::CookState::free){
-                cook->setAssignedMenuItem(menuItem);
-                return;
-            }
-            else{
-                // if initialized the least busy cook
-                if(leastBusyCook){
-                    if (cook->cyclesLeft < leastBusyCook->cyclesLeft){
-                        leastBusyCook = cook;
-                    }
-                }
-                // if not initialized
-                else{
-                    leastBusyCook = cook;
-                }
-            }
+            cook->preparingItems = itemsList;
+            cook->cyclesLeft = cycles;
+            cook->currentState = Cook::CookState::busy;
         }
     }
 }
@@ -128,6 +121,17 @@ Cook *CustomEmployeesDb::getCook(int id) {
 
 Waiter *CustomEmployeesDb::getWaiter(int id) {
     return dynamic_cast<Waiter*>(&*items[id]);
+}
+
+int CustomEmployeesDb::getAmountOfCooks() {
+    int counter = 0;
+    for (auto &worker_ptr: items) {
+        Cook* cook = dynamic_cast<Cook*>(&*worker_ptr);
+        if (cook){
+           counter++;
+        }
+    }
+    return counter;
 }
 
 

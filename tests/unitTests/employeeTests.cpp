@@ -74,7 +74,7 @@ TEST_CASE("cook printStateLog") {
     Price salary(3000, 0);
     Cook cook(11, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
     CHECK(cook.printStateLog() == "cook 11 - free\n");
-    cook.setAssignedMenuItem(make_unique<Dessert>(Dessert("Cake", Price(5, 0), 3)));
+    cook.setAssignedMenuItem(std::string());
     CHECK(cook.printStateLog() == "cook 11 - started preparing Cake\n");
 }
 

@@ -15,6 +15,7 @@ Cook::Cook(int id, const string &name, const string &surname, int gender, Price 
         : Employee(id, name, surname, gender, baseSalary, baseAmountOfShifts),
           known_cuisines(knownCuisines) {
     assignedMenuItem.reset();
+    preparingItems = "";
 }
 
 Price Cook::calculate_salary() const noexcept {
@@ -62,7 +63,7 @@ string Cook::printStateLog() const {
         case CookState::free:
             return msg + "free\n";
         case CookState::busy:
-            return msg + "started preparing " + assignedMenuItem->GetName() + "\n";
+            return msg + "prepares " + preparingItems + "\n";
         default:
             throw StateException(currentState);
     }
@@ -70,14 +71,9 @@ string Cook::printStateLog() const {
 
 
 
-void Cook::setAssignedMenuItem(std::shared_ptr<MenuItem> newAssignedMenuItem) {
-    cyclesLeft = newAssignedMenuItem->GetCyclesToPrepare();
-    Cook::assignedMenuItem  = newAssignedMenuItem;
-    currentState = CookState::busy;
-}
 #if DEBUG
 string Cook::getAssignedMenuItemName() const {
-    return assignedMenuItem->ToString();
+    return preparingItems;
 }
 #endif
 
