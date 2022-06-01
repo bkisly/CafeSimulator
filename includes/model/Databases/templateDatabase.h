@@ -98,8 +98,8 @@ TemplateDatabase<T>::TemplateDatabase(vector<std::shared_ptr<T>> newItems) {
 
 template<class T>
 std::ostream &TemplateDatabase<T>::Write(ostream &os) {
-    for (const auto &worker_ptr: items) {
-        os << *worker_ptr << "\n";
+    for (const auto &item: items) {
+        item->Write(os);
     }
     return os;
 }
@@ -109,8 +109,8 @@ std::istream &TemplateDatabase<T>::Read(istream &is) {
     items.clear();
     while(!cin.eof()){
         T newObject;
-        is >> newObject;
-        items.push_back(newObject);
+        newObject.Read(is);
+        items.push_back(make_shared<T>(newObject));
     }
     return is;
 }

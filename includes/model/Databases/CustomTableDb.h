@@ -4,9 +4,8 @@
 
 class CustomTableDb  : public TemplateDatabase<Table>{
 public:
-    int GetFristTableId() {
-        return items.front()->GetId();
-    }
+    void AdvanceStateAllTables();
+    bool TryAssignCustomersGroup(CustomersGroup customersGroup);
 };
 
 

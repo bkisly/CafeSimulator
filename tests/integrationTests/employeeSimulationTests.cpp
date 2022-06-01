@@ -13,6 +13,7 @@
 #include "../../includes/model/MenuItem/dessert.h"
 #include "../../includes/model/MenuItem/dish.h"
 #include "../../includes/model/MenuItem/beverage.h"
+#include "../../includes/model/Databases/CustomTableDb.h"
 #include <sstream>
 
 using std::stringstream;
@@ -113,6 +114,95 @@ TEST_CASE("waiter cook big simulation") {
     tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1)
     tablePtr->AdvanceStateAll(); // Awaiting (cyclesLeft = 1) -> Eating
     tablePtr->AdvanceStateAll(); // Eating -> EatingFinished
+
+    workers.advanceCycleAll(); // after that cycles left 2
+    workers.advanceCycleAll(); // after that cycles left 1
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
+    CHECK(workers.getWaiter(1)->printStateLog() == "waiter 1 - preparing orders for "
+                                                   "table nr 1\n");
+
+    workers.advanceCycleAll(); // after that cycles left 2 (item for another customer)
+    workers.advanceCycleAll(); //after that cycles left 1
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
+
+    workers.advanceCycleAll(); // after that cycles left 2 (item for another customer)
+    workers.advanceCycleAll(); //after that cycles left 1
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
+
+    workers.advanceCycleAll(); // hand in order
+    CHECK(workers.getWaiter(1)->printStateLog() == "waiter 1 - handing in orders to "
+                                                   "table nr 1\n");
+    CHECK(workers.getWorkerState(0) == Cook::CookState::free);
+    workers.advanceCycleAll(); // readyToTakeReceipt
+    CHECK(workers.getWaiter(1)->printStateLog() == "waiter 1 - preparing receipt for "
+                                                   "table nr 1\n");
+
+    workers.advanceCycleAll(); // calcRecceipt -> TakenReceipt
+    CHECK(workers.getWaiter(1)->printStateLog() == "waiter 1 - receipt for table nr 1 "
+                                                   "is $6.47\n");
+
+    CHECK(workers.getWorkerState(1) == Waiter::WaiterState::TakenReceipt);
+    // @important - changes are applied to customers hold in tables' vectors, so it should satisfy simulation demands
+    for (auto &customer : tablePtr->GetCustomers()){
+        if (customer.GetCurrentState() == CustomerState::FinishedEating){
+            CHECK(customer.isCollectedOrder());
+            CHECK(customer.isReceivedReceipt());
+        }
+    }
+    for (auto &customer : workers.getWaiter(1)->getAssignedTable() ->GetCustomers()){
+        if (customer.GetCurrentState() == CustomerState::FinishedEating){
+            CHECK(customer.isCollectedOrder());
+            CHECK(customer.isReceivedReceipt());
+        }
+    }
+    workers.advanceCycleAll(); // still clients at table
+    CHECK(workers.getWorkerState(1) == Waiter::WaiterState::collectOrder);
+}
+
+TEST_CASE("waiter cook big simulation CustomTableDB version") {
+    DbWorkers workers;
+    Price salary(3000, 0);
+    workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
+    workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
+    workers.addWaiter("Tomasz", "Burak", Waiter::Gender::male, salary, 4, 0);
+
+    //     prepare table and customers
+    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 2);
+    Beverage tee("tee", Price(1, 49), CupType::Cup, 2);
+
+    vector<Customer> customers1;
+    customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
+    customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
+    customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+
+    CustomersGroup group1(customers1);
+
+    CustomTableDb tablesCollection;
+
+    Table table(1, 5);
+    shared_ptr<Table> tablePtr = make_shared<Table>(table);
+    tablesCollection.AddItem(tablePtr);
+
+//    CHECK(tablesCollection.GetItems()[0]->TryAddCustomers(group1));
+    CHECK(tablesCollection.TryAssignCustomersGroup(group1));
+    tablesCollection.AdvanceStateAllTables();
+
+    workers.getWaiter(1)->setAssignedTable(tablePtr);
+
+    tablePtr->AdvanceStateAll();
+    CHECK(workers.getCook(0)->printStateLog() == "cook 0 - free\n");
+    workers.advanceCycleAll();
+    workers.advanceCycleAll();
+    CHECK(workers.getWaiter(1)->printStateLog() == "waiter 1 - collecting orders from "
+                                                   "table nr 1\n");
+    workers.advanceCycleAll();
+
+//    workers.getWaiter(1)->collectOrders();
+
+    tablesCollection.AdvanceStateAllTables(); // ReadyToOrder -> Awaiting (cyclesLeft = 2)
+    tablesCollection.AdvanceStateAllTables(); // Awaiting (cyclesLeft = 1)
+    tablesCollection.AdvanceStateAllTables(); // Awaiting (cyclesLeft = 1) -> Eating
+    tablesCollection.AdvanceStateAllTables(); // Eating -> EatingFinished
 
     workers.advanceCycleAll(); // after that cycles left 2
     workers.advanceCycleAll(); // after that cycles left 1
