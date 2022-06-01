@@ -44,7 +44,7 @@ private:
     void removeServedCustomers();
 
 public:
-    CafeModel(bool readFromService = true);    // readFromService parameter decides whether to read cafe information using DatabaseService object or read defaults for test purposes
+    CafeModel(bool readFromService = true);    // readFromService parameter decides whether to read cafe information using DatabaseService object or Read defaults for test purposes
 
     // Getters
     MenuDatabase &GetMenu();

@@ -9,6 +9,9 @@
 #include "../../includes/model/Databases/menuDatabase.h"
 #include "../../includes/model/Databases/templateDatabase.h"
 #include "../../includes/model/Databases/CustomTableDb.h"
+#include "../../includes/model/Databases/CustomEmployeesDb.h"
+#include "../../includes/model/Employee/Waiter.h"
+#include "../../includes/model/Employee/Cook.h"
 
 
 TEST_CASE("basic object"){
@@ -22,13 +25,19 @@ TEST_CASE("basic object"){
     REQUIRE_THROWS(db2.AddItem(make_shared<Table>(Table(1, 2))));
     CHECK(db2.CountItems() == 2);
     CHECK(db2.GetItems().size() == 2);
-    REQUIRE_THROWS(db2.RemoveItem(22));
-    db2.RemoveItem(1);
+    REQUIRE_THROWS(db2.RemoveItem(2));
+     db2.RemoveItem(1);
     CHECK(db2.CountItems() == 1);
 
-    CustomTableDb db3;
-    db3.AddItem(make_shared<Table>(Table(1,5)));
-    db3.RemoveItem(1);
 
+}
+
+TEST_CASE("new employees"){
+    CustomEmployeesDb db;
+    db.AddItem(make_shared<Waiter>(Waiter(1, "Jan", "Nowal", Employee::Gender::male,
+                                          Price(2000,0), 4, true)));
+    db.AddItem(make_shared<Waiter>(Waiter(2, "Jan", "Nowal", Employee::Gender::male,
+                                          Price(2000,0), 4, true)));
+    CHECK(db.GetItems().size() == 2);
 }
 

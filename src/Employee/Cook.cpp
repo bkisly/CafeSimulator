@@ -25,8 +25,8 @@ unsigned int Cook::calculate_shifts_per_week() const noexcept {
     return (known_cuisines > 25) ? base_amount_of_shifts + 1 : base_amount_of_shifts;
 }
 
-std::ostream &Cook::write(std::ostream &os) const noexcept{
-    Employee::write(os);
+std::ostream &Cook::Write(std::ostream &os) const noexcept{
+    Employee::Write(os);
     os << " " << known_cuisines;
     return os;
 }
@@ -37,8 +37,8 @@ string Cook::printProperties() const noexcept {
 //            (known_cuisines) + "\n";
 }
 
-std::istream &Cook::read(std::istream &in) {
-    Employee::read(in);
+std::istream &Cook::Read(std::istream &in) {
+    Employee::Read(in);
     in >> known_cuisines;
     return in;
 }

@@ -5,7 +5,7 @@
 #include "../Employee/Employee.h"
 #include "../MenuItem/exceptions.h"
 template<class T>
-class TemplateDatabase  : public IDatabaseDebug<T>  {
+class TemplateDatabase  : public IDatabaseExtended<T>  {
 protected:
     vector<shared_ptr<T>> items;
 
@@ -14,20 +14,14 @@ public:
     TemplateDatabase() = default;
     TemplateDatabase(std::shared_ptr<T> item);
     TemplateDatabase(std::vector<std::shared_ptr<T>> newItems);
-    void foo() override;
     void AddItem(std::shared_ptr<T> item) override;
     int CountItems() override;;
-    void RemoveItem(unsigned int id) override;
+    void RemoveItem(unsigned int index) override;
     std::vector<std::shared_ptr<T>> &GetItems() override;
     std::ostream &Write(std::ostream &os) override;
     std::istream &Read(std::istream &is) override;
 };
 
-template<class T>
-void TemplateDatabase<T>::foo() {
-    int a =2;
-    cout<< a;
-}
 
 template<class T>
 void TemplateDatabase<T>::AddItem(shared_ptr<T> item) {
@@ -46,25 +40,13 @@ void TemplateDatabase<T>::AddItem(shared_ptr<T> item) {
 //}
 //
 template<class T>
-void TemplateDatabase<T>::RemoveItem(unsigned int id) {
-    int indexInVector = -1;
-    int counter = 0;
-    for (auto &item : items){
-        if (item->GetId() == id){
-            indexInVector = counter;
-            break;
-        }
-        counter++;
-    }
+void TemplateDatabase<T>::RemoveItem(unsigned int index) {
+   if ( index < 0 || index >= items.size() ){
+       throw IndexOutOfRangeException("index out of range");
+   }
 
-    if (indexInVector >=0){
-        items.erase(items.begin() + indexInVector, items.begin() + indexInVector +1);
-    }
-    else{
-        throw IndexOutOfRangeException("not found id" + to_string(counter));
-    }
+   items.erase(items.begin() + index);
 
-//    items.pop_back();
 }
 
 template<class T>

@@ -24,8 +24,8 @@ unsigned int Waiter::calculate_shifts_per_week() const noexcept {
     return (can_serve_alcohol) ? base_amount_of_shifts + 1 : base_amount_of_shifts;
 }
 
-std::ostream &Waiter::write(std::ostream &os) const noexcept {
-    Employee::write(os);
+std::ostream &Waiter::Write(std::ostream &os) const noexcept {
+    Employee::Write(os);
     os << " " << can_serve_alcohol;
     return os;
 }
@@ -37,8 +37,8 @@ string Waiter::printProperties() const noexcept {
 //            (can_serve_alcohol) + "\n";
 }
 
-std::istream &Waiter::read(std::istream &in) {
-    Employee::read(in);
+std::istream &Waiter::Read(std::istream &in) {
+    Employee::Read(in);
     in >> can_serve_alcohol;
     return in;
 }

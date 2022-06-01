@@ -15027,7 +15027,7 @@ namespace Detail {
 
             static Arch which() {
                 int one = 1;
-                // If the lowest byte we read is non-zero, we can assume
+                // If the lowest byte we Read is non-zero, we can assume
                 // that little endian format is used.
                 auto value = *reinterpret_cast<char*>(&one);
                 return value ? Little : Big;
@@ -15505,7 +15505,7 @@ namespace {
     {}
 
     void XmlEncode::encodeTo( std::ostream& os ) const {
-        // Apostrophe escaping not necessary if we always use " to write attributes
+        // Apostrophe escaping not necessary if we always use " to Write attributes
         // (see: http://www.w3.org/TR/xml/#syntax)
 
         for( std::size_t idx = 0; idx < m_str.size(); ++ idx ) {
@@ -16991,7 +16991,7 @@ namespace Catch {
             // This is not ideal, but it should be enough to mimic gtest's
             // junit output.
             // Ideally the JUnit reporter would also handle `skipTest`
-            // events and write those out appropriately.
+            // events and Write those out appropriately.
             xml.writeAttribute( "status", "run" );
 
             if (sectionNode.stats.assertions.failedButOk) {

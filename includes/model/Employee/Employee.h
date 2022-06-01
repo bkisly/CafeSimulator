@@ -10,15 +10,15 @@ using std::string;
 
 class Employee {
 public:
-    int getId() const;
+    int GetId() const;
     int getCyclesLeft() const;
 
 
 //    io methods
     friend std::ostream &operator<<(std::ostream &os, const Employee &worker);
     friend std::istream &operator>>(std::istream &in, Employee &worker);
-    virtual std::ostream &write(std::ostream &os) const noexcept;
-    virtual std::istream &read(std::istream &in);
+    virtual std::ostream &Write(std::ostream &os) const noexcept;
+    virtual std::istream &Read(std::istream &in);
 
 //    printProperties method for db listing
     virtual string printProperties() const noexcept;

@@ -9,8 +9,8 @@ class Waiter : public Employee {
 
 public:
 //    stream handling
-    std::ostream &write(std::ostream &os) const noexcept;
-    std::istream &read(std::istream &in);
+    std::ostream &Write(std::ostream &os) const noexcept;
+    std::istream &Read(std::istream &in);
 
 //    printProperties method for db listing
     string printProperties() const noexcept;

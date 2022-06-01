@@ -72,14 +72,14 @@ bool Employee::operator!=(const Employee &rhs) const {
     return !(rhs == *this);
 }
 
-std::ostream &Employee::write(std::ostream &os) const noexcept {
+std::ostream &Employee::Write(std::ostream &os) const noexcept {
     os << name << "\n" << surname << "\n" << id << " "
        << gender << " " << base_salary
        << " " << base_amount_of_shifts;
     return os;
 }
 
-std::istream &Employee::read(std::istream &in) {
+std::istream &Employee::Read(std::istream &in) {
     string name, surname;
     int id, gender;
     Price salary;
@@ -98,11 +98,11 @@ std::istream &Employee::read(std::istream &in) {
 
 
 std::ostream &operator<<(std::ostream &os, const Employee &worker) {
-    return worker.write(os);
+    return worker.Write(os);
 }
 
 std::istream &operator>>(std::istream &in, Employee &worker) {
-    worker.read(in);
+    worker.Read(in);
     return in;
 }
 
@@ -114,7 +114,7 @@ string Employee::printProperties() const noexcept {
     + ",\nbase amount of shifts: " + std::to_string(base_amount_of_shifts) + "\n";
 }
 
-int Employee::getId() const {
+int Employee::GetId() const {
     return id;
 }
 

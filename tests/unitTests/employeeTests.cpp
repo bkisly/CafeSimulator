@@ -86,7 +86,7 @@ TEST_CASE("cook in out operators") {
     CHECK(ss.str() == "Tomasz\nNowak\n11 1 3000 0 4 26");
     Cook new_cook;
     ss >> new_cook;
-//    Cleaner::read(ss, new_cook);
+//    Cleaner::Read(ss, new_cook);
     CHECK(new_cook == cook);
 }
 
