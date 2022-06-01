@@ -8,7 +8,6 @@
 Customer::Customer(unsigned int id, bool allowsOthers, shared_ptr<MenuItem> preferredMenuItem) {
     this->id = id;
     this->allowsOthers = allowsOthers;
-    this->cyclesLeft = preferredMenuItem->GetCyclesToPrepare();
     this->preferredMenuItem = move(preferredMenuItem);
     currentState = CustomerState::Unassigned;
     this->collectedOrder = false;
@@ -40,10 +39,7 @@ void Customer::AdvanceState() {
     }
     // advance state to eating only after meal preparation
     else if (currentState == CustomerState::Awaiting){
-        if (this->cyclesLeft > 0){
-            cyclesLeft--;
-        }
-        if (this->cyclesLeft == 0){
+        if (receivedOrder) {
             currentState = (CustomerState)((int)currentState + 1);
         }
     }
@@ -51,7 +47,7 @@ void Customer::AdvanceState() {
     else if (currentState == CustomerState::FinishedEating){
         if (this->receivedReceipt){
             // advance state
-            currentState = (CustomerState) (((int) currentState + 1) % 6);
+            currentState = (CustomerState) (((int) currentState + 1) % 7);
             // reset properties
             this->receivedReceipt = false;
             this->collectedOrder = false;
@@ -61,7 +57,7 @@ void Customer::AdvanceState() {
         }
     }
     // other cases
-    else {
+    else if (currentState != CustomerState::Leaving) {
         currentState = (CustomerState) ((int) currentState + 1);
     }
 }
@@ -95,6 +91,11 @@ string Customer::ToString() {
             result += "is ready to pay.";
             break;
         }
+        case CustomerState::Leaving:
+        {
+            result += "is leaving the cafe.";
+            break;
+        }
         default:
         {
             result += "is not assigned to any table.";
@@ -119,4 +120,8 @@ bool Customer::isReceivedReceipt() const {
 
 void Customer::setReceivedReceipt(bool receivedReceipt) {
     Customer::receivedReceipt = receivedReceipt;
+}
+
+void Customer::SetReceivedOrder(bool receivedOrder) {
+    this->receivedOrder = receivedOrder;
 }

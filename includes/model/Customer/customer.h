@@ -26,8 +26,7 @@ private:
     shared_ptr<MenuItem> preferredMenuItem;
 
     CustomerState currentState;
-    bool collectedOrder, receivedReceipt;
-    int cyclesLeft;
+    bool collectedOrder, receivedReceipt, receivedOrder;
 
 public:
     Customer(unsigned int id, bool allowsOthers, shared_ptr<MenuItem> preferredMenuItem);
@@ -41,6 +40,7 @@ public:
     void setCollectedOrder(bool collectedOrder);
     bool isReceivedReceipt() const;
     void setReceivedReceipt(bool receivedReceipt);
+    void SetReceivedOrder(bool receivedOrder);
 
     void AdvanceState();
     string ToString();

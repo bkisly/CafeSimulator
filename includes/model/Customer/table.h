@@ -28,6 +28,7 @@ public:
     unsigned int GetCapacity() const;
     vector<Customer> &GetCustomers();
     bool GetHasAssignedWaiter() const;
+    bool HaveAllEaten() const;
     void SetHasAssignedWaiter(bool hasAssignedWaiter);
 
     unsigned int GetAmountOfItemsToPrepare() const;

@@ -122,3 +122,13 @@ void Table::SetHasAssignedWaiter(bool hasAssignedWaiter) {
     this->hasAssignedWaiter = hasAssignedWaiter;
 }
 
+bool Table::HaveAllEaten() const {
+    for(const Customer &customer : customers)
+    {
+        if(customer.GetCurrentState() == CustomerState::Eating)
+            return false;
+    }
+
+    return true;
+}
+

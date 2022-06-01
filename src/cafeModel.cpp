@@ -230,13 +230,13 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
                 }
             }
         }
-
-        // 3. Update state of all employees
+        
         employeesDb.advanceCycleAll();
 
         // 4. Update state of all assigned customers
         for(auto &table : tables)
             table->AdvanceStateAll();
+
 
         // Remove served customers
         removeServedCustomers();
