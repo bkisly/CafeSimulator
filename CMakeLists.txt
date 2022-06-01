@@ -41,10 +41,10 @@ add_library(
 )
 
 add_library(
-        menuDatabase
+        database
         includes/model/Databases/iDatabase.h
         includes/model/Databases/menuDatabase.h src/Databases/menuDatabase.cpp
-)
+        includes/model/Databases/templateDatabase.h src/Databases/CustomTableDb.cpp includes/model/Databases/CustomTableDb.h)
 
 add_library(
         viewModel
@@ -69,16 +69,20 @@ add_executable(customerTableTests tests/unitTests/customerTableTests.cpp)
 target_link_libraries(customerTableTests PRIVATE customer menu helpers employee)
 
 add_executable(menuDatabaseTests tests/unitTests/menuDatabaseTests.cpp)
-target_link_libraries(menuDatabaseTests PRIVATE menu menuDatabase helpers)
+target_link_libraries(menuDatabaseTests PRIVATE menu database helpers)
 
 add_executable(simulationRunner tests/integrationTests/simulationRunner.cpp)
-target_link_libraries(simulationRunner PRIVATE viewModel menu menuDatabase employee helpers customer)
+target_link_libraries(simulationRunner PRIVATE viewModel menu database employee helpers customer)
 
 add_executable(dbEmployeesTests tests/unitTests/DbEmployeeTests.cpp)
 target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu customer)
+
+add_executable(databaseSchemeTests tests/unitTests/databaseScheme.cpp)
+target_link_libraries(databaseSchemeTests PRIVATE customer database menu helpers)
+
 
 # TODO: run all tests executable
 
 # runners
 add_executable(Cafe main.cpp)
-target_link_libraries(Cafe PRIVATE viewModel customer employee menu menuDatabase helpers)
+target_link_libraries(Cafe PRIVATE viewModel customer employee menu database helpers)
