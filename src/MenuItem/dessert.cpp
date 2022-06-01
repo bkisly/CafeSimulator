@@ -7,11 +7,16 @@
 Dessert::Dessert(string name, Price pricePerPortion, unsigned int cyclesToPrepare) : MenuItem(name, PortionUnit::Piece, pricePerPortion, cyclesToPrepare) {}
 
 ostream &Dessert::Write(ostream &os) {
-    // TODO: implement writing to stream
+    os << name << endl;
+    os << pricePerPortion << " " << cyclesToPrepare;
     return os;
 }
 
 istream &Dessert::Read(istream &is) {
-    // TODO: implement reading from stream
+    if(is.peek() == '\n')
+        is.ignore();
+
+    getline(is, name);
+    is >> pricePerPortion >> cyclesToPrepare;
     return is;
 }

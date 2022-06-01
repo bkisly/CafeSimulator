@@ -15,12 +15,20 @@ CupType Beverage::GetCupType() const {
 }
 
 ostream &Beverage::Write(ostream &os) {
-    // TODO: implement writing to stream
+    os << name << endl;
+    os << pricePerPortion << " " << cyclesToPrepare << " " << (int)cupType;
     return os;
 }
 
 istream &Beverage::Read(istream &is) {
-    // TODO: implement reading from stream
+    int cupTypeInt = 0;
+
+    if(is.peek() == '\n')
+       is.ignore();
+
+    getline(is, name);
+    is >> pricePerPortion >> cyclesToPrepare >> cupTypeInt;
+    cupType = (CupType)cupTypeInt;
     return is;
 }
 

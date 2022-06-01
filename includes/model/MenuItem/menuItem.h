@@ -7,6 +7,8 @@
 
 #include <string>
 #include <map>
+#include <iostream>
+#include <memory>
 #include "../helpers/price.h"
 
 using namespace std;
@@ -23,7 +25,7 @@ private:
     void dataValidation(string itemName, Price price, unsigned int cycles);
 
 protected:
-    string name;
+    string name = "";
     PortionUnit portionUnit;
     Price pricePerPortion = Price(0, 0);
     unsigned int cyclesToPrepare;
@@ -47,6 +49,10 @@ public:
     virtual ostream &Write(ostream &os) = 0;
     virtual istream &Read(istream &is) = 0;
     virtual string ToString();
+
+    friend ostream &operator<<(ostream &os, const shared_ptr<MenuItem> &item);
+    friend istream &operator>>(istream &is, shared_ptr<MenuItem> &item);
+
 };
 
 

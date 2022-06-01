@@ -45,3 +45,11 @@ unsigned int MenuItem::GetCyclesToPrepare() const {
 string MenuItem::ToString() {
     return "Name: " + name + ", price per " + unitsToString[portionUnit] + ": " + pricePerPortion.ToString();
 }
+
+ostream &operator<<(ostream &os, const shared_ptr<MenuItem> &item) {
+    return item->Write(os);
+}
+
+istream &operator>>(istream &is, shared_ptr<MenuItem> &item) {
+    return item->Read(is);
+}

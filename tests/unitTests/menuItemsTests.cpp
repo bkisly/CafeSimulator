@@ -5,6 +5,7 @@
 #define CATCH_CONFIG_MAIN
 
 #include <string>
+#include <sstream>
 #include <iostream>
 #include "../catch.hpp"
 #include "../../includes/model/MenuItem/beverage.h"
@@ -121,5 +122,62 @@ TEST_CASE("Overrides")
             CHECK(dish1.ToString() == "Name: Caesar salad, price per portion: $10.49, vegetarian: no");
             CHECK(dish2.ToString() == "Name: Fruit salad, price per portion: $4.00, vegetarian: yes");
         }
+    }
+}
+
+TEST_CASE("Stream operators")
+{
+    stringstream ss;
+
+    SECTION("Output")
+    {
+        Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 3);
+        coffee.Write(ss);
+        CHECK(ss.str() == "Coffee\n2 49 3 0");
+
+        Dessert cake("Cake", Price(10, 0), 2);
+        ss = stringstream();
+        cake.Write(ss);
+        CHECK(ss.str() == "Cake\n10 0 2");
+
+        Dish salad("Caesar salad", Price(15, 99), false, 5);
+        ss = stringstream();
+        salad.Write(ss);
+        CHECK(ss.str() == "Caesar salad\n15 99 5 0");
+    }
+
+    SECTION("Input")
+    {
+        ss = stringstream();
+        Beverage coffee("Coffee", Price(5, 99), CupType::Cup, 3);
+        Beverage gourmetCoffee("Gourmet coffee", Price(12, 99), CupType::Mug, 5);
+        gourmetCoffee.Write(ss);
+        coffee.Read(ss);
+
+        CHECK(coffee.GetName() == gourmetCoffee.GetName());
+        CHECK(coffee.GetPricePerPortion() == gourmetCoffee.GetPricePerPortion());
+        CHECK(coffee.GetCyclesToPrepare() == gourmetCoffee.GetCyclesToPrepare());
+        CHECK(coffee.GetCupType() == gourmetCoffee.GetCupType());
+
+        ss = stringstream();
+        Dessert cake("Cake", Price(6, 25), 2);
+        Dessert anotherCake("Gourmet cake", Price(9, 99), 4);
+        anotherCake.Write(ss);
+        cake.Read(ss);
+
+        CHECK(cake.GetName() == anotherCake.GetName());
+        CHECK(cake.GetPricePerPortion() == anotherCake.GetPricePerPortion());
+        CHECK(cake.GetCyclesToPrepare() == anotherCake.GetCyclesToPrepare());
+
+        ss = stringstream();
+        Dish salad("Normal salad", Price(10, 0), true, 4);
+        Dish unusualSalad("Unusual salad", Price(15, 0), false, 6);
+        unusualSalad.Write(ss);
+        salad.Read(ss);
+
+        CHECK(salad.GetName() == unusualSalad.GetName());
+        CHECK(salad.GetPricePerPortion() == unusualSalad.GetPricePerPortion());
+        CHECK(salad.GetCyclesToPrepare() == unusualSalad.GetCyclesToPrepare());
+        CHECK(salad.IsVegetarian() == unusualSalad.IsVegetarian());
     }
 }

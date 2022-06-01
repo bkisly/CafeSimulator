@@ -13,12 +13,17 @@ bool Dish::IsVegetarian() const {
 }
 
 ostream &Dish::Write(ostream &os) {
-    // TODO: implement writing to stream
+    os << name << endl;
+    os << pricePerPortion << " " << cyclesToPrepare << " " << vegetarian;
     return os;
 }
 
 istream &Dish::Read(istream &is) {
-    // TODO: implement reading from stream
+    if(is.peek() == '\n')
+        is.ignore();
+
+    getline(is, name);
+    is >> pricePerPortion >> cyclesToPrepare >> vegetarian;
     return is;
 }
 

@@ -5,6 +5,7 @@
 #ifndef CAFEMENU_DESSERT_H
 #define CAFEMENU_DESSERT_H
 
+#include <iostream>
 #include "menuItem.h"
 
 using namespace std;
