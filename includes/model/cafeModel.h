@@ -12,6 +12,7 @@
 #include "MenuItem/dish.h"
 
 #include "Databases/menuDatabase.h"
+#include "Databases/databaseService.h"
 #include "Employee/DbWorkers.h"
 
 #include "Customer/customer.h"
@@ -23,6 +24,7 @@ private:
     // Cafe resources
     MenuDatabase menuDb = MenuDatabase(make_shared<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3));
     DbWorkers employeesDb;
+    DatabaseService dbService;
 
     vector<shared_ptr<Table>> tables;
 
@@ -30,7 +32,6 @@ private:
     vector<CustomersGroup> unassignedCustomers;
     unsigned int currentCycle;
     vector<string> simulationLogBlocks;
-    string simulationLog;
     unsigned int totalCustomers;
 
     // Value generators
@@ -40,8 +41,7 @@ private:
     // Simulation sub-procedures
     void addNewCustomers();
     void assignCustomers(vector<Customer> &assignedCustomers);
-    void saveLog(vector<Customer> &assignedCustomers);
-    void removeServedCustomers();
+    void printLog(vector<Customer> &assignedCustomers);
 
 public:
     CafeModel(bool readFromService = true);    // readFromService parameter decides whether to read cafe information using DatabaseService object or Read defaults for test purposes
@@ -56,6 +56,10 @@ public:
 
     // Action methods
     void Simulate(unsigned int cycles, unsigned int customersInterval);
+
+    // Serialization
+    void SaveMenu();
+    void SaveLog(const string &outputName);
 };
 
 

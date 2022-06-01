@@ -127,5 +127,28 @@ istream &Table::Read(istream &is) {
 
 ostream &Table::Write(ostream &os) {
     return os;
+
+}
+    
+bool Table::HaveAllEaten() const {
+    for(const Customer &customer : customers)
+    {
+        if(customer.GetCurrentState() == CustomerState::Eating)
+            return false;
+    }
+
+    return true;
+}
+
+void Table::RemoveServedCustomers() {
+    vector<Customer> filteredCustomers;
+
+    for(Customer &customer : customers)
+    {
+        if(customer.GetCurrentState() != CustomerState::Leaving)
+            filteredCustomers.push_back(customer);
+    }
+
+    customers = filteredCustomers;
 }
 

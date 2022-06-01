@@ -1,5 +1,4 @@
 #include <iostream>
-#include <sstream>
 #include "includes/View/cafeView.h"
 
 void printHelp()
@@ -38,12 +37,12 @@ int main(int argc, char* argv[]) {
     }
     else if(modeArg == "-s")
     {
-        if(argc < 5)
+        if(argc < 6)
         {
             cerr << "Insufficient amount of arguments." << endl << endl;
             printHelp();
         }
-        else if(argc > 5)
+        else if(argc > 6)
         {
             cerr << "Too many arguments." << endl << endl;
             printHelp();
@@ -52,6 +51,7 @@ int main(int argc, char* argv[]) {
         {
             unsigned int numberOfCycles, customersInterval;
             double interval;
+            string outputName = argv[5];
             ss << argv[2];
             ss >> numberOfCycles;
             ss.clear();
@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
             ss << argv[4];
             ss >> customersInterval;
 
-            cafeView.InitSimulation(numberOfCycles, interval, customersInterval);
+            cafeView.InitSimulation(numberOfCycles, interval, customersInterval, outputName);
         }
     }
     else

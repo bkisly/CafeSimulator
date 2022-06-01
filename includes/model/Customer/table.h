@@ -28,7 +28,9 @@ public:
     unsigned int GetCapacity() const;
     vector<Customer> &GetCustomers();
     bool GetHasAssignedWaiter() const;
+    bool HaveAllEaten() const;
     void SetHasAssignedWaiter(bool hasAssignedWaiter);
+    void RemoveServedCustomers();
 
     unsigned int GetAmountOfItemsToPrepare() const;
     shared_ptr<MenuItem> PopLastItemToPrepare();

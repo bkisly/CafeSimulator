@@ -49,6 +49,7 @@ add_library(
         viewModel
         includes/model/cafeModel.h src/cafeModel.cpp
         includes/view/cafeView.h src/cafeView.cpp
+        includes/model/Databases/databaseService.h src/Databases/databaseService.cpp
 )
 
 # tests

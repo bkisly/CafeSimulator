@@ -120,6 +120,7 @@ void CafeView::addItem() {
             }
 
             cout << "Successfully added new item!" << endl << endl;
+            model.SaveMenu();
             validItem = true;
         }
         catch (exception &e)
@@ -147,6 +148,7 @@ void CafeView::removeItem() {
     {
         model.GetMenu().RemoveItem(itemName);
         cout << "Successfully removed an item!" << endl << endl;
+        model.SaveMenu();
     }
     catch(exception &e)
     {
@@ -203,10 +205,11 @@ CafeView::CafeView(bool readFromService) {
     model = CafeModel(readFromService);
 }
 
-void CafeView::InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval) {
+void CafeView::InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval, const string& outputName) {
     try
     {
         model.Simulate(numberOfCycles, customersInterval);
+        model.SaveLog(outputName);
 
         for(const string &block : model.GetSimulationLogBlocks())
         {

@@ -51,26 +51,7 @@ void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
         unassignedCustomers.erase(unassignedCustomers.begin() + id);
 }
 
-void CafeModel::removeServedCustomers() {
-    for(auto &table : tables)
-    {
-        vector<Customer> newCustomers;
-
-        for(Customer &customer : table->GetCustomers())
-        {
-            if(!customer.isReceivedReceipt())
-                newCustomers.push_back(customer);
-        }
-
-        if(newCustomers.size() != table->GetCustomers().size())
-        {
-            table->GetCustomers().clear();
-            table->GetCustomers().insert(table->GetCustomers().begin(), newCustomers.begin(), newCustomers.end());
-        }
-    }
-}
-
-void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
+void CafeModel::printLog(vector<Customer> &assignedCustomers) {
     // 7a. Print header
     string block = "==========\nSIMULATION CYCLE NR " + to_string(currentCycle + 1) + "\n==========\n\n";
     simulationLogBlocks.push_back(block);
@@ -114,7 +95,7 @@ CafeModel::CafeModel(bool readFromService) {
     currentCycle = 0;
     totalCustomers = 0;
 
-    if(!readFromService)
+    if(!readFromService || !DatabaseService::FileExists(DatabaseService::MENU_FILENAME))
     {
         vector<shared_ptr<MenuItem>> menuItems
         {
@@ -153,7 +134,8 @@ CafeModel::CafeModel(bool readFromService) {
     }
     else
     {
-        // TODO: load application data from service
+        // Load application data from service
+        menuDb = dbService.ReadMenu();
     }
 }
 
@@ -176,6 +158,11 @@ unsigned int CafeModel::GetCurrentCycle() const {
 }
 
 string CafeModel::GetSimulationLog() const {
+    string simulationLog;
+
+    for(const string &block : simulationLogBlocks)
+        simulationLog += block;
+
     return simulationLog;
 }
 
@@ -225,15 +212,16 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
             }
         }
 
-        // 3. Update state of all employees
+        // 3. Remove served customers
+        for(auto &table : tables)
+            table->RemoveServedCustomers();
+
+        // 4. Update state of all employees
         employeesDb.advanceCycleAll();
 
         // 4. Update state of all assigned customers
         for(auto &table : tables)
             table->AdvanceStateAll();
-
-        // Remove served customers
-        removeServedCustomers();
 
         // 5. Assign unassigned customers
         assignCustomers(assignedCustomers);
@@ -243,8 +231,16 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
             addNewCustomers();
 
         // 7. Save log
-        saveLog(assignedCustomers);
+        printLog(assignedCustomers);
 
         currentCycle++;
     }
+}
+
+void CafeModel::SaveMenu() {
+    dbService.WriteMenu(menuDb);
+}
+
+void CafeModel::SaveLog(const string &outputName) {
+    dbService.WriteSimulationLog(GetSimulationLog(), outputName);
 }
