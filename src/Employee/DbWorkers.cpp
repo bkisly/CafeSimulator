@@ -94,6 +94,7 @@ void DbWorkers::checkIdExists(int id) {
 }
 
 bool DbWorkers::assignDishToFreeCook(shared_ptr<MenuItem> menuItem) {
+    bool succeeded = false;
     for (auto &worker_ptr: workers) {
         Cook* cook = dynamic_cast<Cook*>(&*worker_ptr);
         if (cook){
@@ -103,6 +104,7 @@ bool DbWorkers::assignDishToFreeCook(shared_ptr<MenuItem> menuItem) {
             }
         }
     }
+
     return false;
 }
 

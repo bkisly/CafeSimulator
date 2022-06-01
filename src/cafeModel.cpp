@@ -70,7 +70,7 @@ void CafeModel::removeServedCustomers() {
     }
 }
 
-void CafeModel::saveLog(vector<Customer> &assignedCustomers) {
+void CafeModel::printLog(vector<Customer> &assignedCustomers) {
     // 7a. Print header
     string block = "==========\nSIMULATION CYCLE NR " + to_string(currentCycle + 1) + "\n==========\n\n";
     simulationLogBlocks.push_back(block);
@@ -114,7 +114,7 @@ CafeModel::CafeModel(bool readFromService) {
     currentCycle = 0;
     totalCustomers = 0;
 
-    if(!readFromService)
+    if(!readFromService || !DatabaseService::FileExists(DatabaseService::MENU_FILENAME))
     {
         vector<shared_ptr<MenuItem>> menuItems
         {
@@ -153,7 +153,8 @@ CafeModel::CafeModel(bool readFromService) {
     }
     else
     {
-        // TODO: load application data from service
+        // Load application data from service
+        menuDb = dbService.ReadMenu();
     }
 }
 
@@ -176,6 +177,11 @@ unsigned int CafeModel::GetCurrentCycle() const {
 }
 
 string CafeModel::GetSimulationLog() const {
+    string simulationLog;
+
+    for(const string &block : simulationLogBlocks)
+        simulationLog += block;
+
     return simulationLog;
 }
 
@@ -243,8 +249,16 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
             addNewCustomers();
 
         // 7. Save log
-        saveLog(assignedCustomers);
+        printLog(assignedCustomers);
 
         currentCycle++;
     }
+}
+
+void CafeModel::SaveMenu() {
+    dbService.WriteMenu(menuDb);
+}
+
+void CafeModel::SaveLog(const string &outputName) {
+    dbService.WriteSimulationLog(GetSimulationLog(), outputName);
 }

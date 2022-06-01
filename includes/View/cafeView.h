@@ -37,7 +37,7 @@ public:
     CafeView(bool readFromService = true);
 
     void InitAdminMode();
-    void InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval);
+    void InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval, const string& outputName);
 };
 
 
