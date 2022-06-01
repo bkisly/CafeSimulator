@@ -78,3 +78,19 @@ TEST_CASE("Collection methods")
         CHECK_THROWS_AS(menu.RemoveItem("Cake"), ItemExistenceException);
     }
 }
+
+TEST_CASE("Stream operations")
+{
+    stringstream ss;
+
+    SECTION("Output")
+    {
+        MenuDatabase db(make_shared<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3));
+        db.AddItem(make_shared<Dessert>("Cake", Price(5, 99), 2));
+        db.AddItem(make_shared<Dish>("Caesar salad", Price(19, 99), true, 5));
+
+        ss << db;
+
+        CHECK(ss.str() == "012\nCoffee\n2 49 3 0\nCake\n5 99 2\nCaesar salad\n19 99 5 1\n");
+    }
+}

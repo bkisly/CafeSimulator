@@ -11,6 +11,9 @@
 #include <algorithm>
 #include <memory>
 #include "../MenuItem/menuItem.h"
+#include "../MenuItem/beverage.h"
+#include "../MenuItem/dessert.h"
+#include "../MenuItem/dish.h"
 #include "iDatabase.h"
 
 using namespace std;

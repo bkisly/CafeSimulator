@@ -88,6 +88,26 @@ istream &MenuDatabase::Read(istream &is) {
 }
 
 ostream &operator<<(ostream &os, const MenuDatabase &menu) {
+    string typesRecord;
+
+    for(const shared_ptr<MenuItem> &item : menu.items)
+    {
+        if(typeid(*item.get()) == typeid(Beverage&))
+            typesRecord += '0';
+        else if(typeid(*item.get()) == typeid(Dessert&))
+            typesRecord += '1';
+        else if(typeid(*item.get()) == typeid(Dish&))
+            typesRecord += '2';
+    }
+
+    os << typesRecord << endl;
+
+    for(const shared_ptr<MenuItem> &item : menu.items)
+    {
+        item->Write(os);
+        os << endl;
+    }
+
     return os;
 }
 
