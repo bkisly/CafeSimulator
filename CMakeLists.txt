@@ -75,7 +75,7 @@ add_executable(simulationRunner tests/integrationTests/simulationRunner.cpp)
 target_link_libraries(simulationRunner PRIVATE viewModel menu database employee helpers customer)
 
 add_executable(dbEmployeesTests tests/unitTests/DbEmployeeTests.cpp)
-target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu customer)
+target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu customer database)
 
 add_executable(databaseSchemeTests tests/unitTests/databaseScheme.cpp)
 target_link_libraries(databaseSchemeTests PRIVATE customer database menu helpers employee)

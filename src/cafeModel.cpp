@@ -82,7 +82,7 @@ void CafeModel::printLog(vector<Customer> &assignedCustomers) {
     // 7d. Print employees state
 
     block = "\n--- Employees state ---\n";
-    for(auto &employee : employeesDb.GetEmployees())
+    for(auto &employee : employeesDb.GetItems())
     {
         block += employee->printStateLog();
     }
@@ -195,7 +195,7 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
 
 
         // 2. Assign tables to free waiters
-        for(auto &employee : employeesDb.GetEmployees())
+        for(auto &employee : employeesDb.GetItems())
         {
             if(typeid(*employee.get()) == typeid(Waiter&))
             {

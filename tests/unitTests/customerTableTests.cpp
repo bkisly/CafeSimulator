@@ -8,7 +8,6 @@
 #include "../../includes/model/Customer/customer.h"
 #include "../../includes/model/MenuItem/beverage.h"
 #include "../../includes/model/Customer/table.h"
-#include "../../includes/model/Employee/DbWorkers.h"
 
 TEST_CASE("Customer tests")
 {

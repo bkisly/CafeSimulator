@@ -13,7 +13,7 @@
 
 #include "Databases/menuDatabase.h"
 #include "Databases/databaseService.h"
-#include "Employee/DbWorkers.h"
+#include "Databases/CustomEmployeesDb.h"
 
 #include "Customer/customer.h"
 #include "Customer/customersGroup.h"
@@ -23,7 +23,7 @@ class CafeModel {
 private:
     // Cafe resources
     MenuDatabase menuDb = MenuDatabase(make_shared<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3));
-    DbWorkers employeesDb;
+    CustomEmployeesDb employeesDb;
     DatabaseService dbService;
 
     vector<shared_ptr<Table>> tables;

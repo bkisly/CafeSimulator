@@ -5,7 +5,10 @@ void printHelp()
 {
     cout << "USAGE:" << endl;
     cout << "-h -> open help" << endl;
-    cout << "-s [number of cycles] [print interval] [customers interval] -> perform a simulation for the given number of cycles" << endl;
+    cout << "-s [number of cycles] [print interval] [customers interval] [output "
+            "filename] "
+            "-> "
+            "perform a simulation for the given number of cycles" << endl;
     cout << "-a -> enter admin mode (modify menu and employee databases)" << endl;
 }
 

@@ -3,7 +3,6 @@
 #include "../catch.hpp"
 #include "../../includes/model/helpers/price.h"
 #include "../../includes/model/Employee/Employee.h"
-#include "../../includes/model/Employee/DbWorkers.h"
 #include "../../includes/model/Employee/Exceptions.h"
 #include "../../includes/model/Employee/Waiter.h"
 #include "../../includes/model/Employee/Cook.h"
@@ -69,14 +68,6 @@ TEST_CASE("cook setter") {
 }
 
 
-
-TEST_CASE("cook printStateLog") {
-    Price salary(3000, 0);
-    Cook cook(11, "Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
-    CHECK(cook.printStateLog() == "cook 11 - free\n");
-    cook.setAssignedMenuItem(std::string());
-    CHECK(cook.printStateLog() == "cook 11 - started preparing Cake\n");
-}
 
 TEST_CASE("cook in out operators") {
     Price salary(3000, 0);

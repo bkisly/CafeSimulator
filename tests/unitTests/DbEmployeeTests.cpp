@@ -8,14 +8,13 @@
 #include "../../includes/model/Employee/Cook.h"
 #include "../../includes/model/MenuItem/dessert.h"
 #include "../../includes/model/MenuItem/dish.h"
-#include "../../includes/model/Employee/DbWorkers.h"
-#include <sstream>
+#include "../../includes/model/Databases/CustomEmployeesDb.h"
 
 using std::stringstream;
 
 TEST_CASE("Employee status") {
     Price salary(3000, 0);
-    DbWorkers workers;
+    CustomEmployeesDb workers;
     workers.addCook("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
     workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
@@ -25,32 +24,23 @@ TEST_CASE("Employee status") {
 
 TEST_CASE("employee removal"){
     Price salary(3000, 0);
-    DbWorkers workers;
+    CustomEmployeesDb workers;
     workers.addCook("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
     workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
 
     SECTION("remove non existing"){
-        REQUIRE_THROWS_AS(workers.removeWorkerById(5), IdException);
+        REQUIRE_THROWS(workers.RemoveItem(5));
     }
     SECTION("remove existing"){
-        REQUIRE_NOTHROW(workers.removeWorkerById(2));
-        REQUIRE_THROWS_AS(workers.removeWorkerById(2), IdException);
+        REQUIRE_NOTHROW(workers.RemoveItem(1));
+        CHECK(workers.GetItems().size() == 2);
+
+        REQUIRE_THROWS(workers.RemoveItem(2));
     }
 }
 
 
-TEST_CASE("assign free cook"){
-    Price salary(3000, 0);
-    DbWorkers workers;
-    workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
-    workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
-    workers.addCook("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, 26);
-    CHECK(workers.assignDishToFreeCook(make_unique<Dessert>(Dessert("Cake", Price(5, 0),
-                                                                    2))));
-    CHECK(workers.assignDishToFreeCook(make_unique<Dessert>(Dessert("Cake", Price(5, 0),
-                                                                    2))) == false);
-}
 
 
 
