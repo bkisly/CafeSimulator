@@ -3,13 +3,26 @@
 #include "iDatabase.h"
 #include "../Customer/table.h"
 #include "../Employee/Employee.h"
-#include "../MenuItem/exceptions.h"
+#include "../MenuItem/Exceptions.h"
 #include "templateDatabase.h"
+#include "../Employee/Cook.h"
+#include "../Employee/Waiter.h"
 
 class CustomEmployeesDb : public TemplateDatabase<Employee> {
 public:
-    void AddWaiter(const string &name, const string &surname, int gender, Price baseSalary,
+    void addWaiter(const string &name, const string &surname, int gender, Price baseSalary,
                    unsigned baseAmountOfShifts, bool canServeAlcohol);
+    void addCook(const string &name, const string &surname, int gender, Price baseSalary,
+                 unsigned baseAmountOfShifts, unsigned int knownCuisines);
+    int getWorkerState(int id);
+    void advanceCycleAll();
+    void assignDishToFreeCook(shared_ptr<MenuItem> menuItem);
+
+#if DEBUG
+    Cook* getCook(int id);
+    Waiter* getWaiter(int id);
+#endif
+
 };
 
 

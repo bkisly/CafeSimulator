@@ -6,7 +6,6 @@
 #include "../catch.hpp"
 #include "../../includes/model/helpers/price.h"
 #include "../../includes/model/Employee/Employee.h"
-#include "../../includes/model/Employee/DbWorkers.h"
 #include "../../includes/model/Employee/Exceptions.h"
 #include "../../includes/model/Employee/Waiter.h"
 #include "../../includes/model/Employee/Cook.h"
@@ -14,6 +13,7 @@
 #include "../../includes/model/MenuItem/dish.h"
 #include "../../includes/model/MenuItem/beverage.h"
 #include "../../includes/model/Databases/CustomTableDb.h"
+#include "../../includes/model/Databases/CustomEmployeesDb.h"
 #include <sstream>
 
 using std::stringstream;
@@ -23,7 +23,7 @@ using std::stringstream;
 #if DEBUG
 
 TEST_CASE("cook simple simulation states") {
-    DbWorkers workers;
+    CustomEmployeesDb workers;
     Price salary(3000, 0);
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
     workers.addCook("Tomasz", "Kowal", Cook::Gender::male, salary, 4, 26);
@@ -59,12 +59,51 @@ TEST_CASE("cook simple simulation states") {
     workers.advanceCycleAll(); // 2nd
     CHECK(workers.getWorkerState(0) == Cook::CookState::free);
 }
+
+TEST_CASE("cook - single -  assigned item"){
+    CustomEmployeesDb workers;
+    Price salary(3000, 0);
+    workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
+    workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
+    workers.addWaiter("Tomasz", "Burak", Waiter::Gender::male, salary, 4, 0);
+
+    //     prepare table and customers
+    Beverage coffee("Coffee", Price(2, 49), CupType::Cup, 2);
+    Beverage tee("tee", Price(1, 49), CupType::Cup, 2);
+
+    vector<Customer> customers1;
+    customers1.emplace_back(Customer(1, true, make_unique<Beverage>(coffee)));
+    customers1.emplace_back(Customer(2, true, make_unique<Beverage>(tee)));
+    customers1.emplace_back(Customer(3, true, make_unique<Beverage>(coffee)));
+
+    CustomersGroup group1(customers1);
+    Table table(1, 5);
+    shared_ptr<Table> tablePtr =  make_shared<Table>(table);
+    CHECK(tablePtr->TryAddCustomers(group1));
+
+
+    workers.getWaiter(1)->setAssignedTable(tablePtr);
+    tablePtr->AdvanceStateAll();
+    tablePtr->AdvanceStateAll();
+    tablePtr->AdvanceStateAll();
+
+    workers.advanceCycleAll();
+    workers.advanceCycleAll();
+    CHECK(workers.getWorkerState(0) == Cook::CookState::free);
+    workers.advanceCycleAll();
+    workers.advanceCycleAll(); // waiter is preparing orders
+    CHECK(workers.getWorkerState(0) == Cook::CookState::busy);
+    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "Name: Coffee, price per liter: $2.49, cup type: Cup");
+    workers.advanceCycleAll();
+    CHECK(workers.getCook(0)->getAssignedMenuItemName() == "Name: Coffee, price per liter: $2.49, cup type: Cup");
+}
+
 #endif
 
 #if DEBUG
 TEST_CASE("waiter setAssignedTable") {
     Price salary(3000, 0);
-    DbWorkers workers;
+    CustomEmployeesDb workers;
     workers.addWaiter("Tomasz", "Nowak", Waiter::Gender::male, salary, 4, true);
     CHECK_NOTHROW(workers.getWaiter(0)->setAssignedTable(make_shared<Table>(Table())));
     // not that without advancing cycle state is not updated -> table can be reassigned
@@ -77,7 +116,7 @@ TEST_CASE("waiter setAssignedTable") {
 
 #if DEBUG
 TEST_CASE("waiter cook big simulation") {
-    DbWorkers workers;
+    CustomEmployeesDb workers;
     Price salary(3000, 0);
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
@@ -160,7 +199,7 @@ TEST_CASE("waiter cook big simulation") {
 }
 
 TEST_CASE("waiter cook big simulation CustomTableDB version") {
-    DbWorkers workers;
+    CustomEmployeesDb workers;
     Price salary(3000, 0);
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
@@ -249,7 +288,7 @@ TEST_CASE("waiter cook big simulation CustomTableDB version") {
 }
 
 TEST_CASE("waiter - finish serving the table"){
-    DbWorkers workers;
+    CustomEmployeesDb workers;
     Price salary(3000, 0);
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
@@ -282,7 +321,7 @@ TEST_CASE("waiter - finish serving the table"){
 
 #if DEBUG
 TEST_CASE("waiter collect orders"){
-    DbWorkers workers;
+    CustomEmployeesDb workers;
     Price salary(3000, 0);
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);
@@ -329,7 +368,7 @@ TEST_CASE("waiter collect orders"){
 
 #if DEBUG
 TEST_CASE("waiter calculate receipt"){
-    DbWorkers workers;
+    CustomEmployeesDb workers;
     Price salary(3000, 0);
     workers.addCook("Tomasz", "Nowak", Cook::Gender::male, salary, 4, 26);
     workers.addWaiter("Tomasz", "Kowal", Waiter::Gender::male, salary, 4, 0);

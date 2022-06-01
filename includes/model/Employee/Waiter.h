@@ -50,6 +50,7 @@ private:
     Price receipt;
 
     friend class DbWorkers;
+    friend class CustomEmployeesDb;
 
 //    legacy
     bool can_serve_alcohol;

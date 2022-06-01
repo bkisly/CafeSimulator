@@ -26,7 +26,7 @@ TEST_CASE("basic object"){
     CHECK(db2.CountItems() == 2);
     CHECK(db2.GetItems().size() == 2);
     REQUIRE_THROWS(db2.RemoveItem(2));
-     db2.RemoveItem(1);
+    db2.RemoveItem(1);
     CHECK(db2.CountItems() == 1);
 
 

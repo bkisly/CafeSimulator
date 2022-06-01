@@ -65,6 +65,8 @@ protected:
     unsigned int base_amount_of_shifts;
 
     friend class DbWorkers;
+    friend class CustomEmployeesDb;
+
 };
 
 //std::ostream &operator<<(std::ostream &os, const Employee &worker);

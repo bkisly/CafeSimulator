@@ -8,10 +8,11 @@ template<class T>
 class TemplateDatabase  : public IDatabaseExtended<T>  {
 protected:
     vector<shared_ptr<T>> items;
+    int newIdToAssign;
 
     void validateId(shared_ptr<T> newItem) override;
 public:
-    TemplateDatabase() = default;
+    TemplateDatabase();
     TemplateDatabase(std::shared_ptr<T> item);
     TemplateDatabase(std::vector<std::shared_ptr<T>> newItems);
     void AddItem(std::shared_ptr<T> item) override;
@@ -27,6 +28,7 @@ template<class T>
 void TemplateDatabase<T>::AddItem(shared_ptr<T> item) {
     validateId(item);
     items.push_back(item);
+    newIdToAssign++;
 }
 
 //template<class T>
@@ -71,11 +73,13 @@ void TemplateDatabase<T>::validateId(shared_ptr<T> newItem) {
 template<class T>
 TemplateDatabase<T>::TemplateDatabase(shared_ptr<T> item) {
     items.push_back(item);
+    newIdToAssign = 0;
 }
 
 template<class T>
 TemplateDatabase<T>::TemplateDatabase(vector<std::shared_ptr<T>> newItems) {
     this->items = newItems;
+    newIdToAssign = 0;
 }
 
 template<class T>
@@ -95,6 +99,11 @@ std::istream &TemplateDatabase<T>::Read(istream &is) {
         items.push_back(make_shared<T>(newObject));
     }
     return is;
+}
+
+template<class T>
+TemplateDatabase<T>::TemplateDatabase() {
+    newIdToAssign = 0;
 }
 
 

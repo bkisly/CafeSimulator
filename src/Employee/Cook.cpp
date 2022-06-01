@@ -75,6 +75,11 @@ void Cook::setAssignedMenuItem(std::shared_ptr<MenuItem> newAssignedMenuItem) {
     Cook::assignedMenuItem  = newAssignedMenuItem;
     currentState = CookState::busy;
 }
+#if DEBUG
+string Cook::getAssignedMenuItemName() const {
+    return assignedMenuItem->ToString();
+}
+#endif
 
 
 

@@ -23,6 +23,9 @@ public:
     };
     void setAssignedMenuItem(shared_ptr<MenuItem> newAssignedMenuItem);
 
+#if DEBUG
+    string getAssignedMenuItemName() const;
+#endif
 
 //  constructors, operators ...
     Cook();
@@ -45,6 +48,7 @@ private:
     std::shared_ptr<MenuItem> assignedMenuItem;
 
     friend class DbWorkers;
+    friend class CustomEmployeesDb;
 
 
 };
