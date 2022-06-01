@@ -15,3 +15,11 @@ bool CustomTableDb::TryAssignCustomersGroup(CustomersGroup customersGroup) {
     return false;
 }
 
+std::ostream &operator<<(ostream &os, CustomTableDb &db) {
+    return db.Write(os);
+}
+
+
+std::istream &operator>>(std::istream &in, CustomTableDb &db) {
+    return db.Read(in);
+}

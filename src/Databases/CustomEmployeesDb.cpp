@@ -1,7 +1,7 @@
-#include "CustomEmployeesDb.h"
-#include "../Employee/Waiter.h"
-#include "../Employee/Cook.h"
-#include "../Employee/Exceptions.h"
+#include "../../includes/model/Databases/CustomEmployeesDb.h"
+#include "../../includes/model/Employee/Waiter.h"
+#include "../../includes/model/Employee/Cook.h"
+#include "../../includes/model/Employee/Exceptions.h"
 
 void CustomEmployeesDb::addWaiter(const string &name, const string &surname, int gender,
                                   Price baseSalary, unsigned int baseAmountOfShifts,
@@ -132,6 +132,36 @@ int CustomEmployeesDb::getAmountOfCooks() {
         }
     }
     return counter;
+}
+
+std::ostream &operator<<(ostream &os, CustomEmployeesDb &db) {
+    return db.Write(os);
+}
+
+std::istream &operator>>(std::istream &in, CustomEmployeesDb &db) {
+    return db.Read(in);
+}
+
+std::istream &CustomEmployeesDb::Read(istream &is) {
+    items.clear();
+    int amount;
+    char kind;
+    is >> amount;
+    while (amount>0){
+        is >> kind;
+        if (kind == 'w'){
+            Waiter waiter;
+            waiter.Read(is);
+            items.push_back(make_shared<Waiter>(waiter));
+        }
+        else{
+            Cook cook;
+            cook.Read(is);
+            items.push_back(make_shared<Cook>(cook));
+        }
+        amount--;
+    }
+    return is;
 }
 
 

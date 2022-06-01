@@ -42,8 +42,11 @@ public:
     bool TryAddCustomers(CustomersGroup &customersGroup);
     string ToString() const;
 
-    ostream &Write(ostream &os) ;
+    ostream &Write(ostream &os);
     istream &Read(istream &is);
+
+    friend std::ostream &operator<<(std::ostream &os, Table &table);
+    friend std::istream &operator>>(std::istream &in, Table &table);
 
 #if DEBUG
     // only for tests

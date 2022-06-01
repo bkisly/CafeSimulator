@@ -25,6 +25,7 @@ unsigned int Waiter::calculate_shifts_per_week() const noexcept {
 }
 
 std::ostream &Waiter::Write(std::ostream &os) const noexcept {
+    os << "w" << " ";
     Employee::Write(os);
     os << " " << can_serve_alcohol;
     return os;

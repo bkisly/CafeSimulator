@@ -122,12 +122,16 @@ void Table::SetHasAssignedWaiter(bool hasAssignedWaiter) {
 }
 
 istream &Table::Read(istream &is) {
+    int capacity, id;
+    is >> id >> capacity;
+    this->id = id;
+    this->capacity = capacity;
     return is;
 }
 
 ostream &Table::Write(ostream &os) {
+    os  << id <<" "<< capacity;
     return os;
-
 }
     
 bool Table::HaveAllEaten() const {
@@ -150,5 +154,13 @@ void Table::RemoveServedCustomers() {
     }
 
     customers = filteredCustomers;
+}
+
+std::ostream &operator<<(ostream &os, Table &table) {
+    return table.Write(os);
+}
+
+std::istream &operator>>(std::istream &in, Table &table) {
+    return table.Read(in);
 }
 

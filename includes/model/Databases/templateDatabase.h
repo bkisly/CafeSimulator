@@ -21,6 +21,8 @@ public:
     std::vector<std::shared_ptr<T>> &GetItems() override;
     std::ostream &Write(std::ostream &os) override;
     std::istream &Read(std::istream &is) override;
+
+//    friend std::ostream &operator<<(std::ostream &os, T &collection);
 };
 
 
@@ -84,8 +86,10 @@ TemplateDatabase<T>::TemplateDatabase(vector<std::shared_ptr<T>> newItems) {
 
 template<class T>
 std::ostream &TemplateDatabase<T>::Write(ostream &os) {
+    os << items.size() << "\n";
     for (const auto &item: items) {
         item->Write(os);
+        os << "\n";
     }
     return os;
 }
@@ -93,10 +97,13 @@ std::ostream &TemplateDatabase<T>::Write(ostream &os) {
 template<class T>
 std::istream &TemplateDatabase<T>::Read(istream &is) {
     items.clear();
-    while(!cin.eof()){
+    int amount;
+    is >> amount;
+    while (amount>0){
         T newObject;
         newObject.Read(is);
         items.push_back(make_shared<T>(newObject));
+        amount--;
     }
     return is;
 }
@@ -105,6 +112,11 @@ template<class T>
 TemplateDatabase<T>::TemplateDatabase() {
     newIdToAssign = 0;
 }
+
+//template<class T>
+//std::ostream &operator<<(ostream &os, T &collection) {
+//    return collection.Write(os);
+//}
 
 
 #endif //TEMPLATEDATABASE_H

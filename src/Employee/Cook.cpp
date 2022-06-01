@@ -27,6 +27,7 @@ unsigned int Cook::calculate_shifts_per_week() const noexcept {
 }
 
 std::ostream &Cook::Write(std::ostream &os) const noexcept{
+    os << "c" << " ";
     Employee::Write(os);
     os << " " << known_cuisines;
     return os;

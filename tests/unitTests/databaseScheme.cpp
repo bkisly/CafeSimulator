@@ -38,6 +38,35 @@ TEST_CASE("new employees"){
                                           Price(2000,0), 4, true)));
     db.AddItem(make_shared<Waiter>(Waiter(2, "Jan", "Nowal", Employee::Gender::male,
                                           Price(2000,0), 4, true)));
-    CHECK(db.GetItems().size() == 2);
+    db.AddItem(make_shared<Cook>(Cook(3, "Jan", "Nowal", Employee::Gender::male,
+                                          Price(2000,0), 4, 9)));
+    CHECK(db.GetItems().size() == 3);
+    stringstream ss;
+    ss << db;
+    string a =ss.str();
+    CHECK(ss.str() =="3\nw Jan\nNowal\n1 1 2000 0 4 1\nw Jan\nNowal\n2 1 2000 0 4 1\nc"
+                     " Jan\nNowal\n3 1 2000 0 4 9\n");
+    CustomEmployeesDb db2;
+    stringstream ss2;
+    ss >> db2;
+    ss2 << db2;
+    string b = ss2.str();
+    CHECK(db2.GetItems()[2]->get_base_amount_of_shifts() == 4);
+
+}
+
+TEST_CASE("tables in out"){
+    CustomTableDb db1;
+    db1.AddItem(make_shared<Table>(Table(1,5)));
+    db1.AddItem(make_shared<Table>(Table(2,5)));
+    stringstream ss;
+    ss << db1;
+    CHECK(ss.str() == "2\n1 5\n2 5\n");
+
+    CustomTableDb db2;
+    stringstream  ss2;
+    ss >> db2;
+    ss2 << db2;
+    CHECK(ss.str() == ss2.str());
 }
 

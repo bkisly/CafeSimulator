@@ -89,6 +89,8 @@ std::istream &Employee::Read(std::istream &in) {
     in >> id >> gender >> salary >> shifts;
     this -> name = name;
     this -> surname = surname;
+    this->currentState = 0;
+    this -> cyclesLeft = 0;
     this -> id = id;
     this -> gender = gender;
     this -> base_salary = salary;
@@ -102,8 +104,7 @@ std::ostream &operator<<(std::ostream &os, const Employee &worker) {
 }
 
 std::istream &operator>>(std::istream &in, Employee &worker) {
-    worker.Read(in);
-    return in;
+    return worker.Read(in);
 }
 
 string Employee::printProperties() const noexcept {

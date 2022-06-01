@@ -20,6 +20,11 @@ public:
     void advanceCycleAll();
     void assignItemsCooks(int cycles, string itemsList);
 
+    std::istream &Read(std::istream &in);
+
+    friend std::ostream &operator<<(std::ostream &os, CustomEmployeesDb &db);
+    friend std::istream &operator>>(std::istream &in, CustomEmployeesDb &db);
+
 #if DEBUG
     Cook* getCook(int id);
     Waiter* getWaiter(int id);
