@@ -121,3 +121,11 @@ void Table::SetHasAssignedWaiter(bool hasAssignedWaiter) {
     this->hasAssignedWaiter = hasAssignedWaiter;
 }
 
+istream &Table::Read(istream &is) {
+    return is;
+}
+
+ostream &Table::Write(ostream &os) {
+    return os;
+}
+

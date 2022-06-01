@@ -63,7 +63,7 @@ add_executable(employeeTests tests/unitTests/employeeTests.cpp)
 target_link_libraries(employeeTests PRIVATE employee helpers menu customer)
 
 add_executable(employeeSimulationTests tests/integrationTests/employeeSimulationTests.cpp)
-target_link_libraries(employeeSimulationTests PRIVATE employee helpers menu customer)
+target_link_libraries(employeeSimulationTests PRIVATE database employee helpers menu customer)
 
 add_executable(customerTableTests tests/unitTests/customerTableTests.cpp)
 target_link_libraries(customerTableTests PRIVATE customer menu helpers employee)

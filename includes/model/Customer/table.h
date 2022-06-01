@@ -40,6 +40,9 @@ public:
     bool TryAddCustomers(CustomersGroup &customersGroup);
     string ToString() const;
 
+    ostream &Write(ostream &os) ;
+    istream &Read(istream &is);
+
 #if DEBUG
     // only for tests
     void ClearAllCustomers();

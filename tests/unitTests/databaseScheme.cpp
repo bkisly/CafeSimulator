@@ -28,7 +28,6 @@ TEST_CASE("basic object"){
 
     CustomTableDb db3;
     db3.AddItem(make_shared<Table>(Table(1,5)));
-    cout<<"\n"<<db3.GetFristTableId();
     db3.RemoveItem(1);
 
 }
