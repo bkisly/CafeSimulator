@@ -34,5 +34,10 @@ public:
     FileException(const string &message);
 };
 
+class NetworkException : public invalid_argument {
+public:
+    NetworkException(const string &message);
+};
+
 
 #endif //CAFEMENU_EXCEPTIONS_H

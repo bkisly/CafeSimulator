@@ -11,3 +11,6 @@ InvalidPriceException::InvalidPriceException(const string &message) : invalid_ar
 ItemExistenceException::ItemExistenceException(const string &message) : invalid_argument(message) {}
 IndexOutOfRangeException::IndexOutOfRangeException(const string &message) : invalid_argument(message) {}
 FileException::FileException(const string &message) : invalid_argument(message) {}
+NetworkException::NetworkException(const string &message) : invalid_argument(message) {
+
+}
