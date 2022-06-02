@@ -51,6 +51,8 @@ public:
 
     // Getters
     MenuDatabase &GetMenu();
+    CustomEmployeesDb &GetEmployees();
+    CustomTableDb &GetTablesDb();
     string GetSimulationLog() const;
     const vector<string> &GetSimulationLogBlocks() const;
 

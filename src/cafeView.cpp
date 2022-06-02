@@ -173,6 +173,109 @@ void CafeView::showMenu() {
 
 void CafeView::addEmployee() {
     cout << "Adding new employee..." << endl << endl;
+
+    vector<string> employeeTypes = {
+        "Waiter",
+        "Cook",
+        "Cancel"
+    };
+
+    bool finished = false;
+
+    do {
+        unsigned int employeeTypeOption = printOptions("Select employee type to add:", employeeTypes);
+
+        if(employeeTypeOption == 2) break;
+
+        stringstream ss;
+        string name, surname, dollarsString, centsString, shiftsString;
+        unsigned int dollars, cents, shifts;
+
+        cout << "Name: ";
+
+        if(cin.peek() == '\n')
+            cin.ignore();
+
+        getline(cin, name);
+
+        cout << "Surname: ";
+
+        if(cin.peek() == '\n')
+            cin.ignore();
+
+        getline(cin, surname);
+
+        vector<string> genderOptions = { "Female", "Male" };
+        int gender = (int)printOptions("Gender:", genderOptions);
+
+        cout << "Salary (dollars part): ";
+        cin >> dollarsString;
+        ss << dollarsString;
+        ss >> dollars;
+        ss.clear();
+        cout << endl;
+
+        cout << "Salary (cents part): ";
+        cin >> centsString;
+        ss << centsString;
+        ss >> cents;
+        ss.clear();
+        cout << endl;
+
+        cout << "Shifts amount: ";
+        cin >> shiftsString;
+        ss << shiftsString;
+        ss >> shifts;
+        ss.clear();
+        cout << endl;
+
+        try
+        {
+            Price salary(dollars, cents);
+
+            switch (employeeTypeOption) {
+                case 0:
+                {
+                    vector<string> alcoholOptions = { "Yes", "No" };
+                    unsigned int alcoholOption = printOptions("Choose whether the waiter can serve alcohol or not:", alcoholOptions);
+                    bool canServeAlcohol = alcoholOption == 0;
+
+                    model.GetEmployees().addWaiter(name, surname, gender, salary, shifts, canServeAlcohol);
+                    break;
+                }
+                case 1:
+                {
+
+                    string cuisinesString;
+                    unsigned int cuisines;
+
+                    cout << "Known cuisines amount: ";
+                    cin >> cuisinesString;
+                    ss << cuisinesString;
+                    ss >> cuisines;
+                    ss.clear();
+                    cout << endl;
+
+                    model.GetEmployees().addCook(name, surname, gender, salary, shifts, cuisines);
+                    break;
+                }
+                default:
+                {
+                    finished = true;
+                    break;
+                }
+            }
+        }
+        catch(exception &e)
+        {
+            cerr << "An error has occurred while adding new employee: " << e.what() << endl << "Try again." << endl << endl;
+            continue;
+        }
+
+        cout << "Successfully added new employee!" << endl << endl;
+        finished = true;
+    }
+    while(!finished);
 }
 
 void CafeView::removeEmployee() {
@@ -181,6 +284,11 @@ void CafeView::removeEmployee() {
 
 void CafeView::showEmployees() {
     cout << "Showing employees collection..." << endl << endl;
+
+    for(auto &employee : model.GetEmployees().GetItems())
+        cout << employee->printProperties() << endl;
+
+    cout << endl;
 }
 
 
@@ -196,6 +304,11 @@ void CafeView::removeTable() {
 
 void CafeView::showTables() {
     cout << "Showing tables collection..." << endl;
+
+    for(auto &table : model.GetTablesDb().GetItems())
+        cout << table->ToString() << endl;
+
+    cout << endl;
 }
 
 // Public members

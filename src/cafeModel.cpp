@@ -142,6 +142,14 @@ MenuDatabase &CafeModel::GetMenu() {
     return menuDb;
 }
 
+CustomEmployeesDb &CafeModel::GetEmployees() {
+    return employeesDb;
+}
+
+CustomTableDb &CafeModel::GetTablesDb() {
+    return tablesDb;
+};
+
 string CafeModel::GetSimulationLog() const {
     string simulationLog;
 
