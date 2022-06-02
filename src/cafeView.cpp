@@ -314,11 +314,48 @@ void CafeView::showEmployees() {
 // Table options
 
 void CafeView::addTable() {
-    cout << "Adding new table..." << endl;
+    cout << "Adding new table..." << endl << endl;
+
+    unsigned int capacity;
+    string capacityString;
+    stringstream ss;
+
+    cout << "Enter table capacity: ";
+    cin >> capacityString;
+    ss << capacityString;
+    ss >> capacity;
+
+    try {
+        model.GetTablesDb().AddTable(capacity);
+        cout << "Successfully added a table!" << endl << endl;
+    }
+    catch(exception &e)
+    {
+        cerr << "An error has occurred while adding new table: " << e.what() << endl << endl;
+    }
 }
 
 void CafeView::removeTable() {
-    cout << "Removing a table..." << endl;
+    cout << "Removing a table..." << endl << endl;
+
+    unsigned int id;
+    string idString;
+    stringstream ss;
+
+    cout << "Type table ID to remove: ";
+    cin >> idString;
+    ss << idString;
+    ss >> id;
+
+    try
+    {
+        model.GetTablesDb().RemoveItem(id);
+        cout << "Successfully removed a table!" << endl << endl;
+    }
+    catch(exception &e)
+    {
+        cerr << "An error has occurred while removing a table: " << e.what() << endl << endl;
+    }
 }
 
 void CafeView::showTables() {
