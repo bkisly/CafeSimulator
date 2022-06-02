@@ -1,7 +1,7 @@
-#include "../../includes/model/Employee/Cook.h"
+#include "../../../includes/model/Employee/Cook.h"
 #include "../../includes/model/Employee/DbWorkers.h"
-#include "../../includes/model/Employee/Waiter.h"
-#include "../../includes/model/Employee/Exceptions.h"
+#include "../../../includes/model/Employee/Waiter.h"
+#include "../../../includes/model/Employee/employeeExceptions.h"
 #include <algorithm>
 
 using std::count;

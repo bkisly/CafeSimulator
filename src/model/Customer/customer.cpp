@@ -2,7 +2,7 @@
 // Created by bkisl on 15.05.2022.
 //
 
-#include "../../includes/model/Customer/customer.h"
+#include "../../../includes/model/Customer/customer.h"
 #include <typeinfo>
 
 Customer::Customer(unsigned int id, bool allowsOthers, shared_ptr<MenuItem> preferredMenuItem) {

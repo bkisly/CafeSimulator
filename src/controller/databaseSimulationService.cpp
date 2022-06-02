@@ -2,28 +2,28 @@
 // Created by bkisl on 01.06.2022.
 //
 
-#include "../../includes/model/Databases/databaseService.h"
+#include "../../includes/controller/databaseSimulationService.h"
 
-const string DatabaseService::MENU_FILENAME = "menu.txt";
+const string DatabaseSimulationService::MENU_FILENAME = "menu.txt";
 
-bool DatabaseService::FileExists(string fileName) {
+bool DatabaseSimulationService::FileExists(string fileName) {
     fstream stream(fileName);
     return stream.good();
 }
 
-void DatabaseService::WriteSimulationLog(string log, string fileName) {
+void DatabaseSimulationService::WriteSimulationLog(string log, string fileName) {
     ofstream fileStream(fileName);
     fileStream << log;
     fileStream.close();
 }
 
-void DatabaseService::WriteMenu(MenuDatabase &menuDb) {
+void DatabaseSimulationService::WriteMenu(MenuDatabase &menuDb) {
     ofstream fileStream(MENU_FILENAME);
     fileStream << menuDb;
     fileStream.close();
 }
 
-MenuDatabase DatabaseService::ReadMenu() {
+MenuDatabase DatabaseSimulationService::ReadMenu() {
     if(!FileExists(MENU_FILENAME)) throw invalid_argument("Menu file doesn't exist");
 
     MenuDatabase db(make_shared<Beverage>("Coffee", Price(2, 39), CupType::Cup, 3));

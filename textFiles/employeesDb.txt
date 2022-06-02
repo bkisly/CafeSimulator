@@ -1,0 +1,19 @@
+6
+c Jan
+Kowalski
+0 0 25 0 2 4
+c Maciej
+Nowak
+1 0 30 0 1 5
+c Bożena
+Kowalska
+2 1 25 0 2 6
+w Borys
+Groch
+3 0 15 0 1 1
+w Grzegorz
+Brzęczyszczykiewicz
+4 0 20 0 2 0
+w Halina
+Grzmot
+5 1 30 0 1 1

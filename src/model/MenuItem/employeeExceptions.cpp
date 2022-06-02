@@ -2,7 +2,7 @@
 // Created by bkisl on 28.04.2022.
 //
 
-#include "../../includes/model/MenuItem/exceptions.h"
+#include "../../../includes/model/helpers/exceptions.h"
 
 using namespace std;
 
@@ -10,3 +10,4 @@ ArgumentEmptyException::ArgumentEmptyException(const string &message) : invalid_
 InvalidPriceException::InvalidPriceException(const string &message) : invalid_argument(message) {}
 ItemExistenceException::ItemExistenceException(const string &message) : invalid_argument(message) {}
 IndexOutOfRangeException::IndexOutOfRangeException(const string &message) : invalid_argument(message) {}
+FileException::FileException(const string &message) : invalid_argument(message) {}

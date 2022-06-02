@@ -2,7 +2,7 @@
 // Created by bkisl on 26.05.2022.
 //
 
-#include "../includes/View/cafeView.h"
+#include "../../includes/View/cafeView.h"
 
 unsigned int CafeView::printOptions(string header, vector<string> options) {
     cout << header << endl;

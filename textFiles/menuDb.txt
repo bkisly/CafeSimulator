@@ -1,0 +1,15 @@
+0001122
+Coffee
+2 49 3 0
+Water
+0 99 1 2
+Tea
+1 50 2 1
+Cake
+5 99 3
+Ice cream
+0 99 2
+Caesar salad
+12 99 5 0
+Vegan wrap
+9 99 4 1

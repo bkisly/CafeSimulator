@@ -1,6 +1,6 @@
 #include <memory>
-#include "../../includes/model/Employee/Cook.h"
-#include "../../includes/model/Employee/Exceptions.h"
+#include "../../../includes/model/Employee/Cook.h"
+#include "../../../includes/model/Employee/employeeExceptions.h"
 
 int Cook::get_known_cuisines() const {
     return known_cuisines;

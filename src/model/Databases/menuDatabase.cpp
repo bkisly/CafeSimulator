@@ -2,8 +2,8 @@
 // Created by bkisl on 27.04.2022.
 //
 
-#include "../../includes/model/Databases/menuDatabase.h"
-#include "../../includes/model/MenuItem/exceptions.h"
+#include "../../../includes/model/Databases/menuDatabase.h"
+#include "../../../includes/model/helpers/exceptions.h"
 
 using namespace std;
 

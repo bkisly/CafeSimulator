@@ -2,7 +2,8 @@
 // Created by bkisl on 22.05.2022.
 //
 
-#include "../includes/model/cafeModel.h"
+#include "../../includes/model/cafeModel.h"
+#include "../../includes/controller/DataService.h"
 
 // Generators
 
@@ -34,7 +35,7 @@ void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
     int groupId = 0;
     for(CustomersGroup &customersGroup : unassignedCustomers)
     {
-        for(auto &table : tables)
+        for(auto &table : tableDb.GetItems())
         {
             if(table->TryAddCustomers(customersGroup))
             {
@@ -69,10 +70,10 @@ void CafeModel::printLog(vector<Customer> &assignedCustomers) {
 
     simulationLogBlocks.push_back(block);
 
-    // 7c. Print tables state
+    // 7c. Print tableDb.GetItems() state
     block = "\n--- Tables state ---\n";
 
-    for(const auto &table : tables)
+    for(const auto &table : tableDb.GetItems())
     {
         block += table->ToString() + "\n";
     }
@@ -95,48 +96,53 @@ CafeModel::CafeModel(bool readFromService) {
     currentCycle = 0;
     totalCustomers = 0;
 
-    if(!readFromService || !DatabaseService::FileExists(DatabaseService::MENU_FILENAME))
-    {
-        vector<shared_ptr<MenuItem>> menuItems
-        {
-            make_shared<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3),
-            make_shared<Beverage>("Water", Price(0, 99), CupType::Glass, 1),
-            make_shared<Beverage>("Tea", Price(1, 50), CupType::Mug, 2),
+//    if(!readFromService || !DatabaseSimulationService::FileExists(DatabaseSimulationService::MENU_FILENAME))
+//    {
+//        vector<shared_ptr<MenuItem>> menuItems
+//        {
+//            make_shared<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3),
+//            make_shared<Beverage>("Water", Price(0, 99), CupType::Glass, 1),
+//            make_shared<Beverage>("Tea", Price(1, 50), CupType::Mug, 2),
+//
+//            make_shared<Dessert>("Cake", Price(5, 99), 3),
+//            make_shared<Dessert>("Ice cream", Price(0, 99), 2),
+//
+//            make_shared<Dish>("Caesar salad", Price(12, 99), false, 5),
+//            make_shared<Dish>("Vegan wrap", Price(9, 99), true, 4)
+//        };
+//
+//        menuDb = MenuDatabase(menuItems);
+//
+//        employeesDb.addCook("Jan", "Kowalski", 0, Price(25, 0), 2, 4);
+//        employeesDb.addCook("Maciej", "Nowak", 0, Price(30, 0), 1, 5);
+//        employeesDb.addCook("Bożena", "Kowalska", 1, Price(25, 0), 2, 6);
+//
+//        employeesDb.addWaiter("Borys", "Groch", 0, Price(15, 0), 1, true);
+//        employeesDb.addWaiter("Grzegorz", "Brzęczyszczykiewicz", 0, Price(20, 0), 2, false);
+//        employeesDb.addWaiter("Halina", "Grzmot", 1, Price(30, 0), 1, true);
+//
+//        vector<shared_ptr<Table>> initialTables
+//        {
+//            make_shared<Table>(1, 2),
+//            make_shared<Table>(2, 2),
+//            make_shared<Table>(3, 3),
+//            make_shared<Table>(4, 4),
+//            make_shared<Table>(5, 4),
+//            make_shared<Table>(6, 5)
+//        };
+//
+//        tableDb.GetItems() = initialTables;
+//    }
+//    else
+//    {
+//        // Load application data from service
+//        menuDb = dbService.ReadMenu();
+//    }
+    DataService service;
+    service.ReadEmployees(employeesDb);
+    service.ReadTables(tableDb);
+    service.ReadMenu(menuDb);
 
-            make_shared<Dessert>("Cake", Price(5, 99), 3),
-            make_shared<Dessert>("Ice cream", Price(0, 99), 2),
-
-            make_shared<Dish>("Caesar salad", Price(12, 99), false, 5),
-            make_shared<Dish>("Vegan wrap", Price(9, 99), true, 4)
-        };
-
-        menuDb = MenuDatabase(menuItems);
-
-        employeesDb.addCook("Jan", "Kowalski", 0, Price(25, 0), 2, 4);
-        employeesDb.addCook("Maciej", "Nowak", 0, Price(30, 0), 1, 5);
-        employeesDb.addCook("Bożena", "Kowalska", 1, Price(25, 0), 2, 6);
-
-        employeesDb.addWaiter("Borys", "Groch", 0, Price(15, 0), 1, true);
-        employeesDb.addWaiter("Grzegorz", "Brzęczyszczykiewicz", 0, Price(20, 0), 2, false);
-        employeesDb.addWaiter("Halina", "Grzmot", 1, Price(30, 0), 1, true);
-
-        vector<shared_ptr<Table>> initialTables
-        {
-            make_shared<Table>(1, 2),
-            make_shared<Table>(2, 2),
-            make_shared<Table>(3, 3),
-            make_shared<Table>(4, 4),
-            make_shared<Table>(5, 4),
-            make_shared<Table>(6, 5)
-        };
-
-        tables = initialTables;
-    }
-    else
-    {
-        // Load application data from service
-        menuDb = dbService.ReadMenu();
-    }
 }
 
 // Getters
@@ -149,9 +155,9 @@ const vector<CustomersGroup> &CafeModel::GetUnassignedCustomers() const {
     return unassignedCustomers;
 }
 
-const vector<shared_ptr<Table>> &CafeModel::GetTables() const {
-    return tables;
-}
+//vector<shared_ptr<Table>> & CafeModel::GetTables() const {
+//    return tableDb.GetItems();
+//}
 
 unsigned int CafeModel::GetCurrentCycle() const {
     return currentCycle;
@@ -185,16 +191,16 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
         // Assigning customers must be performed as the last step before adding new ones
         // in order not to let the change propagate (we don't want to let the customer be assigned and serviced at once)
 
-        // 1. Collect customers who sit by the tables
+        // 1. Collect customers who sit by the tableDb.GetItems()
         vector<Customer> assignedCustomers;
-        for(auto &table : tables)
+        for(auto &table : tableDb.GetItems())
         {
             for(Customer &customer : table->GetCustomers())
                 assignedCustomers.push_back(customer);
         }
 
 
-        // 2. Assign tables to free waiters
+        // 2. Assign tableDb.GetItems() to free waiters
         for(auto &employee : employeesDb.GetItems())
         {
             if(typeid(*employee.get()) == typeid(Waiter&))
@@ -203,7 +209,7 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
 
                 if(waiter->getState() == Waiter::WaiterState::awaiting)
                 {
-                    for(auto &table : tables)
+                    for(auto &table : tableDb.GetItems())
                     {
                         if(!table->GetHasAssignedWaiter() && !table->GetCustomers().empty())
                             waiter->setAssignedTable(table);
@@ -213,14 +219,14 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
         }
 
         // 3. Remove served customers
-        for(auto &table : tables)
+        for(auto &table : tableDb.GetItems())
             table->RemoveServedCustomers();
 
         // 4. Update state of all employees
         employeesDb.advanceCycleAll();
 
         // 4. Update state of all assigned customers
-        for(auto &table : tables)
+        for(auto &table : tableDb.GetItems())
             table->AdvanceStateAll();
 
         // 5. Assign unassigned customers

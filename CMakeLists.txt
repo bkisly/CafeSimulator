@@ -12,44 +12,44 @@ endif()
 # libs
 add_library(
         menu
-        includes/model/MenuItem/menuItem.h src/MenuItem/menuItem.cpp
-        includes/model/MenuItem/beverage.h src/MenuItem/beverage.cpp
-        includes/model/MenuItem/dessert.h src/MenuItem/dessert.cpp
-        includes/model/MenuItem/dish.h src/MenuItem/dish.cpp
-        includes/model/MenuItem/exceptions.h src/MenuItem/exceptions.cpp
+        includes/model/MenuItem/menuItem.h src/model/MenuItem/menuItem.cpp
+        includes/model/MenuItem/beverage.h src/model/MenuItem/beverage.cpp
+        includes/model/MenuItem/dessert.h src/model/MenuItem/dessert.cpp
+        includes/model/MenuItem/dish.h src/model/MenuItem/dish.cpp
+        includes/model/helpers/exceptions.h src/model/MenuItem/employeeExceptions.cpp
 )
 
 add_library(
         customer
-        includes/model/Customer/table.h src/Customer/table.cpp
-        includes/model/Customer/customer.h src/Customer/customer.cpp
-        includes/model/Customer/customersGroup.h src/Customer/customersGroup.cpp
+        includes/model/Customer/table.h src/model/Customer/table.cpp
+        includes/model/Customer/customer.h src/model/Customer/customer.cpp
+        includes/model/Customer/customersGroup.h src/model/Customer/customersGroup.cpp
 )
 
 add_library(
         helpers
-        includes/model/helpers/price.h src/Helpers/price.cpp
+        includes/model/helpers/price.h src/model/Helpers/price.cpp
 )
 
 add_library(
         employee
-        includes/model/Employee/Cook.h src/Employee/Cook.cpp
-        includes/model/Employee/Waiter.h src/Employee/Waiter.cpp
-        includes/model/Employee/Employee.h src/Employee/Employee.cpp
-        includes/model/Employee/Exceptions.h
+        includes/model/Employee/Cook.h src/model/Employee/Cook.cpp
+        includes/model/Employee/Waiter.h src/model/Employee/Waiter.cpp
+        includes/model/Employee/Employee.h src/model/Employee/Employee.cpp
+        includes/model/Employee/employeeExceptions.h
 )
 
 add_library(
         database
         includes/model/Databases/iDatabase.h
-        includes/model/Databases/menuDatabase.h src/Databases/menuDatabase.cpp
-        includes/model/Databases/templateDatabase.h src/Databases/CustomTableDb.cpp includes/model/Databases/CustomTableDb.h src/Databases/CustomEmployeesDb.cpp includes/model/Databases/CustomEmployeesDb.h)
+        includes/model/Databases/menuDatabase.h src/model/Databases/menuDatabase.cpp
+        includes/model/Databases/templateDatabase.h src/model/Databases/CustomTableDb.cpp includes/model/Databases/CustomTableDb.h src/model/Databases/CustomEmployeesDb.cpp includes/model/Databases/CustomEmployeesDb.h src/controller/DataService.cpp includes/controller/DataService.h)
 
 add_library(
         viewModel
-        includes/model/cafeModel.h src/cafeModel.cpp
-        includes/view/cafeView.h src/cafeView.cpp
-        includes/model/Databases/databaseService.h src/Databases/databaseService.cpp
+        includes/model/cafeModel.h src/model/cafeModel.cpp
+        includes/view/cafeView.h src/view/cafeView.cpp
+        includes/controller/databaseSimulationService.h src/controller/databaseSimulationService.cpp
 )
 
 # tests
@@ -84,5 +84,5 @@ target_link_libraries(databaseSchemeTests PRIVATE customer database menu helpers
 # TODO: run all tests executable
 
 # runners
-add_executable(Cafe main.cpp src/Databases/CustomEmployeesDb.cpp includes/model/Databases/CustomEmployeesDb.h)
+add_executable(Cafe main.cpp src/model/Databases/CustomEmployeesDb.cpp includes/model/Databases/CustomEmployeesDb.h)
 target_link_libraries(Cafe PRIVATE viewModel customer employee menu database helpers)

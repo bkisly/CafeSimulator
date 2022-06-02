@@ -2,7 +2,7 @@
 // Created by bkisl on 26.05.2022.
 //
 
-#include "../../includes/model/Customer/customersGroup.h"
+#include "../../../includes/model/Customer/customersGroup.h"
 #include <stdexcept>
 
 void CustomersGroup::validateCustomers(const vector<Customer> &customers) {

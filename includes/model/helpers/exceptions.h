@@ -29,4 +29,10 @@ public:
     IndexOutOfRangeException(const string &message);
 };
 
+class FileException : public invalid_argument {
+public:
+    FileException(const string &message);
+};
+
+
 #endif //CAFEMENU_EXCEPTIONS_H

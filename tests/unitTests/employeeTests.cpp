@@ -3,7 +3,7 @@
 #include "../catch.hpp"
 #include "../../includes/model/helpers/price.h"
 #include "../../includes/model/Employee/Employee.h"
-#include "../../includes/model/Employee/Exceptions.h"
+#include "../../includes/model/Employee/employeeExceptions.h"
 #include "../../includes/model/Employee/Waiter.h"
 #include "../../includes/model/Employee/Cook.h"
 #include "../../includes/model/MenuItem/dessert.h"

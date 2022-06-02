@@ -1,5 +1,5 @@
-#include "../../includes/model/Employee/Waiter.h"
-#include "../../includes/model/Employee/Exceptions.h"
+#include "../../../includes/model/Employee/Waiter.h"
+#include "../../../includes/model/Employee/employeeExceptions.h"
 
 Waiter::Waiter(int id, const string &name, const string &surname, int gender, Price baseSalary,
                unsigned int baseAmountOfShifts, bool canServeAlcohol)

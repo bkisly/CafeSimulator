@@ -6,9 +6,9 @@
 #define CAFE_DATABASESERVICE_H
 
 #include <fstream>
-#include "menuDatabase.h"
+#include "../model/Databases/menuDatabase.h"
 
-class DatabaseService {
+class DatabaseSimulationService {
 public:
     static const string MENU_FILENAME;
     static bool FileExists(string fileName);

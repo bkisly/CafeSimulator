@@ -2,7 +2,7 @@
 // Created by bkisl on 15.05.2022.
 //
 
-#include "../../includes/model/Customer/table.h"
+#include "../../../includes/model/Customer/table.h"
 #include <stdexcept>
 
 void Table::customersGroupValidation(CustomersGroup &customersGroup) {

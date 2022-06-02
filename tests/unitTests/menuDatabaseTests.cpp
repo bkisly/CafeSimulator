@@ -8,7 +8,7 @@
 #include "../../includes/model/MenuItem/beverage.h"
 #include "../../includes/model/MenuItem/dessert.h"
 #include "../../includes/model/MenuItem/dish.h"
-#include "../../includes/model/MenuItem/exceptions.h"
+#include "../../includes/model/helpers/exceptions.h"
 #include "../../includes/model/Databases/menuDatabase.h"
 
 TEST_CASE("Initialization")

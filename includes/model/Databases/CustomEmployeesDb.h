@@ -3,7 +3,7 @@
 #include "iDatabase.h"
 #include "../Customer/table.h"
 #include "../Employee/Employee.h"
-#include "../MenuItem/Exceptions.h"
+#include "../helpers/exceptions.h"
 #include "templateDatabase.h"
 #include "../Employee/Cook.h"
 #include "../Employee/Waiter.h"

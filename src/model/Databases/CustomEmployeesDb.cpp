@@ -1,7 +1,7 @@
-#include "../../includes/model/Databases/CustomEmployeesDb.h"
-#include "../../includes/model/Employee/Waiter.h"
-#include "../../includes/model/Employee/Cook.h"
-#include "../../includes/model/Employee/Exceptions.h"
+#include "../../../includes/model/Databases/CustomEmployeesDb.h"
+#include "../../../includes/model/Employee/Waiter.h"
+#include "../../../includes/model/Employee/Cook.h"
+#include "../../../includes/model/Employee/employeeExceptions.h"
 
 void CustomEmployeesDb::addWaiter(const string &name, const string &surname, int gender,
                                   Price baseSalary, unsigned int baseAmountOfShifts,

@@ -24,6 +24,7 @@ private:
     void validateItems(const vector<shared_ptr<MenuItem>> &menuItems);
 
 public:
+    MenuDatabase() = default;
     MenuDatabase(shared_ptr<MenuItem> initialItem);
     MenuDatabase(vector<shared_ptr<MenuItem>> &initialItems);
 

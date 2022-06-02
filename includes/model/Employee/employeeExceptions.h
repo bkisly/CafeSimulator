@@ -1,5 +1,5 @@
-#ifndef EXCEPTIONS_H
-#define EXCEPTIONS_H
+#ifndef EMPLOYEEEXCEPTIONS_H
+#define EMPLOYEEEXCEPTIONS_H
 
 #include <exception>
 #include <stdexcept>
@@ -83,4 +83,4 @@ public:
     BusyWaiterException() : std::logic_error("Table cannot be assigned to busy waiter") {};
 };
 
-#endif //EXCEPTIONS_H
+#endif //EMPLOYEEEXCEPTIONS_H

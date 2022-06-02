@@ -1,6 +1,6 @@
-#include "../../includes/model/Employee/Employee.h"
-#include "../../includes/model/helpers/price.h"
-#include "../../includes/model/Employee/Exceptions.h"
+#include "../../../includes/model/Employee/Employee.h"
+#include "../../../includes/model/helpers/price.h"
+#include "../../../includes/model/Employee/employeeExceptions.h"
 
 #include <memory>
 
@@ -84,9 +84,9 @@ std::istream &Employee::Read(std::istream &in) {
     int id, gender;
     Price salary;
     unsigned shifts;
-    std::getline(in, name);
-    std::getline(in, surname);
-    in >> id >> gender >> salary >> shifts;
+//    std::getline(in, name);
+//    std::getline(in, surname);
+    in >>name >> surname >> id >> gender >> salary >> shifts;
     this -> name = name;
     this -> surname = surname;
     this->currentState = 0;
