@@ -43,7 +43,7 @@ add_library(
         database
         includes/model/Databases/iDatabase.h
         includes/model/Databases/menuDatabase.h src/model/Databases/menuDatabase.cpp
-        includes/model/Databases/templateDatabase.h src/model/Databases/CustomTableDb.cpp includes/model/Databases/CustomTableDb.h src/model/Databases/CustomEmployeesDb.cpp includes/model/Databases/CustomEmployeesDb.h src/controller/DataService.cpp includes/controller/DataService.h)
+        includes/model/Databases/templateDatabase.h src/model/Databases/CustomTableDb.cpp includes/model/Databases/CustomTableDb.h src/model/Databases/CustomEmployeesDb.cpp includes/model/Databases/CustomEmployeesDb.h src/controller/DataService.cpp includes/controller/DataService.h src/controller/OnlineService.cpp includes/controller/OnlineService.h)
 
 add_library(
         viewModel
@@ -80,6 +80,8 @@ target_link_libraries(dbEmployeesTests PRIVATE employee helpers menu customer da
 add_executable(databaseSchemeTests tests/unitTests/databaseScheme.cpp)
 target_link_libraries(databaseSchemeTests PRIVATE customer database menu helpers employee)
 
+add_executable(httpsTests tests/integrationTests/httpTests.cpp)
+target_link_libraries(databaseSchemeTests PRIVATE customer database menu helpers employee)
 
 # TODO: run all tests executable
 
