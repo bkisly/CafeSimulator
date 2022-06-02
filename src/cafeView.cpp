@@ -280,6 +280,25 @@ void CafeView::addEmployee() {
 
 void CafeView::removeEmployee() {
     cout << "Removing an employee..." << endl << endl;
+
+    unsigned int id;
+    string idString;
+    stringstream ss;
+
+    cout << "Type employee ID to remove: ";
+    cin >> idString;
+    ss << idString;
+    ss >> id;
+
+    try
+    {
+        model.GetEmployees().RemoveItem(id);
+        cout << "Successfully removed an employee!" << endl << endl;
+    }
+    catch(exception &e)
+    {
+        cerr << "An error has occurred while removing an employee: " << e.what() << endl << endl;
+    }
 }
 
 void CafeView::showEmployees() {
