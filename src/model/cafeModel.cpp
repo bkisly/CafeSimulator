@@ -158,7 +158,7 @@ CustomEmployeesDb &CafeModel::GetEmployees() {
 
 CustomTableDb &CafeModel::GetTablesDb() {
     return tablesDb;
-}
+};
 
 string CafeModel::GetSimulationLog() const {
     string simulationLog;

@@ -175,9 +175,9 @@ void CafeView::addEmployee() {
     cout << "Adding new employee..." << endl << endl;
 
     vector<string> employeeTypes = {
-            "Waiter",
-            "Cook",
-            "Cancel"
+        "Waiter",
+        "Cook",
+        "Cancel"
     };
 
     bool finished = false;
