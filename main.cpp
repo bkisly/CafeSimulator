@@ -44,8 +44,17 @@ int main(int argc, char* argv[]) {
             string menuFile = argv[2];
             string employeesFile = argv[3];
             string tablesFile = argv[4];
-            CafeView cafeView = CafeView(menuFile, employeesFile, tablesFile);
-            cafeView.InitAdminMode();
+
+            try
+            {
+                CafeView cafeView = CafeView(menuFile, employeesFile, tablesFile);
+                cafeView.InitAdminMode();
+            }
+            catch(exception &e)
+            {
+                cerr << "An error has occurred while entering admin mode: " << e.what() << endl;
+                return 1;
+            }
         }
     }
     else if(modeArg == "-s")
@@ -79,8 +88,16 @@ int main(int argc, char* argv[]) {
             ss << argv[4];
             ss >> customersInterval;
 
-            CafeView cafeView = CafeView(menuFile, employeesFile, tablesFile);
-            cafeView.InitSimulation(numberOfCycles, interval, customersInterval, outputName);
+            try
+            {
+                CafeView cafeView = CafeView(menuFile, employeesFile, tablesFile);
+                cafeView.InitSimulation(numberOfCycles, interval, customersInterval, outputName);
+            }
+            catch(exception &e)
+            {
+                cerr << "An error has occurred while initializing simulation: " << e.what() << endl;
+                return 2;
+            }
         }
     }
     else

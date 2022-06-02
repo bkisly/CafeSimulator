@@ -375,14 +375,7 @@ void CafeView::showTables() {
 
 CafeView::CafeView(string menuFile, string employeesFile, string tablesFile) {
     // TODO: try-catch should be added here while reading from service - errors may occur
-    try
-    {
-        model = CafeModel(menuFile, employeesFile, tablesFile);
-    }
-    catch(exception &e)
-    {
-        cerr << "An error has occurred while reading databases from given files: " << e.what() << endl;
-    }
+    model = CafeModel(menuFile, employeesFile, tablesFile);
 }
 
 void CafeView::InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval, const string& outputName) {
