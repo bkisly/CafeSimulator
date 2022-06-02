@@ -99,6 +99,7 @@ std::istream &TemplateDatabase<T>::Read(istream &is) {
     items.clear();
     int amount;
     is >> amount;
+    this->newIdToAssign = amount;
     while (amount>0){
         T newObject;
         newObject.Read(is);

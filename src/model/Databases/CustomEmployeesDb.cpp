@@ -152,6 +152,7 @@ std::istream &CustomEmployeesDb::Read(istream &is) {
     int amount;
     char kind;
     is >> amount;
+    this->newIdToAssign = amount;
     while (amount>0){
         is >> kind;
         if (kind == 'w'){
