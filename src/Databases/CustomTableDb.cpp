@@ -23,3 +23,7 @@ std::ostream &operator<<(ostream &os, CustomTableDb &db) {
 std::istream &operator>>(std::istream &in, CustomTableDb &db) {
     return db.Read(in);
 }
+
+void CustomTableDb::AddTable(int capacity) {
+    TemplateDatabase<Table>::AddItem(make_shared<Table>(Table(newIdToAssign, capacity)));
+}

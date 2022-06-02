@@ -6,6 +6,7 @@ class CustomTableDb  : public TemplateDatabase<Table>{
 public:
     void AdvanceStateAllTables();
     bool TryAssignCustomersGroup(CustomersGroup customersGroup);
+    void AddTable(int capacity);
     friend std::ostream &operator<<(std::ostream &os, CustomTableDb &db);
     friend std::istream &operator>>(std::istream &in, CustomTableDb &db);
 };
