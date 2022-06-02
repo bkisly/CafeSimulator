@@ -6,6 +6,8 @@
 #define CAFE_CAFEMODEL_H
 
 #include <cstdlib>
+#include <random>
+#include <chrono>
 
 #include "MenuItem/beverage.h"
 #include "MenuItem/dessert.h"
@@ -13,6 +15,7 @@
 
 #include "Databases/menuDatabase.h"
 #include "../controller/databaseSimulationService.h"
+#include "Databases/CustomTableDb.h"
 #include "Databases/CustomEmployeesDb.h"
 #include "Databases/CustomTableDb.h"
 
@@ -26,9 +29,7 @@ private:
     MenuDatabase menuDb = MenuDatabase(make_shared<Beverage>("Coffee", Price(2, 49), CupType::Cup, 3));
     CustomEmployeesDb employeesDb;
     DatabaseSimulationService dbService;
-
-    vector<shared_ptr<Table>> tables;
-    CustomTableDb tableDb;
+    CustomTableDb tablesDb;
 
     // Simulation status
     vector<CustomersGroup> unassignedCustomers;
@@ -37,6 +38,7 @@ private:
     unsigned int totalCustomers;
 
     // Value generators
+    int randomInt(int min, int max);
     shared_ptr<MenuItem> randomMenuItem();
     Customer randomCustomer(bool allowsOthers);
 
@@ -50,9 +52,9 @@ public:
 
     // Getters
     MenuDatabase &GetMenu();
-    const vector<CustomersGroup> &GetUnassignedCustomers() const;
-//    vector<shared_ptr<Table>> & GetTables() const;
-    unsigned int GetCurrentCycle() const;
+    CustomEmployeesDb &GetEmployees();
+    CustomTableDb &GetTablesDb();
+
     string GetSimulationLog() const;
     const vector<string> &GetSimulationLogBlocks() const;
 

@@ -173,29 +173,198 @@ void CafeView::showMenu() {
 
 void CafeView::addEmployee() {
     cout << "Adding new employee..." << endl << endl;
+
+    vector<string> employeeTypes = {
+            "Waiter",
+            "Cook",
+            "Cancel"
+    };
+
+    bool finished = false;
+
+    do {
+        unsigned int employeeTypeOption = printOptions("Select employee type to add:", employeeTypes);
+
+        if(employeeTypeOption == 2) break;
+
+        stringstream ss;
+        string name, surname, dollarsString, centsString, shiftsString;
+        unsigned int dollars, cents, shifts;
+
+        cout << "Name: ";
+
+        if(cin.peek() == '\n')
+            cin.ignore();
+
+        getline(cin, name);
+
+        cout << "Surname: ";
+
+        if(cin.peek() == '\n')
+            cin.ignore();
+
+        getline(cin, surname);
+
+        vector<string> genderOptions = { "Female", "Male" };
+        int gender = (int)printOptions("Gender:", genderOptions);
+
+        cout << "Salary (dollars part): ";
+        cin >> dollarsString;
+        ss << dollarsString;
+        ss >> dollars;
+        ss.clear();
+        cout << endl;
+
+        cout << "Salary (cents part): ";
+        cin >> centsString;
+        ss << centsString;
+        ss >> cents;
+        ss.clear();
+        cout << endl;
+
+        cout << "Shifts amount: ";
+        cin >> shiftsString;
+        ss << shiftsString;
+        ss >> shifts;
+        ss.clear();
+        cout << endl;
+
+        try
+        {
+            Price salary(dollars, cents);
+
+            switch (employeeTypeOption) {
+                case 0:
+                {
+                    vector<string> alcoholOptions = { "Yes", "No" };
+                    unsigned int alcoholOption = printOptions("Choose whether the waiter can serve alcohol or not:", alcoholOptions);
+                    bool canServeAlcohol = alcoholOption == 0;
+
+                    model.GetEmployees().addWaiter(name, surname, gender, salary, shifts, canServeAlcohol);
+                    break;
+                }
+                case 1:
+                {
+
+                    string cuisinesString;
+                    unsigned int cuisines;
+
+                    cout << "Known cuisines amount: ";
+                    cin >> cuisinesString;
+                    ss << cuisinesString;
+                    ss >> cuisines;
+                    ss.clear();
+                    cout << endl;
+
+                    model.GetEmployees().addCook(name, surname, gender, salary, shifts, cuisines);
+                    break;
+                }
+                default:
+                {
+                    finished = true;
+                    break;
+                }
+            }
+        }
+        catch(exception &e)
+        {
+            cerr << "An error has occurred while adding new employee: " << e.what() << endl << "Try again." << endl << endl;
+            continue;
+        }
+
+        cout << "Successfully added new employee!" << endl << endl;
+        finished = true;
+    }
+    while(!finished);
 }
 
 void CafeView::removeEmployee() {
     cout << "Removing an employee..." << endl << endl;
+
+    unsigned int id;
+    string idString;
+    stringstream ss;
+
+    cout << "Type employee ID to remove: ";
+    cin >> idString;
+    ss << idString;
+    ss >> id;
+
+    try
+    {
+        model.GetEmployees().RemoveItem(id);
+        cout << "Successfully removed an employee!" << endl << endl;
+    }
+    catch(exception &e)
+    {
+        cerr << "An error has occurred while removing an employee: " << e.what() << endl << endl;
+    }
 }
 
 void CafeView::showEmployees() {
     cout << "Showing employees collection..." << endl << endl;
+
+    for(auto &employee : model.GetEmployees().GetItems())
+        cout << employee->printProperties() << endl;
+
+    cout << endl;
 }
 
 
 // Table options
 
 void CafeView::addTable() {
-    cout << "Adding new table..." << endl;
+    cout << "Adding new table..." << endl << endl;
+
+    unsigned int capacity;
+    string capacityString;
+    stringstream ss;
+
+    cout << "Enter table capacity: ";
+    cin >> capacityString;
+    ss << capacityString;
+    ss >> capacity;
+
+    try {
+        model.GetTablesDb().AddTable(capacity);
+        cout << "Successfully added a table!" << endl << endl;
+    }
+    catch(exception &e)
+    {
+        cerr << "An error has occurred while adding new table: " << e.what() << endl << endl;
+    }
 }
 
 void CafeView::removeTable() {
-    cout << "Removing a table..." << endl;
+    cout << "Removing a table..." << endl << endl;
+
+    unsigned int id;
+    string idString;
+    stringstream ss;
+
+    cout << "Type table ID to remove: ";
+    cin >> idString;
+    ss << idString;
+    ss >> id;
+
+    try
+    {
+        model.GetTablesDb().RemoveItem(id);
+        cout << "Successfully removed a table!" << endl << endl;
+    }
+    catch(exception &e)
+    {
+        cerr << "An error has occurred while removing a table: " << e.what() << endl << endl;
+    }
 }
 
 void CafeView::showTables() {
     cout << "Showing tables collection..." << endl;
+
+    for(auto &table : model.GetTablesDb().GetItems())
+        cout << table->ToString() << endl;
+
+    cout << endl;
 }
 
 // Public members
@@ -227,16 +396,16 @@ void CafeView::InitAdminMode() {
     cout << "==================\nCAFE SIMULATOR ADMIN MODE\n==================" << endl << endl;
 
     vector<string> mainMenuOptions {
-        "Add menu item",
-        "Remove menu item",
-        "Show menu",
-        "Add employee",
-        "Remove employee",
-        "Show employees",
-        "Add table",
-        "Remove table",
-        "Show tables",
-        "Exit"
+            "Add menu item",
+            "Remove menu item",
+            "Show menu",
+            "Add employee",
+            "Remove employee",
+            "Show employees",
+            "Add table",
+            "Remove table",
+            "Show tables",
+            "Exit"
     };
 
     bool exitSelected = false;

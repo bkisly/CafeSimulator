@@ -7,8 +7,14 @@
 
 // Generators
 
+int CafeModel::randomInt(int min, int max) {
+    unsigned int seed = chrono::system_clock::now().time_since_epoch().count();
+    mt19937 generator(seed);
+    return (generator() % (max + 1 - min)) + min;
+}
+
 shared_ptr<MenuItem> CafeModel::randomMenuItem() {
-    return menuDb.GetItems()[rand() % menuDb.GetItems().size()];
+    return menuDb.GetItems()[randomInt(0, menuDb.GetItems().size() - 1)];
 }
 
 Customer CafeModel::randomCustomer(bool allowsOthers) {
@@ -19,8 +25,8 @@ Customer CafeModel::randomCustomer(bool allowsOthers) {
 // Simulation sub-procedures
 
 void CafeModel::addNewCustomers() {
-    unsigned int customersAmount = rand() % 5 + 1;
-    bool allowOthers = rand() % 2 == 1;
+    unsigned int customersAmount = randomInt(1, 5);
+    bool allowOthers = randomInt(0, 1) == 1;
     vector<Customer> customersToAdd;
 
     for(int i = 0; i < customersAmount; i++) {
@@ -35,14 +41,10 @@ void CafeModel::assignCustomers(vector<Customer> &assignedCustomers) {
     int groupId = 0;
     for(CustomersGroup &customersGroup : unassignedCustomers)
     {
-        for(auto &table : tableDb.GetItems())
+        if(tablesDb.TryAssignCustomersGroup(customersGroup))
         {
-            if(table->TryAddCustomers(customersGroup))
-            {
-                groupsIdsToRemove.push_back(groupId);
-                assignedCustomers.insert(assignedCustomers.end(), customersGroup.GetCustomers().begin(), customersGroup.GetCustomers().end());
-                break;
-            }
+            groupsIdsToRemove.push_back(groupId);
+            assignedCustomers.insert(assignedCustomers.end(), customersGroup.GetCustomers().begin(), customersGroup.GetCustomers().end());
         }
 
         groupId++;
@@ -73,7 +75,7 @@ void CafeModel::printLog(vector<Customer> &assignedCustomers) {
     // 7c. Print tableDb.GetItems() state
     block = "\n--- Tables state ---\n";
 
-    for(const auto &table : tableDb.GetItems())
+    for(const auto &table : tablesDb.GetItems())
     {
         block += table->ToString() + "\n";
     }
@@ -140,9 +142,8 @@ CafeModel::CafeModel(bool readFromService) {
 //    }
     DataService service;
     service.ReadEmployees(employeesDb);
-    service.ReadTables(tableDb);
+    service.ReadTables(tablesDb);
     service.ReadMenu(menuDb);
-
 }
 
 // Getters
@@ -151,16 +152,12 @@ MenuDatabase &CafeModel::GetMenu() {
     return menuDb;
 }
 
-const vector<CustomersGroup> &CafeModel::GetUnassignedCustomers() const {
-    return unassignedCustomers;
+CustomEmployeesDb &CafeModel::GetEmployees() {
+    return employeesDb;
 }
 
-//vector<shared_ptr<Table>> & CafeModel::GetTables() const {
-//    return tableDb.GetItems();
-//}
-
-unsigned int CafeModel::GetCurrentCycle() const {
-    return currentCycle;
+CustomTableDb &CafeModel::GetTablesDb() {
+    return tablesDb;
 }
 
 string CafeModel::GetSimulationLog() const {
@@ -193,7 +190,8 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
 
         // 1. Collect customers who sit by the tableDb.GetItems()
         vector<Customer> assignedCustomers;
-        for(auto &table : tableDb.GetItems())
+
+        for(auto &table : tablesDb.GetItems())
         {
             for(Customer &customer : table->GetCustomers())
                 assignedCustomers.push_back(customer);
@@ -209,7 +207,7 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
 
                 if(waiter->getState() == Waiter::WaiterState::awaiting)
                 {
-                    for(auto &table : tableDb.GetItems())
+                    for(auto &table : tablesDb.GetItems())
                     {
                         if(!table->GetHasAssignedWaiter() && !table->GetCustomers().empty())
                             waiter->setAssignedTable(table);
@@ -219,15 +217,14 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
         }
 
         // 3. Remove served customers
-        for(auto &table : tableDb.GetItems())
+        for(auto &table : tablesDb.GetItems())
             table->RemoveServedCustomers();
 
         // 4. Update state of all employees
         employeesDb.advanceCycleAll();
 
         // 4. Update state of all assigned customers
-        for(auto &table : tableDb.GetItems())
-            table->AdvanceStateAll();
+        tablesDb.AdvanceStateAllTables();
 
         // 5. Assign unassigned customers
         assignCustomers(assignedCustomers);
