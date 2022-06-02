@@ -75,11 +75,16 @@ void CustomEmployeesDb::advanceCycleAll() {
                             }
                             break;
                         case Waiter::WaiterState::handInOrder:
+                            for(Customer &customer : waiter->assignedTable->GetCustomers())
+                                customer.SetReceivedOrder(true);
+
                             waiter->currentState++;
                             break;
                         case Waiter::WaiterState::ReadyToTakeReceipt:
                             waiter->calcReceipt();
-                            waiter->currentState++;
+
+                            if(waiter->assignedTable->HaveAllEaten())
+                                waiter->currentState++;
                             break;
                         case Waiter::WaiterState::TakenReceipt:
                             // if new clients come, serve them, otherwise leave table
