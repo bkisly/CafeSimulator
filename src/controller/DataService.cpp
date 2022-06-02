@@ -36,7 +36,7 @@ void DataService::ReadTables(CustomTableDb &tablesDb, string filename) {
     file.close();
 }
 
-void DataService::WriteTables(MenuDatabase &tablesDb, string filename) {
+void DataService::WriteTables(CustomTableDb &tablesDb, string filename) {
     filename = "../textFiles/" + filename;
     validatePath(filename);
     ofstream file;

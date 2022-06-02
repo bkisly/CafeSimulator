@@ -34,7 +34,7 @@ private:
     void showTables();
 
 public:
-    CafeView(bool readFromService = true);
+    CafeView(string menuFile = "menuDb.txt", string employeesFile = "employeesDb.txt", string tablesFile = "tablesDb.txt");
 
     void InitAdminMode();
     void InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval, const string& outputName);

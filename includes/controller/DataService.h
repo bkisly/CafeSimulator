@@ -13,7 +13,7 @@ public:
     void WriteMenu(MenuDatabase &menuDb, string filename="menuDb.txt");
 
     void ReadTables(CustomTableDb &tablesDb, string filename= "tablesDb.txt");
-    void WriteTables(MenuDatabase &tablesDb, string filename="tables.txt");
+    void WriteTables(CustomTableDb &tablesDb, string filename="tables.txt");
 
     void ReadEmployees(CustomEmployeesDb &employeesDb, string filename= "employeesDb.txt");
     void WriteEmployees(CustomEmployeesDb &employeesDb, string filename= "employeesDb.txt");

@@ -6,14 +6,13 @@ void printHelp()
     cout << "USAGE:" << endl;
     cout << "-h -> open help" << endl;
     cout << "-s [number of cycles] [print interval] [customers interval] [output "
-            "filename] "
+            "filename] [menu filename] [employees filename] [tables filename] "
             "-> "
-            "perform a simulation for the given number of cycles" << endl;
-    cout << "-a -> enter admin mode (modify menu and employee databases)" << endl;
+            "perform a simulation for the given number of cycles. Read cafe data from given filenames" << endl;
+    cout << "-a [menu filename] [employees filename] [tables filename] -> enter admin mode (modify menu and employee databases), operate on given filenames" << endl;
 }
 
 int main(int argc, char* argv[]) {
-    CafeView cafeView(false);
     stringstream ss;
 
     if(argc == 1)
@@ -30,22 +29,33 @@ int main(int argc, char* argv[]) {
     if(modeArg == "-h") printHelp();
     else if(modeArg == "-a")
     {
-        if(argc > 2)
+        if(argc > 5)
         {
             cerr << "Too many arguments." << endl << endl;
             printHelp();
         }
-        else
-            cafeView.InitAdminMode();
-    }
-    else if(modeArg == "-s")
-    {
-        if(argc < 6)
+        else if(argc < 5)
         {
             cerr << "Insufficient amount of arguments." << endl << endl;
             printHelp();
         }
-        else if(argc > 6)
+        else
+        {
+            string menuFile = argv[2];
+            string employeesFile = argv[3];
+            string tablesFile = argv[4];
+            CafeView cafeView = CafeView(menuFile, employeesFile, tablesFile);
+            cafeView.InitAdminMode();
+        }
+    }
+    else if(modeArg == "-s")
+    {
+        if(argc < 9)
+        {
+            cerr << "Insufficient amount of arguments." << endl << endl;
+            printHelp();
+        }
+        else if(argc > 9)
         {
             cerr << "Too many arguments." << endl << endl;
             printHelp();
@@ -55,6 +65,9 @@ int main(int argc, char* argv[]) {
             unsigned int numberOfCycles, customersInterval;
             double interval;
             string outputName = argv[5];
+            string menuFile = argv[6];
+            string employeesFile = argv[7];
+            string tablesFile = argv[8];
             ss << argv[2];
             ss >> numberOfCycles;
             ss.clear();
@@ -66,6 +79,7 @@ int main(int argc, char* argv[]) {
             ss << argv[4];
             ss >> customersInterval;
 
+            CafeView cafeView = CafeView(menuFile, employeesFile, tablesFile);
             cafeView.InitSimulation(numberOfCycles, interval, customersInterval, outputName);
         }
     }

@@ -147,8 +147,8 @@ void CafeView::removeItem() {
     try
     {
         model.GetMenu().RemoveItem(itemName);
-        cout << "Successfully removed an item!" << endl << endl;
         model.SaveMenu();
+        cout << "Successfully removed an item!" << endl << endl;
     }
     catch(exception &e)
     {
@@ -273,6 +273,7 @@ void CafeView::addEmployee() {
         }
 
         cout << "Successfully added new employee!" << endl << endl;
+        model.SaveEmployees();
         finished = true;
     }
     while(!finished);
@@ -293,6 +294,7 @@ void CafeView::removeEmployee() {
     try
     {
         model.GetEmployees().RemoveItem(id);
+        model.SaveEmployees();
         cout << "Successfully removed an employee!" << endl << endl;
     }
     catch(exception &e)
@@ -327,6 +329,7 @@ void CafeView::addTable() {
 
     try {
         model.GetTablesDb().AddTable(capacity);
+        model.SaveTables();
         cout << "Successfully added a table!" << endl << endl;
     }
     catch(exception &e)
@@ -350,6 +353,7 @@ void CafeView::removeTable() {
     try
     {
         model.GetTablesDb().RemoveItem(id);
+        model.SaveTables();
         cout << "Successfully removed a table!" << endl << endl;
     }
     catch(exception &e)
@@ -369,9 +373,16 @@ void CafeView::showTables() {
 
 // Public members
 
-CafeView::CafeView(bool readFromService) {
+CafeView::CafeView(string menuFile, string employeesFile, string tablesFile) {
     // TODO: try-catch should be added here while reading from service - errors may occur
-    model = CafeModel(readFromService);
+    try
+    {
+        model = CafeModel(menuFile, employeesFile, tablesFile);
+    }
+    catch(exception &e)
+    {
+        cerr << "An error has occurred while reading databases from given files: " << e.what() << endl;
+    }
 }
 
 void CafeView::InitSimulation(unsigned int numberOfCycles, double intervalSeconds, unsigned int customersInterval, const string& outputName) {

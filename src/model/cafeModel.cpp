@@ -94,7 +94,7 @@ void CafeModel::printLog(vector<Customer> &assignedCustomers) {
     simulationLogBlocks.push_back(block);
 }
 
-CafeModel::CafeModel(bool readFromService) {
+CafeModel::CafeModel(string menuFile, string employeesFile, string tablesFile) {
     currentCycle = 0;
     totalCustomers = 0;
 
@@ -140,10 +140,14 @@ CafeModel::CafeModel(bool readFromService) {
 //        // Load application data from service
 //        menuDb = dbService.ReadMenu();
 //    }
-    DataService service;
-    service.ReadEmployees(employeesDb);
-    service.ReadTables(tablesDb);
-    service.ReadMenu(menuDb);
+
+    this->menuFile = menuFile;
+    this->employeesFile = employeesFile;
+    this->tablesFile = tablesFile;
+
+    service.ReadEmployees(employeesDb, this->employeesFile);
+    service.ReadTables(tablesDb, this->tablesFile);
+    service.ReadMenu(menuDb, this->menuFile);
 }
 
 // Getters
@@ -241,7 +245,15 @@ void CafeModel::Simulate(unsigned int cycles, unsigned int customersInterval) {
 }
 
 void CafeModel::SaveMenu() {
-    dbService.WriteMenu(menuDb);
+    service.WriteMenu(menuDb, menuFile);
+}
+
+void CafeModel::SaveEmployees() {
+    service.WriteEmployees(employeesDb, employeesFile);
+}
+
+void CafeModel::SaveTables() {
+    service.WriteTables(tablesDb, tablesFile);
 }
 
 void CafeModel::SaveLog(const string &outputName) {

@@ -15,6 +15,7 @@
 
 #include "Databases/menuDatabase.h"
 #include "../controller/databaseSimulationService.h"
+#include "../controller/DataService.h"
 #include "Databases/CustomTableDb.h"
 #include "Databases/CustomEmployeesDb.h"
 #include "Databases/CustomTableDb.h"
@@ -30,6 +31,10 @@ private:
     CustomEmployeesDb employeesDb;
     DatabaseSimulationService dbService;
     CustomTableDb tablesDb;
+
+    // Service information
+    DataService service;
+    string menuFile, employeesFile, tablesFile;
 
     // Simulation status
     vector<CustomersGroup> unassignedCustomers;
@@ -48,7 +53,7 @@ private:
     void printLog(vector<Customer> &assignedCustomers);
 
 public:
-    CafeModel(bool readFromService = true);    // readFromService parameter decides whether to read cafe information using DatabaseSimulationService object or Read defaults for test purposes
+    CafeModel(string menuFile = "menuDb.txt", string employeesFile = "employeesDb.txt", string tablesFile = "tablesDb.txt");    // readFromService parameter decides whether to read cafe information using DatabaseSimulationService object or Read defaults for test purposes
 
     // Getters
     MenuDatabase &GetMenu();
@@ -62,6 +67,8 @@ public:
 
     // Serialization
     void SaveMenu();
+    void SaveEmployees();
+    void SaveTables();
     void SaveLog(const string &outputName);
 };
 
